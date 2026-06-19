@@ -11,10 +11,12 @@
 Test Design Studio は、MVPをP0、P1、P2で段階実装する。
 
 - P0: Webアプリ単体で1機能分の仕様把握、観点、ケース、Markdown/JSON出力までを成立させる。
-- P1: Chrome拡張、DomCaptureCandidate、変更管理、影響追跡を追加する。
+- P1: Chrome拡張、UiCaptureCandidate、変更管理、影響追跡を追加する。
 - P2: 技法ワークベンチ、AI context export、Playwright draft exportを追加する。
 
 P0で専用UIを作らないモデルでも、後続フェーズで破壊的変更を避けるために型・保存対象・export対象として予約する場合がある。
+
+`DomCaptureCandidate` はDOM-only前提の旧称である。新規実装では、DOM CaptureとAccessibility Tree Captureの両方を扱える `UiCaptureCandidate` を使う。
 
 ## Common conventions
 
@@ -140,6 +142,9 @@ type UiNode = EntityBase & {
   description?: string;
   selectorHint?: string;
   textHint?: string;
+  accessibleNameHint?: string;
+  locatorStrategy?: "role" | "label" | "testid" | "text" | "css";
+  locatorHint?: string;
   required?: boolean;
   disabledCondition?: string;
   visibleCondition?: string;
@@ -150,12 +155,14 @@ type UiNode = EntityBase & {
 ### UiNodeの扱い
 
 - DOMをそのまま保存しない。
+- Accessibility Treeをそのまま保存しない。
 - テスト設計上意味のある単位に整理する。
 - ボタン、フォーム、テーブル、モーダル、タブ、メニューなどを想定する。
 - `componentType` は初期実装では自由入力の文字列とする。
 - `UiNodeType` enum は初期実装では定義しない。現実のUI分類で詰まりやすいため、必要になった段階で追加する。
 - `selectorHint` はPlaywright生成やChrome拡張連携の補助情報であり、仕様そのものではない。
-- 表示ラベルは `textHint` または `name` で表現し、`label` フィールドは初期モデルには追加しない。
+- `accessibleNameHint`、`locatorStrategy`、`locatorHint` は自動化補助情報であり、仕様そのものではない。
+- 表示ラベルは `textHint`、`accessibleNameHint`、または `name` で表現し、`label` フィールドは初期モデルには追加しない。
 
 ## DataEntity
 
@@ -352,7 +359,6 @@ type TraceNodeType =
   | "testCase"
   | "traceLink"
   | "changeRecord"
-  | "domCaptureCandidate"
   | "evidence";
 
 type TraceLinkType =
@@ -380,6 +386,8 @@ TraceLinkも `EntityBase` を持つ。Traceabilityでは過去の根拠を残す
 
 `traceLink` はTraceLink自体の変更履歴をChangeRecordで記録するために `TraceNodeType` に含める。TraceLink同士を無制限に結ぶためのものではない。
 
+`UiCaptureCandidate` は一時候補であり、原則としてTraceLinkの正本対象にはしない。ユーザーが確認・編集して `UiNode` に変換した後、`UiNode` を起点にTraceLinkを作成する。
+
 ## ChangeRecord
 
 仕様、UI、業務ルール、テスト観点、テストケースの変更を記録する。
@@ -391,6 +399,10 @@ type ChangeType =
   | "deprecated"
   | "removed"
   | "selector-changed"
+  | "accessible-name-changed"
+  | "role-changed"
+  | "state-changed"
+  | "description-changed"
   | "behavior-changed"
   | "validation-changed"
   | "display-changed"
@@ -410,14 +422,22 @@ type ChangeRecord = EntityBase & {
 
 `ChangeType` は `docs/specs/07-change-management-spec.md` と同じ値を使う。
 
-## DomCaptureCandidate
+## UiCaptureCandidate
 
-Chrome拡張で取得したDOM候補をWebアプリ側でレビューするための一時的な候補モデル。
+Chrome拡張やPlaywright等で取得したUI候補をWebアプリ側でレビューするための一時的な候補モデル。
+
+`DomCaptureCandidate` は旧称であり、DOM-only候補を表す名前としては残してよいが、新規実装では `UiCaptureCandidate` を使う。
+
+詳細は `docs/specs/11-accessibility-tree-capture.md` を正とする。
 
 ```ts
-type CapturedElement = {
+type UiCaptureMode = "dom" | "accessibility-tree" | "hybrid" | "playwright-aria-snapshot";
+
+type UiCaptureSource = "chrome-extension" | "playwright" | "manual-import";
+
+type DomCaptureData = {
   tagName: string;
-  role?: string;
+  roleAttribute?: string;
   accessibleName?: string;
   text?: string;
   placeholder?: string;
@@ -432,7 +452,32 @@ type CapturedElement = {
   selectorCandidates: string[];
 };
 
-type DomCaptureCandidate = {
+type AccessibilityCaptureData = {
+  role?: string;
+  name?: string;
+  description?: string;
+  valueType?: "string" | "number" | "boolean" | "unknown";
+  ignored?: boolean;
+  ignoredReasons?: string[];
+  properties?: {
+    disabled?: boolean;
+    required?: boolean;
+    readonly?: boolean;
+    checked?: boolean | "mixed";
+    selected?: boolean;
+    expanded?: boolean;
+    pressed?: boolean | "mixed";
+    focused?: boolean;
+    focusable?: boolean;
+    invalid?: boolean;
+    hasPopup?: boolean | string;
+    level?: number;
+    multiline?: boolean;
+    autocomplete?: string;
+  };
+};
+
+type UiCaptureCandidate = {
   id: string;
   projectId?: string;
   featureId?: string;
@@ -440,20 +485,27 @@ type DomCaptureCandidate = {
   sourceUrl: string;
   sourceTitle?: string;
   capturedAt: string;
-  element: CapturedElement;
+  captureMode: UiCaptureMode;
+  source: UiCaptureSource;
+  dom?: DomCaptureData;
+  accessibility?: AccessibilityCaptureData;
   suggestedUiNode?: {
     name?: string;
     role?: string;
     componentType?: string;
     selectorHint?: string;
     textHint?: string;
+    accessibleNameHint?: string;
+    descriptionHint?: string;
+    locatorStrategy?: "role" | "label" | "testid" | "text" | "css";
+    locatorHint?: string;
     required?: boolean;
   };
   status: "candidate" | "accepted" | "rejected";
 };
 ```
 
-`DomCaptureCandidate` は仕様の正本ではない。ユーザーが確認・編集し、必要に応じて `UiNode` に変換する。
+`UiCaptureCandidate` は仕様の正本ではない。ユーザーが確認・編集し、必要に応じて `UiNode` に変換する。
 
 ## Evidence
 
@@ -583,7 +635,7 @@ DecisionTableはPhase 8以降の技法ワークベンチで扱う。
 - TestCase has many TestSteps.
 - TraceLink connects supported model pairs with a typed relationship.
 - ChangeRecord records changes to supported models.
-- DomCaptureCandidate can be converted into UiNode after review.
+- UiCaptureCandidate can be converted into UiNode after review.
 - State, StateTransition, Flow, FlowStep, ErrorCase, DecisionTable are reserved for staged MVP expansion.
 
 ## Implementation notes
@@ -593,3 +645,4 @@ DecisionTableはPhase 8以降の技法ワークベンチで扱う。
 - `status !== "removed"` を通常表示の基本条件にする。
 - `updatedAt` は更新時に必ず変更する。
 - P0でUI化しないReserved modelを先取り実装しない。ただし、TraceNodeTypeやExportBundleのoptional fieldとして破壊的変更を避ける準備はしてよい。
+- UiCaptureCandidateは候補モデルであり、仕様正本やTraceLink正本対象として扱わない。
