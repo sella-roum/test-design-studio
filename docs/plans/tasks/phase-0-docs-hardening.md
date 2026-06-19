@@ -102,3 +102,48 @@ P0実装に入る前に、Phase 3 / Phase 4 / Phase 7 の境界、Reserved model
 - TASK-016に再読み込み後保持とTraceLink保持のAcceptance criteriaがある。
 - コード内TODOに仕様判断を残さない方針が統一されている。
 - P0a/P0b/P0cが正式Phaseではなく補助スライスとして定義されている。
+
+## TASK-001C: Accessibility Tree / Hybrid UI Capture設計反映
+
+### Goal
+
+現在のDOM解析前提を見直し、DOM CaptureとAccessibility Tree Captureを統合したHybrid UI Captureとして、P1以降のChrome拡張・候補レビュー・UiNode取り込みの設計を更新する。
+
+### Reference specs
+
+- `docs/specs/04-chrome-extension-spec.md`
+- `docs/specs/09-non-goals.md`
+- `docs/specs/11-accessibility-tree-capture.md`
+- `docs/agents/coding-instructions.md`
+- `AGENTS.md`
+- `docs/plans/implementation-plan.md`
+- `docs/plans/task-breakdown.md`
+- `docs/plans/tasks/phase-5-6-extension.md`
+
+### Scope
+
+- Accessibility Tree Captureの正本仕様を追加する。
+- DOM Capture、Accessibility Tree Capture、Hybrid UI Captureの役割を分離する。
+- `DomCaptureCandidate` / `DomCaptureBundle` を旧称として扱い、新規実装では `UiCaptureCandidate` / `UiCaptureBundle` に寄せる方針を定義する。
+- Accessibility Tree由来のrole、accessible name、description、stateの扱いを定義する。
+- `chrome.debugger` permissionを標準MVPに含めず、任意の追加タスクとして扱う方針を定義する。
+- TASK-020 / TASK-021 / TASK-021Aの境界を明確にする。
+- Non-goalsとAIエージェント指示に、AX treeから仕様やテストケースを自動確定しない制約を追加する。
+
+### Non-goals
+
+- アプリケーションコードは実装しない。
+- Chrome拡張コードは実装しない。
+- `chrome.debugger` permissionを追加しない。
+- Accessibility Tree取得ロジックは実装しない。
+- Playwright `ariaSnapshot()` 取り込みは実装しない。
+- AI生成、Playwright生成、外部サービス連携の実装は行わない。
+
+### Acceptance criteria
+
+- `docs/specs/11-accessibility-tree-capture.md` が追加されている。
+- Chrome Extension Specが `UiCaptureCandidate` / `UiCaptureBundle` 前提に更新されている。
+- TASK-020はDOM Capture最小実装、TASK-021は候補レビュー、TASK-021AはAccessibility Tree Capture Adapterとして分離されている。
+- `chrome.debugger` permissionが標準必須機能ではないことが明記されている。
+- Accessibility Tree由来の情報を仕様正本として自動採用しない制約がNon-goalsに明記されている。
+- AGENTS / coding instructionsで、DOM解析とAccessibility Tree解析を入力補助として扱う方針が明記されている。
