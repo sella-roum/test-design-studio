@@ -57,6 +57,7 @@ AIエージェントは各タスクの着手前に、次を確認する。
 |---|---:|---|---|---|
 | TASK-001 | 0 | 実装計画・仕様分割ドキュメント追加 | `AGENTS.md`, `docs/specs/*`, `docs/plans/*` | `tasks/phase-0-1.md` |
 | TASK-001A | 0 | MVP段階定義・ドメイン・Trace・Export仕様補強 | `docs/specs/00-product-overview.md`, `docs/specs/01-domain-model.md`, `docs/specs/06-traceability-spec.md` | `tasks/phase-0-docs-hardening.md` |
+| TASK-001B | 0 | P0実装前のPhase境界・スコープ整合 | `docs/specs/02-storage-design.md`, `docs/specs/03-web-app-spec.md`, `docs/specs/05-import-export-spec.md`, `docs/specs/06-traceability-spec.md` | `tasks/phase-0-docs-hardening.md` |
 | TASK-002 | 1 | Reactアプリ基盤作成 | `docs/specs/00-product-overview.md` | `tasks/phase-0-1.md` |
 | TASK-003 | 1 | 品質ゲート追加 | `docs/agents/coding-instructions.md` | `tasks/phase-0-1.md` |
 | TASK-004 | 1 | Dexie初期化 | `docs/specs/02-storage-design.md` | `tasks/phase-0-1.md` |
@@ -90,7 +91,7 @@ AIエージェントは各タスクの着手前に、次を確認する。
 
 原則としてTask ID順に進める。
 
-`TASK-001A` は、実装着手前の設計補強タスクである。`TASK-002` 以降の実装は、`TASK-001A` の内容が反映された仕様を前提に進める。
+`TASK-001A` と `TASK-001B` は、実装着手前の設計補強タスクである。`TASK-002` 以降の実装は、これらの内容が反映された仕様を前提に進める。
 
 例外として、Chrome拡張系のTASK-019以降は、Webアプリ側の保存モデルとExport / Importが安定してから着手する。
 

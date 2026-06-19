@@ -212,3 +212,9 @@ Feature Workspace上で未確認事項、テスト観点、構造化されたテ
 - TestCaseの手順が `TestStep[]` として保存される。
 - TestStepにaction、instruction、expectedResult、targetUiNodeIdを保持できる。
 - Feature単位で未確認事項、観点、ケースを一覧できる。
+- OpenQuestion / TestViewpoint / TestCase は再読み込み後も保持される。
+- OpenQuestionのquestionStatusとconfidenceは再読み込み後も保持される。
+- TestViewpointのautomationSuitabilityとautomationReasonは再読み込み後も保持される。
+- TestCase.stepsは `TestStep[]` として保存され、再読み込み後もorder順で復元される。
+- TestViewpointとsource elementsの `derived_from` TraceLinkは再読み込み後も保持される。
+- TestCaseとTestViewpointの `covers` TraceLinkまたはviewpointIdによる紐づきは再読み込み後も保持される。
