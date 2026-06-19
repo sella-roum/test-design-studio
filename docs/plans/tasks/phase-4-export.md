@@ -196,12 +196,18 @@ Project importでは、新しいProject IDを採番したうえで、関連IDを
 | DataField | `id`, `entityId`, `dataTypeId` |
 | DataType | `id` |
 | BusinessRule | `id`, `featureId`, `screenId`, `uiNodeId` |
-| OpenQuestion | `id`, `featureId`, `screenId`, `uiNodeId`, `relatedId` |
+| OpenQuestion | `id`, `featureId`, `screenId`, `uiNodeId` |
 | TestViewpoint | `id`, `featureId` |
 | TestCase | `id`, `featureId`, `viewpointId`, `steps[].targetUiNodeId` |
 | TraceLink | `id`, `fromId`, `toId` |
 | ChangeRecord | `id`, `targetId` |
 | DomCaptureCandidate | `id`, `projectId`, `featureId`, `screenId` |
-| Reserved model | 対応Repositoryが実装されたPhaseで個別に定義する |
+| State | `id`, `featureId`, `screenId`, `uiNodeId`, `dataEntityId` |
+| StateTransition | `id`, `featureId`, `targetId`, `fromStateId`, `toStateId` |
+| Flow | `id`, `featureId`, `startScreenId`, `endScreenId` |
+| FlowStep | `id`, `flowId`, `screenId`, `uiNodeId` |
+| ErrorCase | `id`, `featureId`, `screenId`, `uiNodeId` |
+| DecisionTable | `id`, `businessRuleId` |
+| Reserved model | 対応Repositoryが実装されたPhaseで、上記以外の参照を個別に追加定義する |
 
 ID再マッピングは、まず全対象のoldId→newIdマップを作り、その後に参照IDを置換する。参照先が存在しない場合はimportを失敗させるか、取り込み前の検証でエラーとして表示する。
