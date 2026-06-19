@@ -4,6 +4,8 @@
 
 Webアプリ本体は、Test Design Studio の中心となる編集ワークスペースである。Chrome拡張は入力補助として扱い、正本データの確認・編集・出力はWebアプリ側で行う。
 
+Chrome拡張やPlaywright等から取り込むUI候補は `UiCaptureCandidate` として扱う。DOM CaptureやAccessibility Tree Captureの取得結果は仕様正本ではなく、Webアプリ側でユーザーが確認・編集してから `UiNode` に変換する。
+
 ## Target end-to-end workflow
 
 プロダクトとして最終的に重視する利用フローは次の通り。
@@ -143,12 +145,13 @@ Featureに関連するScreenとUiNodeを登録する。
 - Screen単位でUiNodeを追加できる。
 - UiNodeをツリー構造で表示できる。
 - parentIdとsortOrderで並び順を制御する。
-- name、role、componentType、selectorHint、textHint、required、visibleConditionを編集できる。
-- DOMキャプチャ由来の候補を手動確認して取り込める。ただし、実際のDomCaptureCandidate連携はPhase 6以降で扱う。
+- name、role、componentType、selectorHint、textHint、accessibleNameHint、locatorStrategy、locatorHint、required、visibleConditionを編集できる。
+- UI Capture由来の候補を手動確認して取り込める。ただし、実際の `UiCaptureCandidate` 連携はPhase 6以降で扱う。
+- DOM CaptureとAccessibility Tree Captureの情報は候補として並べて表示できる設計にするが、ユーザー確認なしにUiNodeへ自動反映しない。
 
 初期実装ではドラッグ&ドロップ並び替えは必須にしない。上下移動ボタンまたはsortOrder編集でよい。
 
-`label` フィールドは使わず、表示ラベル相当の情報は `name` または `textHint` で扱う。
+`label` フィールドは使わず、表示ラベル相当の情報は `name`、`textHint`、`accessibleNameHint` で扱う。
 
 ## Data / Rules section
 
@@ -260,5 +263,6 @@ P0のWebアプリでは次を実装しない。
 - 任意TraceLink編集UI
 - ChangeRecord編集UI
 - JSON import UI
+- UI Capture候補レビューUI
 - AI生成
 - Playwrightコード生成
