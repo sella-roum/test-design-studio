@@ -2,7 +2,7 @@
 
 この文書は、AIエージェントが Test Design Studio を実装する際に守るべきルールを定義する。
 
-`docs/design.md` は親設計書であり、長期構想を含む。実装時は `docs/plans/implementation-plan.md`、`docs/plans/task-breakdown.md`、`docs/plans/tasks/*.md` の該当タスクを正とする。
+`docs/design.md` は親設計書であり、長期構想を含む。実装時は現在対応する詳細タスク、対象領域の仕様書、実装計画を正とし、親設計書を直接すべて実装しない。
 
 ## 最重要ルール
 
@@ -12,16 +12,34 @@
 4. 1PRでは1つの責務だけを完了させる。
 5. 判断に迷った場合は勝手に実装を広げず、TODOまたは設計メモとして残す。
 
+## 参照優先度
+
+実装判断に迷った場合は、次の順で確認する。
+
+```text
+1. AGENTS.md
+2. docs/agents/coding-instructions.md
+3. 現在対応する docs/plans/tasks/*.md の Scope / Non-goals / Acceptance criteria
+4. docs/plans/task-breakdown.md
+5. docs/plans/implementation-plan.md
+6. 対象領域の docs/specs/*.md
+7. docs/design.md
+```
+
+矛盾した場合は、原則として **現在対応する詳細タスク > 対象領域の仕様書 > 親設計書** の順で優先する。
+
 ## 実装前チェック
 
 実装前に必ず以下を確認する。
 
 ```text
-1. docs/design.md の関連箇所
-2. docs/plans/implementation-plan.md の該当Phase
-3. docs/plans/task-breakdown.md の対象PR
-4. docs/plans/tasks/*.md の詳細タスク
-5. この coding-instructions.md
+1. AGENTS.md
+2. docs/agents/coding-instructions.md
+3. docs/plans/tasks/*.md の対象タスク
+4. docs/plans/task-breakdown.md の対象Task ID
+5. docs/plans/implementation-plan.md の該当Phase
+6. 対象領域の docs/specs/*.md
+7. 必要な場合のみ docs/design.md の背景・長期構想
 ```
 
 ## ドメイン実装ルール
@@ -30,7 +48,7 @@
 - ドメインIDは原則 `string` で扱う。
 - 日時はISO 8601文字列で保存する。
 - Project配下のデータは原則 `projectId` を持つ。
-- 必要なモデルでは `active / deprecated / removed` を区別する。
+- Projectを含む永続化モデルでは、削除・非推奨・履歴保持の扱いを仕様書と揃える。
 - TraceLinkには `linkType` を持たせる。
 - ChangeRecordには変更対象、変更種別、変更前、変更後、理由、確度を持たせる。
 
@@ -52,9 +70,10 @@
 
 ## Export / Importルール
 
-- JSON exportには `schemaVersion`、`appVersion`、`exportedAt` を含める。
-- 初期Importは新規Projectとして取り込む。
+- JSON exportには `schemaVersion`、`appVersion`、`exportedAt`、`exportType` を含める。
+- 初期Project Importは新規Projectとして取り込む。
 - 既存Projectへの上書き、差分merge、クラウド同期は後続対応にする。
+- Chrome拡張候補はProject backupとは別の `DomCaptureBundle` として扱う。
 - Markdown exportは、まず人間がレビューしやすい構成を優先する。
 
 ## Chrome拡張ルール
@@ -63,6 +82,7 @@
 - DOMから業務ルールや仕様意図を断定しない。
 - Chrome拡張は入力補助として扱う。
 - 初期実装ではElement Pickerによる1要素取り込みを優先する。
+- 拡張由来の候補は、ユーザーが確認・編集してからUiNodeに反映する。
 
 ## 禁止事項
 
@@ -82,6 +102,10 @@
 ```md
 ## Summary
 - 何を実装したか
+
+## Task
+- Task ID:
+- Task document:
 
 ## Scope
 - 今回の対象範囲
