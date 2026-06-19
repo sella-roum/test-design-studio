@@ -247,8 +247,6 @@ type OpenQuestion = EntityBase & {
   featureId?: string;
   screenId?: string;
   uiNodeId?: string;
-  relatedType?: TraceNodeType;
-  relatedId?: string;
   question: string;
   context?: string;
   answer?: string;
@@ -258,6 +256,8 @@ type OpenQuestion = EntityBase & {
 ```
 
 `status` はEntityStatusとして使うため、未確認事項としての状態は `questionStatus` で表現する。
+
+`featureId` / `screenId` / `uiNodeId` は、P0の入力UIで未確認事項を主要な作業文脈へ素早く紐づけるための補助フィールドである。OpenQuestionと他モデルの汎用的な関係は `relatedType` / `relatedId` のような二重管理フィールドではなく、TraceLinkを正本として表現する。
 
 ## TestViewpoint
 
