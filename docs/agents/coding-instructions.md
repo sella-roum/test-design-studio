@@ -75,16 +75,22 @@
 - JSON exportには `schemaVersion`、`appVersion`、`exportedAt`、`exportType` を含める。
 - 初期Project Importは新規Projectとして取り込む。
 - 既存Projectへの上書き、差分merge、クラウド同期は後続対応にする。
-- Chrome拡張候補はProject backupとは別の `DomCaptureBundle` として扱う。
+- Chrome拡張候補はProject backupとは別の `UiCaptureBundle` として扱う。
+- `DomCaptureBundle` は旧称として扱い、新規実装では `UiCaptureBundle` に寄せる。
 - Markdown exportは、まず人間がレビューしやすい構成を優先する。
 
 ## Chrome拡張ルール
 
 - 対象ページを破壊的に変更しない。
-- DOMから業務ルールや仕様意図を断定しない。
+- DOMやAccessibility Treeから業務ルールや仕様意図を断定しない。
 - Chrome拡張は入力補助として扱う。
 - 初期実装ではElement Pickerによる1要素取り込みを優先する。
 - 拡張由来の候補は、ユーザーが確認・編集してからUiNodeに反映する。
+- DOM Capture と Accessibility Tree Capture を混同しない。
+- Accessibility Tree の role、accessible name、state は `UiNode` 候補の補助情報であり、仕様の正本ではない。
+- `chrome.debugger` permission を使う実装は、該当タスクで明示された場合のみ行う。
+- AX取得失敗時もDOM Captureで最低限動作するようにする。
+- Playwright `getByRole()` に使えそうな情報は `locatorHint` として保存してよいが、自動確定しない。
 
 ## 禁止事項
 
@@ -97,6 +103,9 @@
 - 外部SaaS連携
 - DOM全体スキャン
 - DOM差分の完全自動判定
+- Accessibility Treeからの仕様自動確定
+- Accessibility Treeからのテストケース自動生成
+- `chrome.debugger` permissionを使うAX取得
 - 過剰な状態管理ライブラリ導入
 
 ## PR本文テンプレート
@@ -131,3 +140,4 @@
 - Repositoryテストがあるか。
 - Export / ImportのschemaVersionを壊していないか。
 - Chrome拡張が対象ページを破壊していないか。
+- Accessibility Tree由来の情報を仕様正本として扱っていないか。
