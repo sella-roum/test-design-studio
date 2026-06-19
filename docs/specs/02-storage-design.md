@@ -192,7 +192,7 @@ listActiveByProject(projectId: string): Promise<T[]>;
 対象例:
 
 - Project削除時に配下データを論理削除する。
-- Feature削除時に関連Screen、UiNode、OpenQuestion、Viewpoint、TestCaseを論理削除する。
+- Feature削除時に関連Screen、UiNode、BusinessRule、OpenQuestion、Viewpoint、TestCaseを論理削除する。
 - Project import時に複数テーブルをまとめて書き込む。
 - DomCaptureBundle import時に候補をまとめて書き込む。
 - ChangeRecord作成時にTraceLinkを同時作成する。
