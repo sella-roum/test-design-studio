@@ -6,23 +6,24 @@ Change Management は、仕様・UI・業務ルール・テスト設計の変更
 
 Test Design Studio では、既存UIや既存仕様の変更を新規追加と同じくらい重要な情報として扱う。
 
+## Phase position
+
+- P0では、ChangeRecordの型・保存層を用意する。
+- P1では、ChangeRecord UI、TraceLink UI、影響候補表示を実装する。
+- P2では、AIやPlaywright向けexportに変更履歴を含める。
+
 ## ChangeRecord model
 
 ```ts
-type ChangeRecord = {
-  id: string;
-  projectId: string;
-  targetType: string;
+type ChangeRecord = EntityBase & {
+  targetType: TraceNodeType;
   targetId: string;
   changeType: ChangeType;
   summary: string;
   before?: string;
   after?: string;
   reason?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
-  status: "active" | "deprecated" | "removed";
-  createdAt: string;
-  updatedAt: string;
+  confidence: Confidence;
 };
 
 type ChangeType =
@@ -37,6 +38,8 @@ type ChangeType =
   | "permission-changed";
 ```
 
+`TraceNodeType` と `Confidence` は `docs/specs/01-domain-model.md` を正とする。
+
 ## Target types
 
 ChangeRecordは、少なくとも次の対象に紐づけられる。
@@ -49,9 +52,23 @@ dataType
 dataEntity
 dataField
 businessRule
+openQuestion
 testViewpoint
 testCase
 traceLink
+domCaptureCandidate
+```
+
+Reserved modelを実装した場合は、次も対象にできる。
+
+```text
+state
+stateTransition
+flow
+flowStep
+errorCase
+decisionTable
+evidence
 ```
 
 ## Change confidence
@@ -78,6 +95,16 @@ traceLink
 5. 影響するTestViewpoint/TestCaseを確認する。
 6. 必要に応じてTraceLinkを作成する。
 
+### OpenQuestion answered
+
+未確認事項に回答が入った場合:
+
+1. OpenQuestionを選択する。
+2. answerとquestionStatusを更新する。
+3. ChangeRecordを作成する。
+4. OpenQuestionに由来するTestViewpoint/TestCaseを確認する。
+5. 必要に応じて観点・ケースを更新する。
+
 ### DOM candidate to existing UiNode
 
 Chrome拡張で取得した候補が既存UiNodeの変更を示す場合:
@@ -91,7 +118,7 @@ Chrome拡張で取得した候補が既存UiNodeの変更を示す場合:
 
 ## Before / after representation
 
-初期実装では、before/afterは文字列で保持してよい。
+P0/P1では、before/afterは文字列で保持してよい。
 
 将来的には差分対象ごとに構造化する。
 
@@ -103,7 +130,7 @@ type StructuredChangeDiff = {
 };
 ```
 
-ただし初期実装では、実装負荷を抑えるため、summaryとbefore/afterのテキスト表現を優先する。
+ただしP0/P1では、実装負荷を抑えるため、summaryとbefore/afterのテキスト表現を優先する。
 
 ## Impact candidates
 
@@ -133,6 +160,14 @@ BusinessRule updated
 → covering TestViewpoint
 ```
 
+### OpenQuestion answered or changed
+
+```text
+OpenQuestion updated
+→ derived TestViewpoint
+→ covering TestCase
+```
+
 ### selector changed
 
 ```text
@@ -143,7 +178,7 @@ selectorHint changed
 
 ## Change statuses
 
-ChangeRecord自体もstatusを持つ。
+ChangeRecord自体もEntityStatusを持つ。
 
 - `active`: 有効な変更履歴。
 - `deprecated`: 古い変更履歴として残す。
@@ -162,7 +197,7 @@ ChangeRecord自体もstatusを持つ。
 
 ## UI requirements
 
-初期実装では、次のUIで十分とする。
+P1では、次のUIで十分とする。
 
 - Feature WorkspaceのChanges section
 - 対象要素からChangeRecord一覧を表示
@@ -173,7 +208,7 @@ ChangeRecord自体もstatusを持つ。
 
 ## Non-goals
 
-初期実装では次を行わない。
+P0/P1では次を行わない。
 
 - Git diffのような構造化差分表示
 - DOM差分の完全自動検出
