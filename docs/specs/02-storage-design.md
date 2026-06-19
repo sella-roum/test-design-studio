@@ -208,6 +208,7 @@ Repositoryは、UIからDexieを直接操作させないための永続化境界
 ### create
 
 - `id`、`createdAt`、`updatedAt`、`status` はRepositoryで補完する。
+- `id` はRepositoryが生成する。UUID v4など、Project間・端末間・import後でも衝突しにくいグローバル一意IDを使う。
 - `status` の初期値は `"active"` とする。
 - `projectId` など必須参照が不足している場合は保存せず、`ValidationError` 相当のエラーとして扱う。
 - 作成後の完全なEntityを返す。
