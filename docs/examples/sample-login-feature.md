@@ -131,7 +131,7 @@ Steps:
 
 | order | action | targetUiNode | instruction | expectedResult | testData |
 |---:|---|---|---|---|---|
-| 1 | navigate | Login page | Open the login page. | Login form is displayed. | /login |
+| 1 | navigate |  | Open the login page. | Login form is displayed. | /login |
 | 2 | fill | Email input | Enter a registered email address. | Email input contains the value. | user@example.test |
 | 3 | fill | Password input | Enter an invalid password. | Password input accepts the value. | wrong-password |
 | 4 | click | Login button | Click the login button. | Error message is displayed. |  |
