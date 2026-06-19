@@ -6,12 +6,28 @@
 
 `docs/design.md` には長期構想を含む多くのモデル案があるが、実装時はこの文書に記載されたモデルを優先する。
 
+## Staged model policy
+
+Test Design Studio は、MVPをP0、P1、P2で段階実装する。
+
+- P0: Webアプリ単体で1機能分の仕様把握、観点、ケース、Markdown/JSON出力までを成立させる。
+- P1: Chrome拡張、DomCaptureCandidate、変更管理、影響追跡を追加する。
+- P2: 技法ワークベンチ、AI context export、Playwright draft exportを追加する。
+
+P0で専用UIを作らないモデルでも、後続フェーズで破壊的変更を避けるために型・保存対象・export対象として予約する場合がある。
+
 ## Common conventions
 
 Projectを含む永続化モデルは、原則として次の共通フィールドを持つ。
 
 ```ts
 type EntityStatus = "active" | "deprecated" | "removed";
+
+type Confidence = "confirmed" | "tentative" | "assumed" | "unknown";
+
+type Priority = "high" | "medium" | "low";
+
+type AutomationSuitability = "high" | "medium" | "low" | "manual-only";
 
 type EntityBase = {
   id: string;
@@ -62,12 +78,20 @@ type Project = {
 
 テスト設計の主な作業単位。ログイン、ユーザー管理、検索、予約作成など、業務上意味のある機能を表す。
 
+P0ではFeatureにユースケース情報も保持する。将来的に複数ユースケースを1Feature配下で扱う必要が出た場合は、`UseCase` モデルへ分離する。
+
 ```ts
 type Feature = EntityBase & {
   name: string;
   description?: string;
-  priority?: "high" | "medium" | "low";
-  riskLevel?: "high" | "medium" | "low";
+  purpose?: string;
+  actor?: string;
+  preconditions?: string;
+  successCriteria?: string;
+  failureConditions?: string;
+  priority?: Priority;
+  riskLevel?: Priority;
+  confidence?: Confidence;
 };
 ```
 
@@ -76,11 +100,29 @@ type Feature = EntityBase & {
 機能に関連する画面。URLや画面名、画面の目的を保持する。
 
 ```ts
+type ScreenType =
+  | "list"
+  | "detail"
+  | "create"
+  | "edit"
+  | "confirm"
+  | "complete"
+  | "error"
+  | "settings"
+  | "login"
+  | "dashboard"
+  | "admin"
+  | "other";
+
 type Screen = EntityBase & {
   featureId: string;
   name: string;
+  screenType?: ScreenType;
   urlPattern?: string;
+  purpose?: string;
+  preconditions?: string;
   description?: string;
+  confidence?: Confidence;
 };
 ```
 
@@ -166,74 +208,174 @@ type DataType = EntityBase & {
 
 ## BusinessRule
 
-業務ルール、バリデーション、権限制御、表示条件、保存条件などを表す。
+業務ルール、バリデーション、権限制御、表示条件、保存条件、エラー、例外などを表す。
 
 ```ts
+type BusinessRuleType =
+  | "validation"
+  | "permission"
+  | "display"
+  | "calculation"
+  | "workflow"
+  | "error"
+  | "exception"
+  | "other";
+
 type BusinessRule = EntityBase & {
   featureId?: string;
   screenId?: string;
   uiNodeId?: string;
   name: string;
   description: string;
-  ruleType: "validation" | "permission" | "display" | "calculation" | "workflow" | "other";
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  ruleType: BusinessRuleType;
+  confidence: Confidence;
 };
 ```
+
+P0では `ErrorCase` を独立実装せず、エラー・例外は `BusinessRule.ruleType` の `error` / `exception` で表現してよい。P2以降で異常系を詳細化する場合は、Reserved modelの `ErrorCase` を利用する。
+
+## OpenQuestion
+
+未確認事項、仮説、要確認の仕様を表す。
+
+未確認事項を `description` や `note` に埋め込むと、どの仕様が未確定のままテスト設計に使われているか追えなくなる。そのため、P0から独立モデルとして扱う。
+
+```ts
+type OpenQuestionStatus = "open" | "answered" | "deferred" | "not_applicable";
+
+type OpenQuestion = EntityBase & {
+  featureId?: string;
+  screenId?: string;
+  uiNodeId?: string;
+  relatedType?: TraceNodeType;
+  relatedId?: string;
+  question: string;
+  context?: string;
+  answer?: string;
+  questionStatus: OpenQuestionStatus;
+  confidence: Confidence;
+};
+```
+
+`status` はEntityStatusとして使うため、未確認事項としての状態は `questionStatus` で表現する。
 
 ## TestViewpoint
 
 テストケースの前段となる観点。何を確認すべきかを表す。
 
 ```ts
+type TestTechnique =
+  | "equivalence"
+  | "boundary"
+  | "state-transition"
+  | "decision-table"
+  | "use-case"
+  | "exploratory";
+
 type TestViewpoint = EntityBase & {
   featureId: string;
   title: string;
   description?: string;
-  technique?: "equivalence" | "boundary" | "state-transition" | "decision-table" | "use-case" | "exploratory";
-  priority?: "high" | "medium" | "low";
-  automationSuitability?: "high" | "medium" | "low" | "manual-only";
+  technique?: TestTechnique;
+  priority?: Priority;
+  automationSuitability?: AutomationSuitability;
+  automationReason?: string;
 };
 ```
+
+`automationReason` は、自動化しやすい・しにくい理由を説明するために保持する。後続のAI/Playwright exportで参照する。
 
 ## TestCase
 
 具体的な確認手順と期待結果。
 
+P0から `steps: string[]` ではなく構造化された `TestStep[]` として保存する。これは将来のPlaywright draft exportに備えるためであり、P0のUIでは簡易入力から `TestStep` に変換してもよい。
+
 ```ts
+type TestStepAction =
+  | "navigate"
+  | "click"
+  | "fill"
+  | "select"
+  | "check"
+  | "assert"
+  | "wait"
+  | "other";
+
+type TestStep = {
+  id: string;
+  order: number;
+  action: TestStepAction;
+  targetUiNodeId?: string;
+  instruction: string;
+  expectedResult?: string;
+  testData?: string;
+};
+
 type TestCase = EntityBase & {
   viewpointId?: string;
   featureId: string;
   title: string;
   preconditions?: string;
-  steps: string[];
-  expectedResult: string;
+  steps: TestStep[];
+  expectedResult?: string;
   testData?: string;
-  priority?: "high" | "medium" | "low";
-  automationSuitability?: "high" | "medium" | "low" | "manual-only";
+  priority?: Priority;
+  automationSuitability?: AutomationSuitability;
+  automationReason?: string;
 };
 ```
+
+`expectedResult` はケース全体の期待結果を表す。各手順に対応する期待結果は `TestStep.expectedResult` を使う。
 
 ## TraceLink
 
 仕様要素、観点、ケース、変更履歴の関係を表す。
 
 ```ts
-type TraceLinkType = "covers" | "derived_from" | "impacts" | "validates" | "depends_on" | "replaces";
+type TraceNodeType =
+  | "feature"
+  | "screen"
+  | "uiNode"
+  | "dataType"
+  | "dataEntity"
+  | "dataField"
+  | "businessRule"
+  | "openQuestion"
+  | "state"
+  | "stateTransition"
+  | "flow"
+  | "flowStep"
+  | "errorCase"
+  | "decisionTable"
+  | "testViewpoint"
+  | "testCase"
+  | "changeRecord"
+  | "domCaptureCandidate"
+  | "evidence";
 
-type TraceLink = {
-  id: string;
-  projectId: string;
-  fromType: string;
+type TraceLinkType =
+  | "covers"
+  | "derived_from"
+  | "impacts"
+  | "validates"
+  | "depends_on"
+  | "replaces"
+  | "supports";
+
+type TraceLink = EntityBase & {
+  fromType: TraceNodeType;
   fromId: string;
-  toType: string;
+  toType: TraceNodeType;
   toId: string;
   linkType: TraceLinkType;
   reason?: string;
-  createdAt: string;
 };
 ```
 
 `linkType` は必須とする。単に `from` と `to` だけを保存すると、関係の意味が曖昧になるためである。
+
+TraceLinkも `EntityBase` を持つ。Traceabilityでは過去の根拠を残す価値があるため、削除時は原則として物理削除ではなく `status: "removed"` で無効化する。
 
 ## ChangeRecord
 
@@ -252,14 +394,14 @@ type ChangeType =
   | "permission-changed";
 
 type ChangeRecord = EntityBase & {
-  targetType: string;
+  targetType: TraceNodeType;
   targetId: string;
   changeType: ChangeType;
   summary: string;
   before?: string;
   after?: string;
   reason?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  confidence: Confidence;
 };
 ```
 
@@ -312,7 +454,7 @@ type DomCaptureCandidate = {
 
 ## Evidence
 
-仕様判断の根拠を表す。初期実装では必須ではないが、モデルとして予約する。
+仕様判断の根拠を表す。P0では必須ではないが、モデルとして予約する。
 
 ```ts
 type Evidence = EntityBase & {
@@ -321,23 +463,125 @@ type Evidence = EntityBase & {
   url?: string;
   quote?: string;
   note?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  confidence: Confidence;
 };
 ```
 
-初期実装では `Evidence` Repository は必須にしない。ExportBundleでは `evidences?: Evidence[]` として任意扱いにする。
+P0では `Evidence` Repository は必須にしない。ExportBundleでは `evidences?: Evidence[]` として任意扱いにする。
+
+## Reserved future models
+
+次のモデルは親設計書と後続フェーズで必要になるため予約する。P0で専用UIやRepositoryを必ず実装する必要はないが、schemaVersion、ExportBundle、TraceNodeTypeを設計する際に破壊的変更が起きないよう考慮する。
+
+### State / StateTransition
+
+```ts
+type StateScope = "app" | "session" | "screen" | "uiNode" | "form" | "data" | "flow" | "async" | "external";
+
+type State = EntityBase & {
+  featureId?: string;
+  screenId?: string;
+  uiNodeId?: string;
+  dataEntityId?: string;
+  name: string;
+  scope: StateScope;
+  condition?: string;
+  observableResult?: string;
+  allowedOperations?: string[];
+  prohibitedOperations?: string[];
+  confidence: Confidence;
+};
+
+type StateTransition = EntityBase & {
+  featureId: string;
+  targetType: "screen" | "uiNode" | "data" | "flow" | "other";
+  targetId?: string;
+  fromStateId: string;
+  toStateId: string;
+  event: string;
+  condition?: string;
+  expectedResult?: string;
+  valid: boolean;
+};
+```
+
+### Flow / FlowStep
+
+```ts
+type Flow = EntityBase & {
+  featureId: string;
+  name: string;
+  purpose?: string;
+  startScreenId?: string;
+  endScreenId?: string;
+  preconditions?: string;
+  successCriteria?: string;
+  alternativePaths?: string;
+  exceptionPaths?: string;
+};
+
+type FlowStep = EntityBase & {
+  flowId: string;
+  order: number;
+  screenId?: string;
+  uiNodeId?: string;
+  operation: string;
+  expectedResult?: string;
+  branchCondition?: string;
+};
+```
+
+### ErrorCase
+
+```ts
+type ErrorCase = EntityBase & {
+  featureId?: string;
+  screenId?: string;
+  uiNodeId?: string;
+  trigger: string;
+  message?: string;
+  recovery?: string;
+  severity?: Priority;
+  confidence: Confidence;
+};
+```
+
+P0ではBusinessRuleの `ruleType: "error" | "exception"` で表現してよい。ErrorCaseは、異常系を独立管理する必要が出た段階で使う。
+
+### DecisionTable
+
+```ts
+type DecisionTableRule = {
+  id: string;
+  conditions: Record<string, string>;
+  actions: Record<string, string>;
+  expectedResult?: string;
+};
+
+type DecisionTable = EntityBase & {
+  businessRuleId: string;
+  conditions: string[];
+  actions: string[];
+  rules: DecisionTableRule[];
+};
+```
+
+DecisionTableはPhase 8以降の技法ワークベンチで扱う。
 
 ## Relationship summary
 
 - Project has many Features.
 - Feature has many Screens.
+- Feature can have many OpenQuestions.
 - Screen has many UiNodes.
 - Feature has many BusinessRules.
 - Feature has many TestViewpoints.
 - TestViewpoint has many TestCases.
-- TraceLink connects any supported model pair.
+- TestCase has many TestSteps.
+- TraceLink connects supported model pairs with a typed relationship.
 - ChangeRecord records changes to supported models.
 - DomCaptureCandidate can be converted into UiNode after review.
+- State, StateTransition, Flow, FlowStep, ErrorCase, DecisionTable are reserved for staged MVP expansion.
 
 ## Implementation notes
 
@@ -345,3 +589,4 @@ type Evidence = EntityBase & {
 - Repository層で各モデルのCRUDを提供する。
 - `status !== "removed"` を通常表示の基本条件にする。
 - `updatedAt` は更新時に必ず変更する。
+- P0でUI化しないReserved modelを先取り実装しない。ただし、TraceNodeTypeやExportBundleのoptional fieldとして破壊的変更を避ける準備はしてよい。
