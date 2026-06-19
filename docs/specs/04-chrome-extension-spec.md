@@ -1,0 +1,203 @@
+# Chrome Extension Spec
+
+## Purpose
+
+Chrome拡張は、テスト対象アプリケーションを開いた状態で、現在の画面情報や選択したDOM要素を Test Design Studio に取り込むための入力補助である。
+
+Chrome拡張は仕様の正本ではない。取得したDOM情報は候補として扱い、利用者が確認・編集してからUiNodeやChangeRecordに反映する。
+
+## Architecture
+
+初期実装では Manifest V3 を前提にする。
+
+```text
+extension/
+  manifest.json
+  src/
+    background/
+    content/
+    sidepanel/
+    shared/
+```
+
+### Components
+
+- Side Panel: 利用者が操作する拡張UI。
+- Content Script: 対象ページのDOM情報を取得する。
+- Background Service Worker: Side Panel と Content Script の通信を中継する。
+- Shared module: メッセージ型、DOM抽出ロジック、候補型を共有する。
+
+## Permissions
+
+初期実装で想定する権限は次の通り。
+
+```json
+{
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
+  "host_permissions": ["<all_urls>"]
+}
+```
+
+実装時は最小権限を優先し、`<all_urls>` が不要であれば制限する。
+
+## Side Panel requirements
+
+Side Panelは、現在のタブを見ながら仕様情報を補助的に取り込むためのUIである。
+
+### Initial capabilities
+
+- 現在タブのURLを表示する。
+- 現在タブのtitleを表示する。
+- 現在タブからDOM情報を取得できる。
+- Element Pickerを開始できる。
+- 取得した候補をDomCaptureCandidateとして保存できる。
+- `DomCaptureBundle` export/importを通じてWebアプリ本体と連携できる。
+
+## Content Script requirements
+
+Content Scriptは対象ページ上でDOM情報を取得する。
+
+### Capture current page
+
+取得対象の例:
+
+```ts
+type PageCapture = {
+  url: string;
+  title: string;
+  capturedAt: string;
+};
+```
+
+### Capture element
+
+選択要素から次の情報を取得する。
+
+```ts
+type CapturedElement = {
+  tagName: string;
+  role?: string;
+  accessibleName?: string;
+  text?: string;
+  placeholder?: string;
+  ariaLabel?: string;
+  name?: string;
+  id?: string;
+  className?: string;
+  inputType?: string;
+  required?: boolean;
+  disabled?: boolean;
+  visible?: boolean;
+  selectorCandidates: string[];
+};
+```
+
+DOMから取得できる情報は仕様そのものではなく、UiNode作成の候補情報である。
+
+## DomCaptureCandidate
+
+Chrome拡張から取り込んだ候補を表す。
+
+```ts
+type DomCaptureCandidate = {
+  id: string;
+  projectId?: string;
+  featureId?: string;
+  screenId?: string;
+  sourceUrl: string;
+  sourceTitle?: string;
+  capturedAt: string;
+  element: CapturedElement;
+  suggestedUiNode?: {
+    name?: string;
+    role?: string;
+    componentType?: string;
+    selectorHint?: string;
+    textHint?: string;
+    required?: boolean;
+  };
+  status: "candidate" | "accepted" | "rejected";
+};
+```
+
+## DomCaptureBundle
+
+Chrome拡張候補は、Project単位の完全バックアップである `ExportBundle` とは別形式で扱う。
+
+```ts
+type DomCaptureBundle = {
+  schemaVersion: number;
+  appVersion: string;
+  exportedAt: string;
+  exportType: "dom-capture";
+  source: "chrome-extension";
+  candidates: DomCaptureCandidate[];
+};
+```
+
+`DomCaptureBundle` はWebアプリ側でimportし、候補レビュー画面に取り込む。Projectの完全復元や既存Project置き換えには使わない。
+
+## Element Picker
+
+Element Pickerは、ユーザーが対象ページ上の要素を1つ選択する機能である。
+
+### Requirements
+
+- picker開始時に対象ページ上でhover highlightを表示する。
+- clickした要素を選択する。
+- 選択後、DOM情報をSide Panelへ送信する。
+- Escまたはキャンセル操作でpickerを終了する。
+- picker終了時にhighlightや一時イベントリスナーを解除する。
+
+### Safety
+
+- 対象アプリの入力値、保存状態、業務データを変更しない。
+- click選択時に本来のclickイベントを抑止する。
+- 対象ページのDOM構造を永続的に変更しない。
+- 注入するstyleやoverlayはpicker終了時に削除する。
+
+## Message protocol
+
+初期実装では、次のようなメッセージを想定する。
+
+```ts
+type ExtensionMessage =
+  | { type: "GET_ACTIVE_TAB" }
+  | { type: "CAPTURE_PAGE" }
+  | { type: "START_ELEMENT_PICKER" }
+  | { type: "STOP_ELEMENT_PICKER" }
+  | { type: "ELEMENT_PICKED"; payload: CapturedElement };
+```
+
+message payloadは `shared` に型定義し、Side Panel / Background / Content Script で共有する。
+
+## Integration with web app
+
+初期実装では、Webアプリ本体とChrome拡張のリアルタイム同期は必須にしない。
+
+優先する連携方式:
+
+1. 拡張側で候補を `DomCaptureBundle` としてJSON exportする。
+2. Webアプリ側で `DomCaptureBundle` をimportする。
+3. Webアプリ側の候補レビュー画面で `DomCaptureCandidate` を確認する。
+4. ユーザーが確認・編集した候補を `UiNode` へ取り込む。
+
+将来的には、同一拡張内にWebアプリUIを持つ方式、またはローカル通信方式を検討する。
+
+## Non-goals
+
+初期Chrome拡張では次を実装しない。
+
+- DOMから完全な仕様書を自動生成する。
+- DOMからテストケースを自動生成する。
+- 対象アプリのフォーム入力や保存操作を自動実行する。
+- iframeでWebアプリ本体を対象ページへ埋め込む。
+- Webアプリ本体とのリアルタイム双方向同期。
+- 複数タブ横断の自動探索。
+
+## Testing
+
+- DOM抽出ロジックは可能な限り純粋関数化する。
+- selectorCandidates生成はfixture HTMLでテストする。
+- message protocolは型テストまたは単体テストを用意する。
+- pickerのE2Eは後続フェーズで検討する。
