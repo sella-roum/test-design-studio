@@ -350,6 +350,7 @@ type TraceNodeType =
   | "decisionTable"
   | "testViewpoint"
   | "testCase"
+  | "traceLink"
   | "changeRecord"
   | "domCaptureCandidate"
   | "evidence";
@@ -376,6 +377,8 @@ type TraceLink = EntityBase & {
 `linkType` は必須とする。単に `from` と `to` だけを保存すると、関係の意味が曖昧になるためである。
 
 TraceLinkも `EntityBase` を持つ。Traceabilityでは過去の根拠を残す価値があるため、削除時は原則として物理削除ではなく `status: "removed"` で無効化する。
+
+`traceLink` はTraceLink自体の変更履歴をChangeRecordで記録するために `TraceNodeType` に含める。TraceLink同士を無制限に結ぶためのものではない。
 
 ## ChangeRecord
 
