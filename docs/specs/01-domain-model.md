@@ -8,15 +8,17 @@
 
 ## Common conventions
 
-すべての永続化モデルは、原則として次の共通フィールドを持つ。
+Projectを含む永続化モデルは、原則として次の共通フィールドを持つ。
 
 ```ts
+type EntityStatus = "active" | "deprecated" | "removed";
+
 type EntityBase = {
   id: string;
   projectId: string;
   createdAt: string;
   updatedAt: string;
-  status: "active" | "deprecated" | "removed";
+  status: EntityStatus;
 };
 ```
 
@@ -38,6 +40,8 @@ type EntityBase = {
 
 プロジェクト全体を表す最上位単位。
 
+Projectは `projectId` を持たないが、削除・非推奨・履歴保持の方針を他モデルと揃えるため、`status` を持つ。
+
 ```ts
 type Project = {
   id: string;
@@ -46,10 +50,13 @@ type Project = {
   targetAppName?: string;
   targetAppUrl?: string;
   schemaVersion: number;
+  status: EntityStatus;
   createdAt: string;
   updatedAt: string;
 };
 ```
+
+通常のProject一覧では `status !== "removed"` を表示対象にする。
 
 ## Feature
 
@@ -103,7 +110,10 @@ type UiNode = EntityBase & {
 - DOMをそのまま保存しない。
 - テスト設計上意味のある単位に整理する。
 - ボタン、フォーム、テーブル、モーダル、タブ、メニューなどを想定する。
+- `componentType` は初期実装では自由入力の文字列とする。
+- `UiNodeType` enum は初期実装では定義しない。現実のUI分類で詰まりやすいため、必要になった段階で追加する。
 - `selectorHint` はPlaywright生成やChrome拡張連携の補助情報であり、仕様そのものではない。
+- 表示ラベルは `textHint` または `name` で表現し、`label` フィールドは初期モデルには追加しない。
 
 ## DataEntity
 
@@ -208,6 +218,8 @@ type TestCase = EntityBase & {
 仕様要素、観点、ケース、変更履歴の関係を表す。
 
 ```ts
+type TraceLinkType = "covers" | "derived_from" | "impacts" | "validates" | "depends_on" | "replaces";
+
 type TraceLink = {
   id: string;
   projectId: string;
@@ -215,7 +227,7 @@ type TraceLink = {
   fromId: string;
   toType: string;
   toId: string;
-  linkType: "covers" | "derived_from" | "impacts" | "validates" | "depends_on" | "replaces";
+  linkType: TraceLinkType;
   reason?: string;
   createdAt: string;
 };
@@ -228,10 +240,21 @@ type TraceLink = {
 仕様、UI、業務ルール、テスト観点、テストケースの変更を記録する。
 
 ```ts
+type ChangeType =
+  | "added"
+  | "updated"
+  | "deprecated"
+  | "removed"
+  | "selector-changed"
+  | "behavior-changed"
+  | "validation-changed"
+  | "display-changed"
+  | "permission-changed";
+
 type ChangeRecord = EntityBase & {
   targetType: string;
   targetId: string;
-  changeType: "added" | "updated" | "deprecated" | "removed" | "selector-changed" | "behavior-changed";
+  changeType: ChangeType;
   summary: string;
   before?: string;
   after?: string;
@@ -239,6 +262,53 @@ type ChangeRecord = EntityBase & {
   confidence: "confirmed" | "tentative" | "assumed" | "unknown";
 };
 ```
+
+`ChangeType` は `docs/specs/07-change-management-spec.md` と同じ値を使う。
+
+## DomCaptureCandidate
+
+Chrome拡張で取得したDOM候補をWebアプリ側でレビューするための一時的な候補モデル。
+
+```ts
+type CapturedElement = {
+  tagName: string;
+  role?: string;
+  accessibleName?: string;
+  text?: string;
+  placeholder?: string;
+  ariaLabel?: string;
+  name?: string;
+  id?: string;
+  className?: string;
+  inputType?: string;
+  required?: boolean;
+  disabled?: boolean;
+  visible?: boolean;
+  selectorCandidates: string[];
+};
+
+type DomCaptureCandidate = {
+  id: string;
+  projectId?: string;
+  featureId?: string;
+  screenId?: string;
+  sourceUrl: string;
+  sourceTitle?: string;
+  capturedAt: string;
+  element: CapturedElement;
+  suggestedUiNode?: {
+    name?: string;
+    role?: string;
+    componentType?: string;
+    selectorHint?: string;
+    textHint?: string;
+    required?: boolean;
+  };
+  status: "candidate" | "accepted" | "rejected";
+};
+```
+
+`DomCaptureCandidate` は仕様の正本ではない。ユーザーが確認・編集し、必要に応じて `UiNode` に変換する。
 
 ## Evidence
 
@@ -255,6 +325,8 @@ type Evidence = EntityBase & {
 };
 ```
 
+初期実装では `Evidence` Repository は必須にしない。ExportBundleでは `evidences?: Evidence[]` として任意扱いにする。
+
 ## Relationship summary
 
 - Project has many Features.
@@ -265,10 +337,11 @@ type Evidence = EntityBase & {
 - TestViewpoint has many TestCases.
 - TraceLink connects any supported model pair.
 - ChangeRecord records changes to supported models.
+- DomCaptureCandidate can be converted into UiNode after review.
 
 ## Implementation notes
 
 - UIからDexieを直接操作しない。
 - Repository層で各モデルのCRUDを提供する。
-- `status !== removed` を通常表示の基本条件にする。
+- `status !== "removed"` を通常表示の基本条件にする。
 - `updatedAt` は更新時に必ず変更する。
