@@ -32,6 +32,10 @@ type ChangeType =
   | "deprecated"
   | "removed"
   | "selector-changed"
+  | "accessible-name-changed"
+  | "role-changed"
+  | "state-changed"
+  | "description-changed"
   | "behavior-changed"
   | "validation-changed"
   | "display-changed"
@@ -56,8 +60,9 @@ openQuestion
 testViewpoint
 testCase
 traceLink
-domCaptureCandidate
 ```
+
+`UiCaptureCandidate` は一時候補であり、原則としてChangeRecordの正本targetにはしない。候補から作成または更新された `UiNode` をtargetにする。
 
 Reserved modelを実装した場合は、次も対象にできる。
 
@@ -105,16 +110,18 @@ evidence
 4. OpenQuestionに由来するTestViewpoint/TestCaseを確認する。
 5. 必要に応じて観点・ケースを更新する。
 
-### DOM candidate to existing UiNode
+### UI capture candidate to existing UiNode
 
-Chrome拡張で取得した候補が既存UiNodeの変更を示す場合:
+Chrome拡張で取得した `UiCaptureCandidate` が既存UiNodeの変更を示す場合:
 
-1. DomCaptureCandidateを確認する。
+1. UiCaptureCandidateを確認する。
 2. 既存UiNodeを選択する。
 3. 変更種別を選ぶ。
-4. selectorHint、textHint、roleなどを更新する。
+4. selectorHint、textHint、role、accessibleNameHint、locatorHintなどを必要に応じて更新する。
 5. ChangeRecordを作成する。
 6. 影響候補を確認する。
+
+候補由来情報は、ユーザーが確認・編集してから `UiNode` へ反映する。DOM CaptureやAccessibility Tree Captureの取得結果を、そのまま仕様正本として採用してはいけない。
 
 ## Before / after representation
 
@@ -176,6 +183,16 @@ selectorHint changed
 → Playwright draft candidates in future phase
 ```
 
+### accessible name / role / state changed
+
+```text
+accessibleNameHint / role / state changed
+→ automationSuitability high/medium TestCase
+→ getByRole / locatorHint dependent Playwright draft candidates in future phase
+```
+
+Accessibility Tree由来の変更候補は、Playwright `getByRole()` や支援技術上の操作対象に影響する可能性がある。ただし、自動影響判定は行わず、Phase 7の影響候補として手動確認する。
+
 ## Change statuses
 
 ChangeRecord自体もEntityStatusを持つ。
@@ -212,6 +229,8 @@ P0/P1では次を行わない。
 
 - Git diffのような構造化差分表示
 - DOM差分の完全自動検出
+- Accessibility Tree差分の完全自動検出
 - 変更影響の完全自動確定
+- UiCaptureCandidateをChangeRecord正本targetにすること
 - 外部Issue/PRとの自動同期
 - 監査ログとしての法的厳密性保証
