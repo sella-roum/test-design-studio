@@ -97,6 +97,45 @@ merge-into-project: 既存Projectへ差分取り込みする
 
 `replace-project` と `merge-into-project` は、確認UI、transaction、安全な退避、ID再マッピング、部分失敗時のrollback設計が必要になるため、P0では扱わない。
 
+## P0 importer scope
+
+P0 importerは、P0必須モデルのみを取り込む。
+
+P0で取り込む対象:
+
+- project
+- features
+- screens
+- uiNodes
+- dataEntities
+- dataFields
+- dataTypes
+- businessRules
+- openQuestions
+- testViewpoints
+- testCases
+- traceLinks
+- changeRecords
+
+P0で取り込まないReserved model:
+
+- states
+- stateTransitions
+- flows
+- flowSteps
+- errorCases
+- decisionTables
+- evidences
+- viewpointCandidates
+- importLogs
+- exportLogs
+
+Reserved model fieldが未指定、または空配列の場合は無視する。
+Reserved model fieldにデータが含まれている場合、P0では取り込まず、import前確認で警告を表示する。
+
+P0 importerはReserved modelのID remappingを実装しない。
+Reserved modelの取り込みは、該当RepositoryとUIが実装されたPhaseで個別に扱う。
+
 ## Import validation
 
 import時は、少なくとも次を検証する。
@@ -107,6 +146,7 @@ import時は、少なくとも次を検証する。
 - `exportType: "project"` の場合は project が存在する。
 - `exportType: "project"` の場合は data セクションが存在する。
 - P0必須配列が存在する。
+- Reserved model fieldにデータが含まれている場合は、P0では警告対象として扱う。
 - 参照IDの最低限の整合性がある。
 - `TestCase.steps` が配列であり、各stepに `id`、`order`、`action`、`instruction` がある。
 - `OpenQuestion.questionStatus` が定義済み値である。
@@ -123,24 +163,35 @@ import時は、少なくとも次を検証する。
 
 その他のレコードIDは、衝突がない場合は維持してよい。衝突がある場合は再割当する。
 
-### ID remapping rules
+### P0 ID remapping rules
 
-IDを再割当した場合は、参照元も同じtransaction内で必ず置き換える。
+P0 importerでは、次の参照IDを同一transaction内で再マッピングする。
 
 | 対象 | 置き換える参照 |
 |---|---|
-| Feature.id | Screen.featureId, BusinessRule.featureId, OpenQuestion.featureId, TestViewpoint.featureId, TestCase.featureId, State.featureId, StateTransition.featureId, Flow.featureId, ErrorCase.featureId |
-| Screen.id | UiNode.screenId, BusinessRule.screenId, OpenQuestion.screenId, State.screenId, Flow.startScreenId, Flow.endScreenId, FlowStep.screenId, ErrorCase.screenId |
-| UiNode.id | UiNode.parentId, BusinessRule.uiNodeId, OpenQuestion.uiNodeId, TestStep.targetUiNodeId, State.uiNodeId, FlowStep.uiNodeId, ErrorCase.uiNodeId |
-| DataEntity.id | DataField.entityId, State.dataEntityId |
+| Project.id | すべての `projectId` |
+| Feature.id | Screen.featureId, BusinessRule.featureId, OpenQuestion.featureId, TestViewpoint.featureId, TestCase.featureId |
+| Screen.id | UiNode.screenId, BusinessRule.screenId, OpenQuestion.screenId |
+| UiNode.id | UiNode.parentId, BusinessRule.uiNodeId, OpenQuestion.uiNodeId, TestStep.targetUiNodeId |
+| DataEntity.id | DataField.entityId |
 | DataType.id | DataField.dataTypeId |
 | TestViewpoint.id | TestCase.viewpointId |
+| 任意のP0対象ID | TraceLink.fromId, TraceLink.toId, ChangeRecord.targetId |
+
+ID再マッピングは、全レコードの新旧ID対応表を作成してから適用する。
+
+### Future ID remapping rules
+
+Reserved modelのID remappingは、該当モデルのRepositoryとImport対応を実装するPhaseで追加する。
+
+例:
+
+| 対象 | 置き換える参照 |
+|---|---|
 | State.id | StateTransition.fromStateId, StateTransition.toStateId |
 | Flow.id | FlowStep.flowId |
 | BusinessRule.id | DecisionTable.businessRuleId |
-| 任意の対象ID | TraceLink.fromId, TraceLink.toId, ChangeRecord.targetId, StateTransition.targetId |
-
-ID再マッピングは、全レコードの新旧ID対応表を作成してから適用する。
+| Reserved model | 該当PhaseのImport仕様で個別に定義する |
 
 ### future: replace-project
 
@@ -265,6 +316,8 @@ P0では次を扱わない。
 - 複数Projectを1ファイルにまとめたexport
 - 既存Projectへの置き換えimport
 - 差分import
+- Reserved modelの取り込み
+- Reserved modelのID remapping
 - CSV export
 - GitHubへの直接push
 - Google Driveやクラウドストレージ連携
