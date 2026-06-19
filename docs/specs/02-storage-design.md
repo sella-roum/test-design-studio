@@ -47,17 +47,20 @@ testViewpoints
 testCases
 traceLinks
 changeRecords
+domCaptureCandidates
 evidences
 importLogs
 exportLogs
 ```
+
+`evidences` は初期実装では予約テーブル扱いでもよい。`DomCaptureCandidate` はChrome拡張候補レビューのPhaseで利用する。
 
 ## Index policy
 
 Dexieでは、一覧取得と関連取得を優先してindexを定義する。
 
 ```ts
-projects: "id, updatedAt"
+projects: "id, status, updatedAt"
 features: "id, projectId, [projectId+status], updatedAt"
 screens: "id, projectId, featureId, [featureId+status], updatedAt"
 uiNodes: "id, projectId, screenId, parentId, [screenId+status], sortOrder"
@@ -69,6 +72,7 @@ testViewpoints: "id, projectId, featureId, [featureId+status]"
 testCases: "id, projectId, featureId, viewpointId, [featureId+status]"
 traceLinks: "id, projectId, fromId, toId, [fromType+fromId], [toType+toId], linkType"
 changeRecords: "id, projectId, targetId, [targetType+targetId], changeType, updatedAt"
+domCaptureCandidates: "id, projectId, screenId, sourceUrl, status, capturedAt"
 evidences: "id, projectId, sourceType, [projectId+status]"
 ```
 
@@ -83,12 +87,15 @@ projectRepository
 featureRepository
 screenRepository
 uiNodeRepository
+dataEntityRepository
+dataFieldRepository
 dataTypeRepository
 businessRuleRepository
 testViewpointRepository
 testCaseRepository
 traceLinkRepository
 changeRecordRepository
+domCaptureCandidateRepository
 ```
 
 Repositoryは次の基本操作を提供する。
@@ -113,7 +120,8 @@ type Repository<T> = {
 
 - Project削除時に配下データを論理削除する。
 - Feature削除時に関連Screen、UiNode、Viewpoint、TestCaseを論理削除する。
-- import時に複数テーブルをまとめて書き込む。
+- Project import時に複数テーブルをまとめて書き込む。
+- DomCaptureBundle import時に候補をまとめて書き込む。
 - ChangeRecord作成時にTraceLinkを同時作成する。
 
 ## Migration policy
@@ -134,15 +142,26 @@ export対象には次を含める。
 - schemaVersion
 - appVersion
 - exportedAt
+- exportType
 - project
 - related records
 
-import時は、少なくとも次のモードを用意する。
+Project importの初期実装では、次のモードのみを扱う。
 
-- 新規プロジェクトとして取り込む。
-- 既存プロジェクトを置き換える。
+```text
+create-new-project: 新規Projectとして取り込む
+```
 
-既存プロジェクトへのマージは初期実装では必須にしない。
+以下は後続フェーズで検討する。
+
+```text
+replace-project: 既存Projectを置き換える
+merge-into-project: 既存Projectへ差分取り込みする
+```
+
+既存Projectへの置き換えやマージは、確認UI、transaction、安全な退避、ID再マッピングの仕様が必要になるため、初期実装では扱わない。
+
+Chrome拡張候補の取り込みは、Project backupとは別の `DomCaptureBundle` として扱う。
 
 ## Error handling
 
