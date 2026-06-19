@@ -187,6 +187,7 @@ Feature Workspace上で未確認事項、テスト観点、構造化されたテ
 - OpenQuestionをFeature / Screen / UiNodeなどの関連対象に紐づけられる構造にする。
 - TestViewpoint一覧・作成フォームを追加する。
 - TestViewpointのautomationSuitabilityとautomationReasonを扱う。
+- TestViewpoint作成時にsource elementsを簡易選択し、`derived_from` TraceLinkを作成できるようにする。
 - TestCase一覧・作成フォームを追加する。
 - TestViewpointからTestCaseを作成できるようにする。
 - priority / automationSuitability / automationReasonなどの基本属性を扱う。
@@ -205,6 +206,7 @@ Feature Workspace上で未確認事項、テスト観点、構造化されたテ
 - OpenQuestionを作成できる。
 - OpenQuestionのquestionStatusとconfidenceを保存できる。
 - TestViewpointを作成できる。
+- TestViewpointからUiNode / DataType / DataEntity / DataField / BusinessRule / OpenQuestionなどへの `derived_from` TraceLinkを最低限作成できる。
 - TestViewpointに紐づくTestCaseを作成できる。
 - priority / automationSuitability / automationReasonを保存できる。
 - TestCaseの手順が `TestStep[]` として保存される。
