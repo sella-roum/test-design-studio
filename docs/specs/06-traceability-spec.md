@@ -196,9 +196,11 @@ P0の保存層で扱える主なTraceNodeType:
 - traceLink
 - changeRecord
 
+P0 importerは、TraceLink / ChangeRecordについても上記のstorage-level TraceNodeTypeのみを有効な参照先として扱う。詳細は `docs/specs/05-import-export-spec.md` を正とする。
+
 ### P0 UI-selectable TraceNodeTypes
 
-P0のUIでsource elementとして選択してよいTraceNodeType:
+P0のUIでTestViewpointのsource elementとして選択してよいTraceNodeType:
 
 - screen
 - uiNode
@@ -207,7 +209,8 @@ P0のUIでsource elementとして選択してよいTraceNodeType:
 - dataField
 - businessRule
 - openQuestion
-- testViewpoint
+
+`testViewpoint` は、P0のsource element選択肢には含めない。TestCaseからTestViewpointへの関係は、source elementではなく `testCase covers testViewpoint` として扱う。
 
 `traceLink` と `changeRecord` は、P0では内部保存対象として扱ってよいが、専用UIの選択肢には出さない。これらはPhase 7のTraceLink UI / ChangeRecord UIで扱う。
 
