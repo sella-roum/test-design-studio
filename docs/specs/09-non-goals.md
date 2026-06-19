@@ -11,7 +11,7 @@
 この文書では、次の意味でフェーズ名を使う。
 
 - P0: Web Design MVP。Webアプリ単体で1機能分の設計データを作り、JSON/Markdownで出力できる状態。
-- P1: Capture & Trace MVP。Chrome拡張、DomCaptureCandidate、ChangeRecord、TraceLink UI、影響候補表示を扱う状態。
+- P1: Capture & Trace MVP。Chrome拡張、UiCaptureCandidate、ChangeRecord、TraceLink UI、影響候補表示を扱う状態。
 - P2: Assistive Design MVP。技法ワークベンチ、AI context export、Playwright draft exportを扱う状態。
 
 単に「初期実装」と書かれている場合は、原則としてP0を指す。
@@ -67,8 +67,9 @@ P0/P1では、`selectorHint`、`TestStep.targetUiNodeId`、`automationSuitabilit
 
 P1のChrome拡張では、次を行わない。
 
-- DOMから仕様を完全自動生成する。
-- DOMからテストケースを自動生成する。
+- DOMやAccessibility Treeから仕様を完全自動生成する。
+- DOMやAccessibility Treeからテストケースを自動生成する。
+- Accessibility Treeのrole/name/stateを、ユーザー確認なしに `UiNode` 正本へ採用する。
 - 対象アプリのフォームを自動入力する。
 - 対象アプリの保存・更新・削除操作を実行する。
 - 対象アプリに永続的なDOM変更を加える。
@@ -76,9 +77,27 @@ P1のChrome拡張では、次を行わない。
 - 複数タブを自動巡回する。
 - ログインや権限を突破する。
 - 画面全体のDOMを永続保存する。
+- 画面全体のAX treeを永続保存する。
 - input valueや認証情報を保存する。
+- `chrome.debugger` permissionを標準必須機能にする。
 
 Chrome拡張は、あくまで入力補助である。
+
+## Accessibility Tree non-goals
+
+P1でAccessibility Tree解析を導入する場合も、次を行わない。
+
+- AX treeから仕様意図を自動確定する。
+- AX treeから業務ルールを推定する。
+- AX treeから期待結果を推定する。
+- AX treeからテストケースを自動生成する。
+- AX treeのrole/name/stateを仕様の正本として無条件に採用する。
+- AX treeの不完全さをもって対象アプリの仕様欠陥と断定する。
+- ページ全体のAX treeを永続スナップショットとして保存する。
+- `chrome.debugger` permissionを通常MVPの必須権限にする。
+- Playwright `ariaSnapshot()` 取り込みをP1の必須実装にする。
+
+Accessibility Tree解析は、ユーザー視点のUI候補を補助するための情報源であり、仕様やテスト設計を自動確定する根拠ではない。
 
 ## Integration non-goals
 
@@ -143,6 +162,7 @@ P0では、次を保証しない。
 
 - 変更影響の完全自動検出
 - DOM差分の完全一致比較
+- Accessibility Tree差分の完全一致比較
 - Git履歴との自動同期
 - 外部PRやIssueとの紐づけ
 - 法的監査ログとしての厳密性
