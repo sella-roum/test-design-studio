@@ -61,7 +61,8 @@ Test Design Studio は、次の中間に位置する。
 
 - ローカルファーストであること。
 - テスト設計上意味のある構造を扱うこと。
-- DOMをそのまま保存するのではなく、仕様理解に必要なUI要素へ整理すること。
+- DOMやAccessibility Treeをそのまま保存するのではなく、仕様理解に必要なUI要素へ整理すること。
+- UI解析はDOM CaptureとAccessibility Tree Captureを統合したHybrid UI Captureとして扱い、取得結果は候補として人が確認すること。
 - AI生成よりも、根拠のある構造化データを優先すること。
 - 変更履歴と影響範囲を追えること。
 - MVPを1回で削り切るのではなく、P0、P1、P2で段階的に全体構想へ近づけること。
@@ -96,10 +97,11 @@ P1では、実画面から設計素材を取り込み、変更履歴と影響追
 P1の成功条件:
 
 1. Chrome拡張から現在画面のURL、タイトル、選択要素をUI候補として取り込める。
-2. DomCaptureCandidateをWebアプリ側で確認・編集し、UiNodeへ変換できる。
-3. ChangeRecordを登録できる。
-4. TraceLinkを手動で作成・確認できる。
-5. 変更対象から影響候補を表示し、人が影響有無を確定できる。
+2. DOM Capture由来の候補を `UiCaptureCandidate` として扱い、Webアプリ側で確認・編集してUiNodeへ変換できる。
+3. Accessibility Tree Captureを追加する場合も、role、accessible name、stateは候補情報として扱い、ユーザー確認後にUiNodeへ反映できる。
+4. ChangeRecordを登録できる。
+5. TraceLinkを手動で作成・確認できる。
+6. 変更対象から影響候補を表示し、人が影響有無を確定できる。
 
 ### P2: Assistive Design MVP
 
@@ -118,7 +120,7 @@ P2の成功条件:
 P0では、次を目的にしない。
 
 - 完全なテスト管理SaaS
-- DOMからの仕様完全自動生成
+- DOMやAccessibility Treeからの仕様完全自動生成
 - AIによるテストケース大量生成
 - Playwrightコードの完全自動生成
 - Playwrightの実行・結果収集・自己修復
