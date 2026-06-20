@@ -7,15 +7,15 @@
 
 ## Scope implemented
 
-- 
+-
 
 ## Non-goals kept out of scope
 
-- 
+-
 
 ## Changed files
 
-- 
+-
 
 ## Verification
 
@@ -30,8 +30,8 @@
 
 ## Notes for reviewers
 
-- 
+-
 
 ## Follow-up tasks
 
-- 
+-
