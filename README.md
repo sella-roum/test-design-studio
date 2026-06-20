@@ -89,6 +89,7 @@ Chrome拡張で実画面からUI候補を取り込み、変更履歴と影響追
     │   ├── task-breakdown.md
     │   └── tasks/
     └── specs/
+        └── ui/
 ```
 
 ## Important documents
@@ -101,7 +102,8 @@ Chrome拡張で実画面からUI候補を取り込み、変更履歴と影響追
 4. `docs/plans/task-breakdown.md`
 5. `docs/plans/implementation-plan.md`
 6. 対象領域の `docs/specs/*.md`
-7. `docs/design.md`
+7. UI実装時は `docs/specs/ui/README.md` と対象画面のUI仕様
+8. `docs/design.md`
 
 `docs/design.md` は長期構想を含む親設計書です。実装時にそのまま全体を実装してはいけません。現在対応するTask IDのScopeを優先してください。
 
