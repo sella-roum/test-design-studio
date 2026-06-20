@@ -73,7 +73,8 @@ Vite + React + TypeScript の最小アプリ基盤を作成する。
 - Vite React TypeScript構成を追加する。
 - `src/main.tsx` と `src/App.tsx` を追加する。
 - 基本レイアウトとグローバルCSSを追加する。
-- `dev`、`build`、`typecheck`、`test` scriptを定義する。
+- `dev`、`build`、`typecheck` scriptを定義する。
+- `test` scriptはTASK-003の品質ゲート追加で実体化する。TASK-002で必要な場合は、実テスト基盤を導入しない一時placeholderに留める。
 - アプリ名、プロダクト概要、空状態を表示する初期画面を作る。
 
 ### Non-goals
@@ -83,6 +84,7 @@ Vite + React + TypeScript の最小アプリ基盤を作成する。
 - Project作成画面は実装しない。
 - Chrome拡張は実装しない。
 - 認証、クラウド同期、外部API連携は実装しない。
+- Vitest、Testing Library、GitHub Actionsの品質ゲートは実装しない。
 
 ### Acceptance criteria
 
@@ -91,6 +93,7 @@ Vite + React + TypeScript の最小アプリ基盤を作成する。
 - `npm run build` と `npm run typecheck` が成功する。
 - 初期画面にアプリ名が表示される。
 - 初期画面に「ローカルファーストなテスト設計ワークスペース」であることが分かる説明が表示される。
+- `test` scriptを追加する場合は、Vitestなどの実テスト基盤を導入せず、TASK-003で置き換える一時placeholderであることが分かる。
 - `docs/specs/09-non-goals.md` に反する機能が入っていない。
 
 ## TASK-003: 品質ゲート追加
