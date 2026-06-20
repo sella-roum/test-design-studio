@@ -8,8 +8,8 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
-    "format": "prettier --write \"*.{js,json,ts,tsx,css,html,md,yml,yaml}\" \"src/**/*.{ts,tsx,css}\" \".github/**/*.{md,yml,yaml}\"",
-    "format:check": "prettier --check \"*.{js,json,ts,tsx,css,html,md,yml,yaml}\" \"src/**/*.{ts,tsx,css}\" \".github/**/*.{md,yml,yaml}\"",
+    "format": "prettier --write \"index.html\" \"package.json\" \"eslint.config.js\" \"vite.config.ts\" \"vitest.config.ts\" \"tsconfig*.json\" \"README.md\" \"src/**/*.{ts,tsx,css}\" \".github/**/*.{md,yml,yaml}\"",
+    "format:check": "prettier --check \"index.html\" \"package.json\" \"eslint.config.js\" \"vite.config.ts\" \"vitest.config.ts\" \"tsconfig*.json\" \"README.md\" \"src/**/*.{ts,tsx,css}\" \".github/**/*.{md,yml,yaml}\"",
     "preview": "vite preview",
     "test": "vitest run",
     "check": "npm run lint && npm run format:check && npm run typecheck && npm run test"
