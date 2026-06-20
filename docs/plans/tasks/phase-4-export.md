@@ -121,7 +121,7 @@ type ExportBundle = {
   schemaVersion: number;
   appVersion: string;
   exportedAt: string;
-  exportType: "project";
+  exportType: 'project';
   project: Project;
   data: {
     features: Feature[];
@@ -169,8 +169,8 @@ type UiCaptureBundle = {
   schemaVersion: number;
   appVersion: string;
   exportedAt: string;
-  exportType: "ui-capture";
-  source: "chrome-extension" | "playwright" | "manual-import";
+  exportType: 'ui-capture';
+  source: 'chrome-extension' | 'playwright' | 'manual-import';
   candidates: UiCaptureCandidate[];
 };
 ```
@@ -194,29 +194,29 @@ type UiCaptureBundle = {
 
 Project importでは、新しいProject IDを採番したうえで、関連IDを一貫して再マッピングする。
 
-| 対象 | 再マッピング対象 |
-|---|---|
-| Project | `project.id` |
-| EntityBase | `projectId` |
-| Feature | `id` |
-| Screen | `id`, `featureId` |
-| UiNode | `id`, `screenId`, `parentId` |
-| DataEntity | `id` |
-| DataField | `id`, `entityId`, `dataTypeId` |
-| DataType | `id` |
-| BusinessRule | `id`, `featureId`, `screenId`, `uiNodeId` |
-| OpenQuestion | `id`, `featureId`, `screenId`, `uiNodeId` |
-| TestViewpoint | `id`, `featureId` |
-| TestCase | `id`, `featureId`, `viewpointId`, `steps[].targetUiNodeId` |
-| TraceLink | `id`, `fromId`, `toId` |
-| ChangeRecord | `id`, `targetId` |
-| State | `id`, `featureId`, `screenId`, `uiNodeId`, `dataEntityId` |
-| StateTransition | `id`, `featureId`, `targetId`, `fromStateId`, `toStateId` |
-| Flow | `id`, `featureId`, `startScreenId`, `endScreenId` |
-| FlowStep | `id`, `flowId`, `screenId`, `uiNodeId` |
-| ErrorCase | `id`, `featureId`, `screenId`, `uiNodeId` |
-| DecisionTable | `id`, `businessRuleId` |
-| Reserved model | 対応Repositoryが実装されたPhaseで、上記以外の参照を個別に追加定義する |
+| 対象            | 再マッピング対象                                                      |
+| --------------- | --------------------------------------------------------------------- |
+| Project         | `project.id`                                                          |
+| EntityBase      | `projectId`                                                           |
+| Feature         | `id`                                                                  |
+| Screen          | `id`, `featureId`                                                     |
+| UiNode          | `id`, `screenId`, `parentId`                                          |
+| DataEntity      | `id`                                                                  |
+| DataField       | `id`, `entityId`, `dataTypeId`                                        |
+| DataType        | `id`                                                                  |
+| BusinessRule    | `id`, `featureId`, `screenId`, `uiNodeId`                             |
+| OpenQuestion    | `id`, `featureId`, `screenId`, `uiNodeId`                             |
+| TestViewpoint   | `id`, `featureId`                                                     |
+| TestCase        | `id`, `featureId`, `viewpointId`, `steps[].targetUiNodeId`            |
+| TraceLink       | `id`, `fromId`, `toId`                                                |
+| ChangeRecord    | `id`, `targetId`                                                      |
+| State           | `id`, `featureId`, `screenId`, `uiNodeId`, `dataEntityId`             |
+| StateTransition | `id`, `featureId`, `targetId`, `fromStateId`, `toStateId`             |
+| Flow            | `id`, `featureId`, `startScreenId`, `endScreenId`                     |
+| FlowStep        | `id`, `flowId`, `screenId`, `uiNodeId`                                |
+| ErrorCase       | `id`, `featureId`, `screenId`, `uiNodeId`                             |
+| DecisionTable   | `id`, `businessRuleId`                                                |
+| Reserved model  | 対応Repositoryが実装されたPhaseで、上記以外の参照を個別に追加定義する |
 
 `UiCaptureCandidate` はProject ExportBundleのP0 import対象ではない。UiCaptureBundle importで扱う場合のID再マッピングは、Phase 5-6の候補取り込みタスクで定義する。
 

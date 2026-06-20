@@ -222,15 +222,15 @@ Project
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| プロジェクト名 | テスト対象名 |
-| 説明 | 対象アプリの概要 |
-| 対象環境 | Web / Mobile Web / Admin / API など |
-| 対象デバイス | PC / スマホ / タブレット |
-| 備考 | 補足情報 |
-| 作成日時 | 作成日 |
-| 更新日時 | 更新日 |
+| 項目           | 内容                                |
+| -------------- | ----------------------------------- |
+| プロジェクト名 | テスト対象名                        |
+| 説明           | 対象アプリの概要                    |
+| 対象環境       | Web / Mobile Web / Admin / API など |
+| 対象デバイス   | PC / スマホ / タブレット            |
+| 備考           | 補足情報                            |
+| 作成日時       | 作成日                              |
+| 更新日時       | 更新日                              |
 
 ---
 
@@ -242,19 +242,19 @@ Project
 
 ### 必須項目
 
-| 項目 | 内容 |
-|---|---|
-| 機能名 | ユーザー作成、ログイン、検索など |
-| 目的 | 利用者が何を達成するための機能か |
-| アクター | 管理者、一般ユーザー、ゲストなど |
-| 前提条件 | ログイン済み、権限あり、対象データありなど |
-| 成功条件 | どの状態になれば成功か |
-| 失敗条件 | どの状態になれば失敗か |
-| 関連画面 | 関連する画面 |
-| 関連データ | 関連するエンティティ |
-| 関連ルール | 関連する業務ルール |
-| 確度 | 確定 / 暫定 / 推測 / 要確認 |
-| 根拠 | 仕様書、Figma、実装、MTG、Slackなど |
+| 項目       | 内容                                       |
+| ---------- | ------------------------------------------ |
+| 機能名     | ユーザー作成、ログイン、検索など           |
+| 目的       | 利用者が何を達成するための機能か           |
+| アクター   | 管理者、一般ユーザー、ゲストなど           |
+| 前提条件   | ログイン済み、権限あり、対象データありなど |
+| 成功条件   | どの状態になれば成功か                     |
+| 失敗条件   | どの状態になれば失敗か                     |
+| 関連画面   | 関連する画面                               |
+| 関連データ | 関連するエンティティ                       |
+| 関連ルール | 関連する業務ルール                         |
+| 確度       | 確定 / 暫定 / 推測 / 要確認                |
+| 根拠       | 仕様書、Figma、実装、MTG、Slackなど        |
 
 ### 例
 
@@ -277,17 +277,17 @@ Project
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| 画面名 | ユーザー一覧画面など |
-| 画面種別 | 一覧、詳細、作成、編集、確認、完了、エラーなど |
-| URL / ルート | `/users` など |
-| 目的 | この画面で何をするか |
-| 前提条件 | ログイン済み、権限ありなど |
-| 関連機能 | 所属する機能 |
-| 関連フロー | 関連する業務フロー |
-| 状態 | 初期表示、空状態、データあり、エラーなど |
-| 根拠 | 仕様書、Figma、実装確認など |
+| 項目         | 内容                                           |
+| ------------ | ---------------------------------------------- |
+| 画面名       | ユーザー一覧画面など                           |
+| 画面種別     | 一覧、詳細、作成、編集、確認、完了、エラーなど |
+| URL / ルート | `/users` など                                  |
+| 目的         | この画面で何をするか                           |
+| 前提条件     | ログイン済み、権限ありなど                     |
+| 関連機能     | 所属する機能                                   |
+| 関連フロー   | 関連する業務フロー                             |
+| 状態         | 初期表示、空状態、データあり、エラーなど       |
+| 根拠         | 仕様書、Figma、実装確認など                    |
 
 ### 画面種別プリセット
 
@@ -368,22 +368,22 @@ DOM構造を完全に再現するのではなく、**テスト設計上意味の
 
 ### UIノード項目
 
-| 項目 | 内容 |
-|---|---|
-| 名前 | 保存ボタン、メールアドレス入力欄など |
-| nodeType | input, button, dialog, form など |
-| role | input, action, container, feedback など |
-| 親UI | 親ノード |
-| 所属画面 | 画面ID |
-| 表示順 | 同階層での順番 |
-| 表示条件 | どの条件で表示されるか |
-| 操作可能条件 | どの条件で操作可能か |
-| データ種別 | 入力欄などに紐づくデータ種別 |
-| 状態 | enabled, disabled, invalid など |
-| 操作 | click, input, select など |
-| 期待される振る舞い | 操作後にどうなるべきか |
-| selectorHint | data-testid, role/name の候補 |
-| 根拠 | 仕様情報の出所 |
+| 項目               | 内容                                    |
+| ------------------ | --------------------------------------- |
+| 名前               | 保存ボタン、メールアドレス入力欄など    |
+| nodeType           | input, button, dialog, form など        |
+| role               | input, action, container, feedback など |
+| 親UI               | 親ノード                                |
+| 所属画面           | 画面ID                                  |
+| 表示順             | 同階層での順番                          |
+| 表示条件           | どの条件で表示されるか                  |
+| 操作可能条件       | どの条件で操作可能か                    |
+| データ種別         | 入力欄などに紐づくデータ種別            |
+| 状態               | enabled, disabled, invalid など         |
+| 操作               | click, input, select など               |
+| 期待される振る舞い | 操作後にどうなるべきか                  |
+| selectorHint       | data-testid, role/name の候補           |
+| 根拠               | 仕様情報の出所                          |
 
 ### nodeType候補
 
@@ -444,36 +444,36 @@ layout
 
 ### データ種別との違い
 
-| 概念 | 例 | 意味 |
-|---|---|---|
-| エンティティ | ユーザー | 業務データのまとまり |
-| フィールド | email | エンティティが持つ項目 |
-| データ種別 | メールアドレス | 入力値・値の性質 |
+| 概念         | 例             | 意味                   |
+| ------------ | -------------- | ---------------------- |
+| エンティティ | ユーザー       | 業務データのまとまり   |
+| フィールド   | email          | エンティティが持つ項目 |
+| データ種別   | メールアドレス | 入力値・値の性質       |
 
 ### エンティティ項目
 
-| 項目 | 内容 |
-|---|---|
+| 項目           | 内容                             |
+| -------------- | -------------------------------- |
 | エンティティ名 | ユーザー、注文、プロジェクトなど |
-| 説明 | 何を表すデータか |
-| 関連機能 | どの機能で使うか |
-| 関連画面 | どの画面で表示・編集されるか |
-| ライフサイクル | 作成、編集、削除、無効化など |
-| 関連状態 | 下書き、承認済み、削除済みなど |
+| 説明           | 何を表すデータか                 |
+| 関連機能       | どの機能で使うか                 |
+| 関連画面       | どの画面で表示・編集されるか     |
+| ライフサイクル | 作成、編集、削除、無効化など     |
+| 関連状態       | 下書き、承認済み、削除済みなど   |
 
 ### フィールド項目
 
-| 項目 | 内容 |
-|---|---|
-| フィールド名 | email |
-| 表示名 | メールアドレス |
-| 型 | string, number, date, enum など |
-| 必須 | 必須 / 任意 |
-| 一意制約 | あり / なし |
-| 初期値 | 作成時の初期値 |
-| 更新可否 | 作成後に変更できるか |
-| 関連データ種別 | メールアドレスなど |
-| 関連業務ルール | 重複不可など |
+| 項目           | 内容                            |
+| -------------- | ------------------------------- |
+| フィールド名   | email                           |
+| 表示名         | メールアドレス                  |
+| 型             | string, number, date, enum など |
+| 必須           | 必須 / 任意                     |
+| 一意制約       | あり / なし                     |
+| 初期値         | 作成時の初期値                  |
+| 更新可否       | 作成後に変更できるか            |
+| 関連データ種別 | メールアドレスなど              |
+| 関連業務ルール | 重複不可など                    |
 
 ---
 
@@ -485,18 +485,18 @@ layout
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| データ種別名 | メールアドレス、氏名、日付、金額など |
-| 種別 | string, number, date, enum, file など |
-| 空値許容 | 可 / 不可 |
-| 有効値例 | 正常に受け付ける値 |
-| 無効値例 | 拒否すべき値 |
-| 最小値 | 文字数、数値、日付など |
-| 最大値 | 文字数、数値、日付など |
-| 境界値 | min-1, min, min+1, max-1, max, max+1 |
-| 関連技法 | 同値分割、境界値分析 |
-| 備考 | 補足 |
+| 項目         | 内容                                  |
+| ------------ | ------------------------------------- |
+| データ種別名 | メールアドレス、氏名、日付、金額など  |
+| 種別         | string, number, date, enum, file など |
+| 空値許容     | 可 / 不可                             |
+| 有効値例     | 正常に受け付ける値                    |
+| 無効値例     | 拒否すべき値                          |
+| 最小値       | 文字数、数値、日付など                |
+| 最大値       | 文字数、数値、日付など                |
+| 境界値       | min-1, min, min+1, max-1, max, max+1  |
+| 関連技法     | 同値分割、境界値分析                  |
+| 備考         | 補足                                  |
 
 ### 例
 
@@ -544,18 +544,18 @@ UI要素
 
 ### 状態項目
 
-| 項目 | 内容 |
-|---|---|
-| 状態名 | 未入力、保存中、承認済みなど |
-| スコープ | 画面、UI要素、データなど |
-| 対象 | 対象画面、対象UI、対象データなど |
-| 状態になる条件 | どの条件でその状態になるか |
-| 観測できる結果 | ユーザーから見える表示・制約 |
-| 次に可能な操作 | この状態で可能な操作 |
-| 禁止される操作 | この状態で不可の操作 |
-| 期待結果 | テスト時に確認すべき結果 |
-| 関連技法 | 状態遷移、デシジョンテーブルなど |
-| 根拠 | 仕様情報の出所 |
+| 項目           | 内容                             |
+| -------------- | -------------------------------- |
+| 状態名         | 未入力、保存中、承認済みなど     |
+| スコープ       | 画面、UI要素、データなど         |
+| 対象           | 対象画面、対象UI、対象データなど |
+| 状態になる条件 | どの条件でその状態になるか       |
+| 観測できる結果 | ユーザーから見える表示・制約     |
+| 次に可能な操作 | この状態で可能な操作             |
+| 禁止される操作 | この状態で不可の操作             |
+| 期待結果       | テスト時に確認すべき結果         |
+| 関連技法       | 状態遷移、デシジョンテーブルなど |
+| 根拠           | 仕様情報の出所                   |
 
 ### 共通状態プリセット
 
@@ -589,24 +589,24 @@ UI要素
 
 ### 状態遷移項目
 
-| 項目 | 内容 |
-|---|---|
-| 対象 | データ、画面、UI、フローなど |
-| 現在状態 | from |
-| イベント | 状態を変える操作・きっかけ |
-| 次状態 | to |
-| 条件 | 遷移が成立する条件 |
-| 期待結果 | 遷移後に観測できる結果 |
-| 不正遷移 | 許可されない遷移 |
-| 関連テスト観点 | 状態遷移から作る観点 |
+| 項目           | 内容                         |
+| -------------- | ---------------------------- |
+| 対象           | データ、画面、UI、フローなど |
+| 現在状態       | from                         |
+| イベント       | 状態を変える操作・きっかけ   |
+| 次状態         | to                           |
+| 条件           | 遷移が成立する条件           |
+| 期待結果       | 遷移後に観測できる結果       |
+| 不正遷移       | 許可されない遷移             |
+| 関連テスト観点 | 状態遷移から作る観点         |
 
 ### 例
 
-| 現在状態 | イベント | 次状態 | 条件 | 期待結果 |
-|---|---|---|---|---|
-| 下書き | 申請する | 申請中 | 必須項目入力済み | ステータスが申請中になる |
-| 申請中 | 承認する | 承認済み | 承認者権限あり | 承認済みになる |
-| 申請中 | 差し戻す | 差し戻し | コメント入力済み | 差し戻しになる |
+| 現在状態 | イベント | 次状態   | 条件             | 期待結果                 |
+| -------- | -------- | -------- | ---------------- | ------------------------ |
+| 下書き   | 申請する | 申請中   | 必須項目入力済み | ステータスが申請中になる |
+| 申請中   | 承認する | 承認済み | 承認者権限あり   | 承認済みになる           |
+| 申請中   | 差し戻す | 差し戻し | コメント入力済み | 差し戻しになる           |
 
 ---
 
@@ -618,18 +618,18 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| ルール名 | メールアドレス一意制約など |
-| 対象 | 機能、データ、UI、フローなど |
-| 条件 | どの条件で適用されるか |
-| 期待される振る舞い | 条件成立時にどう動くか |
-| 例外 | 例外条件 |
-| 関連データ | 対象エンティティ・フィールド |
-| 関連画面 | 関連する画面 |
-| 関連技法 | デシジョンテーブル、同値分割など |
-| 根拠 | 仕様書、MTG、実装確認など |
-| 確度 | 確定 / 暫定 / 推測 / 要確認 |
+| 項目               | 内容                             |
+| ------------------ | -------------------------------- |
+| ルール名           | メールアドレス一意制約など       |
+| 対象               | 機能、データ、UI、フローなど     |
+| 条件               | どの条件で適用されるか           |
+| 期待される振る舞い | 条件成立時にどう動くか           |
+| 例外               | 例外条件                         |
+| 関連データ         | 対象エンティティ・フィールド     |
+| 関連画面           | 関連する画面                     |
+| 関連技法           | デシジョンテーブル、同値分割など |
+| 根拠               | 仕様書、MTG、実装確認など        |
+| 確度               | 確定 / 暫定 / 推測 / 要確認      |
 
 ### 例
 
@@ -651,32 +651,32 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### フロー項目
 
-| 項目 | 内容 |
-|---|---|
-| フロー名 | ユーザーを作成する |
-| 目的 | フローの目的 |
-| 開始画面 | 開始地点 |
-| 終了画面 | 終了地点 |
-| 前提条件 | フロー開始に必要な条件 |
-| 成功条件 | フロー完了時の状態 |
-| 代替パス | 分岐する正常系 |
-| 例外パス | 異常系 |
-| 関連機能 | 対応する機能 |
-| 関連状態 | 状態変化 |
-| 関連データ | 使用するデータ |
+| 項目       | 内容                   |
+| ---------- | ---------------------- |
+| フロー名   | ユーザーを作成する     |
+| 目的       | フローの目的           |
+| 開始画面   | 開始地点               |
+| 終了画面   | 終了地点               |
+| 前提条件   | フロー開始に必要な条件 |
+| 成功条件   | フロー完了時の状態     |
+| 代替パス   | 分岐する正常系         |
+| 例外パス   | 異常系                 |
+| 関連機能   | 対応する機能           |
+| 関連状態   | 状態変化               |
+| 関連データ | 使用するデータ         |
 
 ### フローステップ項目
 
-| 項目 | 内容 |
-|---|---|
-| 順番 | ステップ番号 |
-| 対象画面 | 操作する画面 |
-| 対象UI | 操作対象のUIノード |
-| 操作 | click, input, select など |
-| 入力データ | 使用するデータ |
-| 期待結果 | 操作後の結果 |
-| 遷移先状態 | 次の状態 |
-| 関連ルール | 適用される業務ルール |
+| 項目       | 内容                      |
+| ---------- | ------------------------- |
+| 順番       | ステップ番号              |
+| 対象画面   | 操作する画面              |
+| 対象UI     | 操作対象のUIノード        |
+| 操作       | click, input, select など |
+| 入力データ | 使用するデータ            |
+| 期待結果   | 操作後の結果              |
+| 遷移先状態 | 次の状態                  |
+| 関連ルール | 適用される業務ルール      |
 
 ---
 
@@ -690,16 +690,16 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| エラー名 | 必須エラー、重複エラー、通信エラーなど |
-| 発生条件 | どの条件で発生するか |
-| 対象 | 画面、UI、データ、APIなど |
-| 表示内容 | エラーメッセージ、表示位置 |
-| 復旧方法 | 修正、再試行、戻る、キャンセルなど |
-| 入力保持 | 失敗時に入力値を保持するか |
-| 副作用 | 保存済みか、ロールバックされるか |
-| 関連テスト観点 | 異常系・復旧系の観点 |
+| 項目           | 内容                                   |
+| -------------- | -------------------------------------- |
+| エラー名       | 必須エラー、重複エラー、通信エラーなど |
+| 発生条件       | どの条件で発生するか                   |
+| 対象           | 画面、UI、データ、APIなど              |
+| 表示内容       | エラーメッセージ、表示位置             |
+| 復旧方法       | 修正、再試行、戻る、キャンセルなど     |
+| 入力保持       | 失敗時に入力値を保持するか             |
+| 副作用         | 保存済みか、ロールバックされるか       |
+| 関連テスト観点 | 異常系・復旧系の観点                   |
 
 ### 例
 
@@ -721,17 +721,17 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| 質問 | 確認したい内容 |
-| 対象 | 機能、画面、UI、データ、ルールなど |
-| 優先度 | 高 / 中 / 低 |
-| 状態 | 未確認 / 確認中 / 回答済み / 保留 |
-| 回答 | 確認結果 |
-| 確認先 | PdM、開発者、クライアントなど |
-| 確認日 | 回答を得た日 |
-| 関連テスト観点 | 回答により影響する観点 |
-| 関連変更 | 回答による仕様変更 |
+| 項目           | 内容                               |
+| -------------- | ---------------------------------- |
+| 質問           | 確認したい内容                     |
+| 対象           | 機能、画面、UI、データ、ルールなど |
+| 優先度         | 高 / 中 / 低                       |
+| 状態           | 未確認 / 確認中 / 回答済み / 保留  |
+| 回答           | 確認結果                           |
+| 確認先         | PdM、開発者、クライアントなど      |
+| 確認日         | 回答を得た日                       |
+| 関連テスト観点 | 回答により影響する観点             |
+| 関連変更       | 回答による仕様変更                 |
 
 ### 例
 
@@ -752,13 +752,13 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### MVPで扱う技法
 
-| 技法 | 主な対象 |
-|---|---|
-| 同値分割 | データ種別、有効値、無効値 |
-| 境界値分析 | 文字数、数値、日付、件数 |
-| 状態遷移テスト | データ状態、画面状態、フロー状態 |
-| デシジョンテーブル | 複数条件と結果 |
-| ユースケーステスト | 業務フロー、画面遷移 |
+| 技法               | 主な対象                         |
+| ------------------ | -------------------------------- |
+| 同値分割           | データ種別、有効値、無効値       |
+| 境界値分析         | 文字数、数値、日付、件数         |
+| 状態遷移テスト     | データ状態、画面状態、フロー状態 |
+| デシジョンテーブル | 複数条件と結果                   |
+| ユースケーステスト | 業務フロー、画面遷移             |
 
 ### 技法適用例
 
@@ -787,26 +787,26 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| 観点名 | 何を確認するか |
-| 対象 | 機能、画面、UI、データ、状態など |
-| 技法 | 同値分割、境界値分析など |
-| 根拠 | 仕様・ルール・状態・データなど |
-| 優先度 | 高 / 中 / 低 |
-| リスク | 影響度、発生可能性 |
-| 自動化候補 | 高 / 中 / 低 |
-| ステータス | 候補 / 採用 / 却下 / 要確認 |
-| 関連テストケース | ケースとの紐づき |
+| 項目             | 内容                             |
+| ---------------- | -------------------------------- |
+| 観点名           | 何を確認するか                   |
+| 対象             | 機能、画面、UI、データ、状態など |
+| 技法             | 同値分割、境界値分析など         |
+| 根拠             | 仕様・ルール・状態・データなど   |
+| 優先度           | 高 / 中 / 低                     |
+| リスク           | 影響度、発生可能性               |
+| 自動化候補       | 高 / 中 / 低                     |
+| ステータス       | 候補 / 採用 / 却下 / 要確認      |
+| 関連テストケース | ケースとの紐づき                 |
 
 ### 例
 
-| 観点 | 対象 | 技法 | 根拠 |
-|---|---|---|---|
-| 必須項目未入力時にエラーになる | 氏名入力欄 | 同値分割 | 空値は無効クラス |
-| 最大文字数を超える氏名を拒否する | 氏名入力欄 | 境界値分析 | 最大文字数境界 |
-| 保存中は二重送信できない | 保存ボタン | 状態遷移 | 保存中状態では再操作不可 |
-| 作成成功後に一覧へ反映される | ユーザー作成フロー | ユースケース | 主成功パス |
+| 観点                             | 対象               | 技法         | 根拠                     |
+| -------------------------------- | ------------------ | ------------ | ------------------------ |
+| 必須項目未入力時にエラーになる   | 氏名入力欄         | 同値分割     | 空値は無効クラス         |
+| 最大文字数を超える氏名を拒否する | 氏名入力欄         | 境界値分析   | 最大文字数境界           |
+| 保存中は二重送信できない         | 保存ボタン         | 状態遷移     | 保存中状態では再操作不可 |
+| 作成成功後に一覧へ反映される     | ユーザー作成フロー | ユースケース | 主成功パス               |
 
 ---
 
@@ -818,18 +818,18 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| ケース名 | テストケース名 |
-| 対象観点 | 紐づくテスト観点 |
-| 前提条件 | 実施前に必要な状態 |
-| 手順 | 実施手順 |
-| 期待結果 | 各手順に対する期待結果 |
-| 使用データ | テストデータ |
-| 優先度 | 高 / 中 / 低 |
-| 自動化可否 | 高 / 中 / 低 |
-| ステータス | 下書き / 確定 / 廃止 |
-| 関連変更 | 仕様変更との紐づき |
+| 項目       | 内容                   |
+| ---------- | ---------------------- |
+| ケース名   | テストケース名         |
+| 対象観点   | 紐づくテスト観点       |
+| 前提条件   | 実施前に必要な状態     |
+| 手順       | 実施手順               |
+| 期待結果   | 各手順に対する期待結果 |
+| 使用データ | テストデータ           |
+| 優先度     | 高 / 中 / 低           |
+| 自動化可否 | 高 / 中 / 低           |
+| ステータス | 下書き / 確定 / 廃止   |
+| 関連変更   | 仕様変更との紐づき     |
 
 ### 手順と期待結果の粒度
 
@@ -842,12 +842,12 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 良い例。
 
-| 手順 | 期待結果 |
-|---|---|
-| ユーザー一覧画面を開く | 新規作成ボタンが表示される |
-| 新規作成ボタンをクリックする | ユーザー作成ダイアログが表示される |
-| 氏名欄を空のままにする | 氏名欄は未入力状態である |
-| 保存ボタンをクリックする | 氏名必須エラーが表示され、保存されない |
+| 手順                         | 期待結果                               |
+| ---------------------------- | -------------------------------------- |
+| ユーザー一覧画面を開く       | 新規作成ボタンが表示される             |
+| 新規作成ボタンをクリックする | ユーザー作成ダイアログが表示される     |
+| 氏名欄を空のままにする       | 氏名欄は未入力状態である               |
+| 保存ボタンをクリックする     | 氏名必須エラーが表示され、保存されない |
 
 ---
 
@@ -872,13 +872,13 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 主な項目
 
-| 項目 | 内容 |
-|---|---|
-| 関連元 | 機能、画面、UI、ルールなど |
-| 関連先 | 観点、ケース、フローなど |
-| 関連理由 | なぜ紐づくのか |
+| 項目       | 内容                               |
+| ---------- | ---------------------------------- |
+| 関連元     | 機能、画面、UI、ルールなど         |
+| 関連先     | 観点、ケース、フローなど           |
+| 関連理由   | なぜ紐づくのか                     |
 | カバー状態 | 未カバー / 一部カバー / カバー済み |
-| 変更影響 | 変更時に見直すべき対象 |
+| 変更影響   | 変更時に見直すべき対象             |
 
 ### 価値
 
@@ -899,34 +899,34 @@ UIだけでは表現できない仕様・制約・条件を整理する。
 
 ### 扱う変更種別
 
-| 変更種別 | 例 |
-|---|---|
-| UI追加 | 新しい入力欄を追加 |
-| UI削除 | 既存ボタンを削除 |
-| UI変更 | ラベル名、表示順、配置を変更 |
-| 入力仕様変更 | 必須→任意、最大文字数変更 |
-| 表示条件変更 | 特定権限だけ表示 |
-| 操作条件変更 | 保存ボタンの活性条件変更 |
-| 状態変更 | 保存中は入力欄をdisabled |
-| フロー変更 | 保存後の遷移先変更 |
-| 業務ルール変更 | メール再利用条件変更 |
-| 期待結果変更 | エラー文言や表示位置変更 |
-| データ変更 | 保存対象フィールド追加 |
+| 変更種別       | 例                           |
+| -------------- | ---------------------------- |
+| UI追加         | 新しい入力欄を追加           |
+| UI削除         | 既存ボタンを削除             |
+| UI変更         | ラベル名、表示順、配置を変更 |
+| 入力仕様変更   | 必須→任意、最大文字数変更    |
+| 表示条件変更   | 特定権限だけ表示             |
+| 操作条件変更   | 保存ボタンの活性条件変更     |
+| 状態変更       | 保存中は入力欄をdisabled     |
+| フロー変更     | 保存後の遷移先変更           |
+| 業務ルール変更 | メール再利用条件変更         |
+| 期待結果変更   | エラー文言や表示位置変更     |
+| データ変更     | 保存対象フィールド追加       |
 
 ### 変更レコード項目
 
-| 項目 | 内容 |
-|---|---|
-| 対象種別 | feature, screen, uiNode, dataType, rule など |
-| 対象ID | 変更対象 |
-| 変更種別 | added, updated, removed など |
-| 変更前 | 変更前の概要 |
-| 変更後 | 変更後の概要 |
-| 変更理由 | なぜ変わったか |
-| 情報ソース | 仕様書、MTG、実装確認など |
-| 確度 | 確定 / 暫定 / 推測 / 要確認 |
-| 影響メモ | 見直すべき仕様・観点・ケース |
-| 作成日時 | 変更登録日 |
+| 項目       | 内容                                         |
+| ---------- | -------------------------------------------- |
+| 対象種別   | feature, screen, uiNode, dataType, rule など |
+| 対象ID     | 変更対象                                     |
+| 変更種別   | added, updated, removed など                 |
+| 変更前     | 変更前の概要                                 |
+| 変更後     | 変更後の概要                                 |
+| 変更理由   | なぜ変わったか                               |
+| 情報ソース | 仕様書、MTG、実装確認など                    |
+| 確度       | 確定 / 暫定 / 推測 / 要確認                  |
+| 影響メモ   | 見直すべき仕様・観点・ケース                 |
+| 作成日時   | 変更登録日                                   |
 
 ### 削除の扱い
 
@@ -948,15 +948,15 @@ removed
 
 MVPではチェックリスト形式で持つ。
 
-| 分類 | 例 |
-|---|---|
-| パフォーマンス | 一覧1000件で表示できるか |
-| セキュリティ | 権限なしでアクセスできないか |
+| 分類             | 例                                   |
+| ---------------- | ------------------------------------ |
+| パフォーマンス   | 一覧1000件で表示できるか             |
+| セキュリティ     | 権限なしでアクセスできないか         |
 | アクセシビリティ | キーボード操作、ラベル、フォーカス順 |
-| レスポンシブ | PC/スマホで表示・操作できるか |
-| 可用性 | 通信失敗時に復帰できるか |
-| 互換性 | Chrome, Safari, Edge, mobile browser |
-| データ保護 | 個人情報、ローカル保存、削除 |
+| レスポンシブ     | PC/スマホで表示・操作できるか        |
+| 可用性           | 通信失敗時に復帰できるか             |
+| 互換性           | Chrome, Safari, Edge, mobile browser |
+| データ保護       | 個人情報、ローカル保存、削除         |
 
 ---
 
@@ -964,14 +964,14 @@ MVPではチェックリスト形式で持つ。
 
 仕様は環境や端末で変わるため、確認条件を記録する。
 
-| 項目 | 内容 |
-|---|---|
-| 対象環境 | local / dev / staging / production |
-| デバイス | PC / tablet / smartphone |
-| ブラウザ | Chrome / Safari / Edge / Firefox |
-| OS | Windows / macOS / iOS / Android |
-| 画面幅 | desktop / mobile |
-| 設定 | feature flag, tenant setting, plan |
+| 項目       | 内容                               |
+| ---------- | ---------------------------------- |
+| 対象環境   | local / dev / staging / production |
+| デバイス   | PC / tablet / smartphone           |
+| ブラウザ   | Chrome / Safari / Edge / Firefox   |
+| OS         | Windows / macOS / iOS / Android    |
+| 画面幅     | desktop / mobile                   |
+| 設定       | feature flag, tenant setting, plan |
 | データ状態 | 初期データ、大量データ、異常データ |
 
 ---
@@ -980,15 +980,15 @@ MVPではチェックリスト形式で持つ。
 
 データ種別とは別に、実際に使うテストデータセットを管理する。
 
-| 種別 | 例 |
-|---|---|
-| 正常データ | 有効なユーザー |
-| 異常データ | 不正メール、欠損値 |
-| 境界データ | 最大文字数、最小値、期限当日 |
-| 状態別データ | 下書き、承認済み、削除済み |
-| 権限別データ | 管理者、一般、ゲスト |
-| 量的データ | 0件、1件、100件、1000件 |
-| 組み合わせデータ | 権限 × ステータス × 入力値 |
+| 種別             | 例                           |
+| ---------------- | ---------------------------- |
+| 正常データ       | 有効なユーザー               |
+| 異常データ       | 不正メール、欠損値           |
+| 境界データ       | 最大文字数、最小値、期限当日 |
+| 状態別データ     | 下書き、承認済み、削除済み   |
+| 権限別データ     | 管理者、一般、ゲスト         |
+| 量的データ       | 0件、1件、100件、1000件      |
+| 組み合わせデータ | 権限 × ステータス × 入力値   |
 
 ---
 
@@ -1000,15 +1000,15 @@ MVPではチェックリスト形式で持つ。
 
 ### カバレッジ種別
 
-| カバレッジ | 内容 |
-|---|---|
-| 画面カバレッジ | 登録画面のうち観点作成済みの割合 |
-| UIカバレッジ | UI要素に観点が紐づいているか |
-| データカバレッジ | データ種別に有効/無効/境界値があるか |
-| 状態カバレッジ | 状態ごとの観点があるか |
-| フローカバレッジ | 主成功/代替/例外パスがあるか |
-| ルールカバレッジ | 業務ルールごとにテスト観点があるか |
-| 権限カバレッジ | ロール別の確認があるか |
+| カバレッジ         | 内容                                             |
+| ------------------ | ------------------------------------------------ |
+| 画面カバレッジ     | 登録画面のうち観点作成済みの割合                 |
+| UIカバレッジ       | UI要素に観点が紐づいているか                     |
+| データカバレッジ   | データ種別に有効/無効/境界値があるか             |
+| 状態カバレッジ     | 状態ごとの観点があるか                           |
+| フローカバレッジ   | 主成功/代替/例外パスがあるか                     |
+| ルールカバレッジ   | 業務ルールごとにテスト観点があるか               |
+| 権限カバレッジ     | ロール別の確認があるか                           |
 | 変更影響カバレッジ | 仕様変更に対する観点・ケース更新が完了しているか |
 
 ---
@@ -1017,33 +1017,33 @@ MVPではチェックリスト形式で持つ。
 
 ### 9.1 主要画面
 
-| 画面 | 役割 |
-|---|---|
-| プロジェクト一覧 | テスト対象を選ぶ |
+| 画面                       | 役割                                     |
+| -------------------------- | ---------------------------------------- |
+| プロジェクト一覧           | テスト対象を選ぶ                         |
 | プロジェクトダッシュボード | 画面数、UI要素数、観点数、ケース数を見る |
-| 機能/ユースケース一覧 | 機能単位で仕様を整理する |
-| 画面カタログ | 画面を管理する |
-| UIツリーエディタ | 入れ子UIを管理する |
-| データモデル管理 | エンティティとフィールドを管理する |
-| データ種別カタログ | 入力値・境界値・同値クラスを管理する |
-| 状態カタログ | 共通/固有状態を管理する |
-| 状態遷移表 | 状態間の遷移を管理する |
-| 業務ルール一覧 | 条件・期待動作・例外を管理する |
-| フローエディタ | 操作フローを管理する |
-| エラー/例外一覧 | 異常系と復旧仕様を管理する |
-| 未確認事項一覧 | 仕様の穴を管理する |
-| テスト技法ワークベンチ | 技法ごとに観点を作る |
-| テスト観点一覧 | 観点を整理する |
-| テストケース一覧 | 手順・期待結果を管理する |
-| 変更履歴 | 仕様変更と影響範囲を見る |
-| エクスポート画面 | Markdown / CSV / JSON出力 |
+| 機能/ユースケース一覧      | 機能単位で仕様を整理する                 |
+| 画面カタログ               | 画面を管理する                           |
+| UIツリーエディタ           | 入れ子UIを管理する                       |
+| データモデル管理           | エンティティとフィールドを管理する       |
+| データ種別カタログ         | 入力値・境界値・同値クラスを管理する     |
+| 状態カタログ               | 共通/固有状態を管理する                  |
+| 状態遷移表                 | 状態間の遷移を管理する                   |
+| 業務ルール一覧             | 条件・期待動作・例外を管理する           |
+| フローエディタ             | 操作フローを管理する                     |
+| エラー/例外一覧            | 異常系と復旧仕様を管理する               |
+| 未確認事項一覧             | 仕様の穴を管理する                       |
+| テスト技法ワークベンチ     | 技法ごとに観点を作る                     |
+| テスト観点一覧             | 観点を整理する                           |
+| テストケース一覧           | 手順・期待結果を管理する                 |
+| 変更履歴                   | 仕様変更と影響範囲を見る                 |
+| エクスポート画面           | Markdown / CSV / JSON出力                |
 
 ### 9.2 PCとスマホの使い分け
 
-| デバイス | 主な用途 |
-|---|---|
-| PC | 仕様整理、UIツリー編集、テーブル編集、エクスポート |
-| スマホ | 現場確認、簡易メモ、未確認事項登録、レビュー確認 |
+| デバイス | 主な用途                                           |
+| -------- | -------------------------------------------------- |
+| PC       | 仕様整理、UIツリー編集、テーブル編集、エクスポート |
+| スマホ   | 現場確認、簡易メモ、未確認事項登録、レビュー確認   |
 
 MVPではPC優先でよい。  
 ただし、スマホでも閲覧・軽い編集が可能なレスポンシブ設計にする。
@@ -1073,7 +1073,7 @@ type Feature = {
   preconditions?: string;
   successCriteria?: string;
   failureConditions?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  confidence: 'confirmed' | 'tentative' | 'assumed' | 'unknown';
   evidenceIds?: string[];
   createdAt: string;
   updatedAt: string;
@@ -1107,7 +1107,7 @@ type UiNode = {
   enabledCondition?: string;
   dataTypeId?: string | null;
   isTestTarget: boolean;
-  status: "active" | "deprecated" | "removed";
+  status: 'active' | 'deprecated' | 'removed';
   createdAt: string;
   updatedAt: string;
 };
@@ -1154,16 +1154,16 @@ type StateDefinition = {
   projectId: string;
   name: string;
   scope:
-    | "app"
-    | "user"
-    | "screen"
-    | "uiElement"
-    | "form"
-    | "data"
-    | "flow"
-    | "async"
-    | "layout"
-    | "external";
+    | 'app'
+    | 'user'
+    | 'screen'
+    | 'uiElement'
+    | 'form'
+    | 'data'
+    | 'flow'
+    | 'async'
+    | 'layout'
+    | 'external';
   targetType?: string;
   targetId?: string;
   condition: string;
@@ -1171,7 +1171,7 @@ type StateDefinition = {
   allowedOperations?: string[];
   disallowedOperations?: string[];
   expectedResult?: string;
-  priority: "high" | "medium" | "low";
+  priority: 'high' | 'medium' | 'low';
 };
 
 type StateTransition = {
@@ -1195,7 +1195,7 @@ type BusinessRule = {
   condition: string;
   expectedBehavior: string;
   exceptions?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  confidence: 'confirmed' | 'tentative' | 'assumed' | 'unknown';
   evidenceIds?: string[];
 };
 
@@ -1243,8 +1243,8 @@ type OpenQuestion = {
   question: string;
   targetType?: string;
   targetId?: string;
-  priority: "high" | "medium" | "low";
-  status: "open" | "in_progress" | "answered" | "deferred";
+  priority: 'high' | 'medium' | 'low';
+  status: 'open' | 'in_progress' | 'answered' | 'deferred';
   answer?: string;
   assignee?: string;
   answeredAt?: string;
@@ -1258,9 +1258,9 @@ type TestViewpoint = {
   targetId?: string;
   technique: string;
   rationale: string;
-  priority: "high" | "medium" | "low";
-  automationCandidate?: "high" | "medium" | "low";
-  status: "candidate" | "accepted" | "rejected" | "needs_confirmation";
+  priority: 'high' | 'medium' | 'low';
+  automationCandidate?: 'high' | 'medium' | 'low';
+  status: 'candidate' | 'accepted' | 'rejected' | 'needs_confirmation';
 };
 
 type TestCase = {
@@ -1269,9 +1269,9 @@ type TestCase = {
   title: string;
   viewpointIds: string[];
   preconditions?: string;
-  priority: "high" | "medium" | "low";
-  automationCandidate?: "high" | "medium" | "low";
-  status: "draft" | "confirmed" | "deprecated";
+  priority: 'high' | 'medium' | 'low';
+  automationCandidate?: 'high' | 'medium' | 'low';
+  status: 'draft' | 'confirmed' | 'deprecated';
 };
 
 type TestCaseStep = {
@@ -1292,7 +1292,7 @@ type TraceLink = {
   toType: string;
   toId: string;
   reason?: string;
-  coverageStatus?: "not_covered" | "partially_covered" | "covered";
+  coverageStatus?: 'not_covered' | 'partially_covered' | 'covered';
 };
 
 type ChangeRecord = {
@@ -1301,19 +1301,19 @@ type ChangeRecord = {
   targetType: string;
   targetId: string;
   changeType:
-    | "added"
-    | "updated"
-    | "removed"
-    | "renamed"
-    | "moved"
-    | "conditionChanged"
-    | "behaviorChanged"
-    | "validationChanged";
+    | 'added'
+    | 'updated'
+    | 'removed'
+    | 'renamed'
+    | 'moved'
+    | 'conditionChanged'
+    | 'behaviorChanged'
+    | 'validationChanged';
   beforeSummary?: string;
   afterSummary: string;
   reason?: string;
   source?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  confidence: 'confirmed' | 'tentative' | 'assumed' | 'unknown';
   impactNotes?: string;
   createdAt: string;
 };
@@ -1325,39 +1325,39 @@ type ChangeRecord = {
 
 ```ts
 db.version(1).stores({
-  projects: "id, name, updatedAt",
+  projects: 'id, name, updatedAt',
 
-  features: "id, projectId, name, updatedAt",
-  screens: "id, projectId, featureId, name, screenType, updatedAt",
+  features: 'id, projectId, name, updatedAt',
+  screens: 'id, projectId, featureId, name, screenType, updatedAt',
 
-  uiNodes: "id, projectId, screenId, parentId, nodeType, role, order, status",
+  uiNodes: 'id, projectId, screenId, parentId, nodeType, role, order, status',
 
-  entities: "id, projectId, name",
-  entityFields: "id, projectId, entityId, name, dataTypeId",
+  entities: 'id, projectId, name',
+  entityFields: 'id, projectId, entityId, name, dataTypeId',
 
-  dataTypes: "id, projectId, name, kind",
+  dataTypes: 'id, projectId, name, kind',
 
-  states: "id, projectId, scope, targetType, targetId, name",
-  stateTransitions: "id, projectId, targetType, targetId, fromStateId, toStateId",
+  states: 'id, projectId, scope, targetType, targetId, name',
+  stateTransitions: 'id, projectId, targetType, targetId, fromStateId, toStateId',
 
-  businessRules: "id, projectId, targetType, targetId, name",
+  businessRules: 'id, projectId, targetType, targetId, name',
 
-  flows: "id, projectId, featureId, name",
-  flowSteps: "id, projectId, flowId, order, screenId, uiNodeId",
+  flows: 'id, projectId, featureId, name',
+  flowSteps: 'id, projectId, flowId, order, screenId, uiNodeId',
 
-  errorSpecs: "id, projectId, targetType, targetId, name",
+  errorSpecs: 'id, projectId, targetType, targetId, name',
 
-  openQuestions: "id, projectId, status, priority, targetType, targetId",
+  openQuestions: 'id, projectId, status, priority, targetType, targetId',
 
-  testViewpoints: "id, projectId, targetType, targetId, technique, status, priority",
-  testCases: "id, projectId, status, priority",
-  testCaseSteps: "id, projectId, testCaseId, order",
+  testViewpoints: 'id, projectId, targetType, targetId, technique, status, priority',
+  testCases: 'id, projectId, status, priority',
+  testCaseSteps: 'id, projectId, testCaseId, order',
 
-  traceLinks: "id, projectId, fromType, fromId, toType, toId, coverageStatus",
+  traceLinks: 'id, projectId, fromType, fromId, toType, toId, coverageStatus',
 
-  changeRecords: "id, projectId, targetType, targetId, changeType, createdAt",
+  changeRecords: 'id, projectId, targetType, targetId, changeType, createdAt',
 
-  domCaptureCandidates: "id, projectId, screenId, tabUrl, capturedAt, captureMethod, status"
+  domCaptureCandidates: 'id, projectId, screenId, tabUrl, capturedAt, captureMethod, status',
 });
 ```
 
@@ -1732,15 +1732,15 @@ Optional later:
 
 ## 19. リスクと対策
 
-| リスク | 内容 | 対策 |
-|---|---|---|
-| 入力が重すぎる | 情報量が多く、使い始めに負担が大きい | テンプレート、プリセット、段階入力を用意する |
-| ただの台帳になる | 技法や観点に接続されない | テスト技法ワークベンチをMVPに含める |
-| 仕様とテストが分断される | 仕様情報だけ登録して終わる | トレーサビリティを必須にする |
-| 変更追従できない | 仕様変更時に影響範囲が分からない | 変更履歴と影響リンクを持つ |
-| UIツリーが細かすぎる | DOM再現になり入力が破綻する | テスト設計上意味のあるUIだけ登録する |
-| データが端末に閉じる | PC/スマホ間で共有しづらい | JSONエクスポート/インポートを必須にする |
-| 状態が曖昧になる | 状態・イベント・条件・期待結果が混ざる | 状態定義にスコープ、条件、観測結果を持たせる |
+| リスク                   | 内容                                   | 対策                                         |
+| ------------------------ | -------------------------------------- | -------------------------------------------- |
+| 入力が重すぎる           | 情報量が多く、使い始めに負担が大きい   | テンプレート、プリセット、段階入力を用意する |
+| ただの台帳になる         | 技法や観点に接続されない               | テスト技法ワークベンチをMVPに含める          |
+| 仕様とテストが分断される | 仕様情報だけ登録して終わる             | トレーサビリティを必須にする                 |
+| 変更追従できない         | 仕様変更時に影響範囲が分からない       | 変更履歴と影響リンクを持つ                   |
+| UIツリーが細かすぎる     | DOM再現になり入力が破綻する            | テスト設計上意味のあるUIだけ登録する         |
+| データが端末に閉じる     | PC/スマホ間で共有しづらい              | JSONエクスポート/インポートを必須にする      |
+| 状態が曖昧になる         | 状態・イベント・条件・期待結果が混ざる | 状態定義にスコープ、条件、観測結果を持たせる |
 
 ---
 
@@ -1775,7 +1775,6 @@ Optional later:
 
 最初は「ユーザー管理機能」など1つの機能を題材に、仕様把握からテストケース出力まで深く設計できることを確認する。  
 ここまでできれば、単なるテストケース管理ではなく、**仕様把握とテスト設計をつなぐ実用ツール**として成立する。
-
 
 ---
 
@@ -2095,31 +2094,31 @@ UI選択モードでは、テスト対象アプリのDOMを恒久的に変更し
 
 選択した要素から、以下を抽出する。
 
-| 項目 | 内容 |
-|---|---|
-| tagName | input, button, select など |
-| inputType | text, email, password など |
-| role | ARIA role |
-| text | 表示テキスト |
-| label | label要素から推定した名称 |
-| ariaLabel | aria-label |
-| placeholder | placeholder |
-| required | required / aria-required |
-| disabled | disabled / aria-disabled |
-| readonly | readonly |
-| invalid | aria-invalid |
-| id | id属性 |
-| name | name属性 |
-| className | class属性 |
-| testId | data-testid |
-| selectorCandidates | selector候補 |
-| parentForm | 親form候補 |
-| parentDialog | 親dialog候補 |
-| parentSection | 親section候補 |
-| boundingBox | 画面上の位置 |
-| pageUrl | 取得元URL |
-| pageTitle | 取得元title |
-| capturedAt | 取得日時 |
+| 項目               | 内容                       |
+| ------------------ | -------------------------- |
+| tagName            | input, button, select など |
+| inputType          | text, email, password など |
+| role               | ARIA role                  |
+| text               | 表示テキスト               |
+| label              | label要素から推定した名称  |
+| ariaLabel          | aria-label                 |
+| placeholder        | placeholder                |
+| required           | required / aria-required   |
+| disabled           | disabled / aria-disabled   |
+| readonly           | readonly                   |
+| invalid            | aria-invalid               |
+| id                 | id属性                     |
+| name               | name属性                   |
+| className          | class属性                  |
+| testId             | data-testid                |
+| selectorCandidates | selector候補               |
+| parentForm         | 親form候補                 |
+| parentDialog       | 親dialog候補               |
+| parentSection      | 親section候補              |
+| boundingBox        | 画面上の位置               |
+| pageUrl            | 取得元URL                  |
+| pageTitle          | 取得元title                |
+| capturedAt         | 取得日時                   |
 
 ---
 
@@ -2312,12 +2311,7 @@ MVPでは、権限を強くしすぎない。
 
 ```json
 {
-  "permissions": [
-    "sidePanel",
-    "activeTab",
-    "scripting",
-    "storage"
-  ]
+  "permissions": ["sidePanel", "activeTab", "scripting", "storage"]
 }
 ```
 
@@ -2349,7 +2343,7 @@ type UiNode = {
   selectorHint?: string;
   sourceUrl?: string;
   capturedAt?: string;
-  captureMethod?: "manual" | "dom_scan" | "element_picker" | "import";
+  captureMethod?: 'manual' | 'dom_scan' | 'element_picker' | 'import';
 
   domSnapshot?: {
     tagName?: string;
@@ -2368,7 +2362,7 @@ type UiNode = {
     testId?: string;
   };
 
-  status: "active" | "deprecated" | "removed";
+  status: 'active' | 'deprecated' | 'removed';
   createdAt: string;
   updatedAt: string;
 };
@@ -2384,7 +2378,7 @@ type DomCaptureCandidate = {
   pageTitle?: string;
   screenId?: string;
   capturedAt: string;
-  captureMethod: "dom_scan" | "element_picker";
+  captureMethod: 'dom_scan' | 'element_picker';
 
   suggestedName?: string;
   suggestedNodeType?: string;
@@ -2413,7 +2407,7 @@ type DomCaptureCandidate = {
     section?: string;
   };
 
-  status: "pending" | "added" | "linked" | "change_registered" | "ignored";
+  status: 'pending' | 'added' | 'linked' | 'change_registered' | 'ignored';
 };
 ```
 
@@ -2424,40 +2418,40 @@ type ChangeRecord = {
   id: string;
   projectId: string;
   targetType:
-    | "feature"
-    | "screen"
-    | "uiNode"
-    | "dataType"
-    | "entity"
-    | "businessRule"
-    | "state"
-    | "flow"
-    | "testViewpoint"
-    | "testCase";
+    | 'feature'
+    | 'screen'
+    | 'uiNode'
+    | 'dataType'
+    | 'entity'
+    | 'businessRule'
+    | 'state'
+    | 'flow'
+    | 'testViewpoint'
+    | 'testCase';
 
   targetId: string;
 
   changeType:
-    | "added"
-    | "updated"
-    | "removed"
-    | "renamed"
-    | "moved"
-    | "conditionChanged"
-    | "behaviorChanged"
-    | "validationChanged"
-    | "selectorChanged"
-    | "labelChanged"
-    | "visibilityConditionChanged"
-    | "enabledConditionChanged";
+    | 'added'
+    | 'updated'
+    | 'removed'
+    | 'renamed'
+    | 'moved'
+    | 'conditionChanged'
+    | 'behaviorChanged'
+    | 'validationChanged'
+    | 'selectorChanged'
+    | 'labelChanged'
+    | 'visibilityConditionChanged'
+    | 'enabledConditionChanged';
 
   beforeSummary?: string;
   afterSummary: string;
   reason?: string;
-  source?: "manual" | "dom_capture" | "import";
+  source?: 'manual' | 'dom_capture' | 'import';
   sourceUrl?: string;
   capturedAt?: string;
-  confidence: "confirmed" | "tentative" | "assumed" | "unknown";
+  confidence: 'confirmed' | 'tentative' | 'assumed' | 'unknown';
   impactNotes?: string;
   createdAt: string;
 };
@@ -2469,8 +2463,7 @@ type ChangeRecord = {
 
 ```ts
 db.version(2).stores({
-  domCaptureCandidates:
-    "id, projectId, screenId, tabUrl, capturedAt, captureMethod, status"
+  domCaptureCandidates: 'id, projectId, screenId, tabUrl, capturedAt, captureMethod, status',
 });
 ```
 

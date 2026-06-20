@@ -46,7 +46,7 @@ P1の設計上は、DOM-only候補とAccessibility Tree由来の候補を同じ 
 ## Capture modes
 
 ```ts
-type UiCaptureMode = "dom" | "accessibility-tree" | "hybrid" | "playwright-aria-snapshot";
+type UiCaptureMode = 'dom' | 'accessibility-tree' | 'hybrid' | 'playwright-aria-snapshot';
 ```
 
 ### DOM Capture
@@ -114,7 +114,7 @@ P1では実装しない。
 今後の正本名は `UiCaptureCandidate` / `UiCaptureBundle` とする。
 
 ```ts
-type UiCaptureSource = "chrome-extension" | "playwright" | "manual-import";
+type UiCaptureSource = 'chrome-extension' | 'playwright' | 'manual-import';
 
 type UiCaptureCandidate = {
   id: string;
@@ -129,7 +129,7 @@ type UiCaptureCandidate = {
   dom?: DomCaptureData;
   accessibility?: AccessibilityCaptureData;
   suggestedUiNode?: SuggestedUiNode;
-  status: "candidate" | "accepted" | "rejected";
+  status: 'candidate' | 'accepted' | 'rejected';
 };
 ```
 
@@ -163,17 +163,17 @@ type AccessibilityCaptureData = {
   role?: string;
   name?: string;
   description?: string;
-  valueType?: "string" | "number" | "boolean" | "unknown";
+  valueType?: 'string' | 'number' | 'boolean' | 'unknown';
   ignored?: boolean;
   ignoredReasons?: string[];
   properties?: {
     disabled?: boolean;
     required?: boolean;
     readonly?: boolean;
-    checked?: boolean | "mixed";
+    checked?: boolean | 'mixed';
     selected?: boolean;
     expanded?: boolean;
-    pressed?: boolean | "mixed";
+    pressed?: boolean | 'mixed';
     focused?: boolean;
     focusable?: boolean;
     invalid?: boolean;
@@ -196,7 +196,7 @@ type SuggestedUiNode = {
   textHint?: string;
   accessibleNameHint?: string;
   descriptionHint?: string;
-  locatorStrategy?: "role" | "label" | "testid" | "text" | "css";
+  locatorStrategy?: 'role' | 'label' | 'testid' | 'text' | 'css';
   locatorHint?: string;
   required?: boolean;
 };
@@ -212,7 +212,7 @@ AX AdapterやElement Pickerの実装内部では、DOM node と Accessibility no
 type UiCaptureMapping = {
   backendDOMNodeId?: number;
   frameId?: string;
-  confidence: "high" | "medium" | "low";
+  confidence: 'high' | 'medium' | 'low';
 };
 
 type UiGeometry = {
@@ -236,7 +236,7 @@ type UiCaptureBundle = {
   schemaVersion: number;
   appVersion: string;
   exportedAt: string;
-  exportType: "ui-capture";
+  exportType: 'ui-capture';
   source: UiCaptureSource;
   candidates: UiCaptureCandidate[];
 };

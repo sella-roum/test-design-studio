@@ -1,5 +1,9 @@
 # Phase 2 ドメイン・保存層タスク詳細
 
+> Note:
+> 現在のPR運用では、TASK-002〜TASK-010A を Foundation Phase として1PRで扱う。
+> このファイル名に含まれる phase-2 は旧分割名であり、現在のPR運用上は Foundation Phase の一部である。
+
 この文書は、Phase 2 のドメインモデルと保存層の実装タスクを定義する。
 
 Phase 2ではUIを作り込まない。Webアプリ、Export / Import、Chrome拡張、変更管理、技法ワークベンチが依存する中核モデルとRepositoryを安定させる。

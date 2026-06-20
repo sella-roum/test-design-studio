@@ -23,13 +23,13 @@ P0で専用UIを作らないモデルでも、後続フェーズで破壊的変�
 Projectを含む永続化モデルは、原則として次の共通フィールドを持つ。
 
 ```ts
-type EntityStatus = "active" | "deprecated" | "removed";
+type EntityStatus = 'active' | 'deprecated' | 'removed';
 
-type Confidence = "confirmed" | "tentative" | "assumed" | "unknown";
+type Confidence = 'confirmed' | 'tentative' | 'assumed' | 'unknown';
 
-type Priority = "high" | "medium" | "low";
+type Priority = 'high' | 'medium' | 'low';
 
-type AutomationSuitability = "high" | "medium" | "low" | "manual-only";
+type AutomationSuitability = 'high' | 'medium' | 'low' | 'manual-only';
 
 type EntityBase = {
   id: string;
@@ -103,18 +103,18 @@ type Feature = EntityBase & {
 
 ```ts
 type ScreenType =
-  | "list"
-  | "detail"
-  | "create"
-  | "edit"
-  | "confirm"
-  | "complete"
-  | "error"
-  | "settings"
-  | "login"
-  | "dashboard"
-  | "admin"
-  | "other";
+  | 'list'
+  | 'detail'
+  | 'create'
+  | 'edit'
+  | 'confirm'
+  | 'complete'
+  | 'error'
+  | 'settings'
+  | 'login'
+  | 'dashboard'
+  | 'admin'
+  | 'other';
 
 type Screen = EntityBase & {
   featureId: string;
@@ -143,7 +143,7 @@ type UiNode = EntityBase & {
   selectorHint?: string;
   textHint?: string;
   accessibleNameHint?: string;
-  locatorStrategy?: "role" | "label" | "testid" | "text" | "css";
+  locatorStrategy?: 'role' | 'label' | 'testid' | 'text' | 'css';
   locatorHint?: string;
   required?: boolean;
   disabledCondition?: string;
@@ -197,7 +197,7 @@ type DataField = EntityBase & {
 ```ts
 type DataType = EntityBase & {
   name: string;
-  baseType: "string" | "number" | "boolean" | "date" | "enum" | "object";
+  baseType: 'string' | 'number' | 'boolean' | 'date' | 'enum' | 'object';
   description?: string;
   constraints?: {
     required?: boolean;
@@ -219,14 +219,14 @@ type DataType = EntityBase & {
 
 ```ts
 type BusinessRuleType =
-  | "validation"
-  | "permission"
-  | "display"
-  | "calculation"
-  | "workflow"
-  | "error"
-  | "exception"
-  | "other";
+  | 'validation'
+  | 'permission'
+  | 'display'
+  | 'calculation'
+  | 'workflow'
+  | 'error'
+  | 'exception'
+  | 'other';
 
 type BusinessRule = EntityBase & {
   featureId?: string;
@@ -248,7 +248,7 @@ P0では `ErrorCase` を独立実装せず、エラー・例外は `BusinessRule
 未確認事項を `description` や `note` に埋め込むと、どの仕様が未確定のままテスト設計に使われているか追えなくなる。そのため、P0から独立モデルとして扱う。
 
 ```ts
-type OpenQuestionStatus = "open" | "answered" | "deferred" | "not_applicable";
+type OpenQuestionStatus = 'open' | 'answered' | 'deferred' | 'not_applicable';
 
 type OpenQuestion = EntityBase & {
   featureId?: string;
@@ -272,12 +272,12 @@ type OpenQuestion = EntityBase & {
 
 ```ts
 type TestTechnique =
-  | "equivalence"
-  | "boundary"
-  | "state-transition"
-  | "decision-table"
-  | "use-case"
-  | "exploratory";
+  | 'equivalence'
+  | 'boundary'
+  | 'state-transition'
+  | 'decision-table'
+  | 'use-case'
+  | 'exploratory';
 
 type TestViewpoint = EntityBase & {
   featureId: string;
@@ -300,14 +300,14 @@ P0から `steps: string[]` ではなく構造化された `TestStep[]` として
 
 ```ts
 type TestStepAction =
-  | "navigate"
-  | "click"
-  | "fill"
-  | "select"
-  | "check"
-  | "assert"
-  | "wait"
-  | "other";
+  | 'navigate'
+  | 'click'
+  | 'fill'
+  | 'select'
+  | 'check'
+  | 'assert'
+  | 'wait'
+  | 'other';
 
 type TestStep = {
   id: string;
@@ -341,34 +341,34 @@ type TestCase = EntityBase & {
 
 ```ts
 type TraceNodeType =
-  | "feature"
-  | "screen"
-  | "uiNode"
-  | "dataType"
-  | "dataEntity"
-  | "dataField"
-  | "businessRule"
-  | "openQuestion"
-  | "state"
-  | "stateTransition"
-  | "flow"
-  | "flowStep"
-  | "errorCase"
-  | "decisionTable"
-  | "testViewpoint"
-  | "testCase"
-  | "traceLink"
-  | "changeRecord"
-  | "evidence";
+  | 'feature'
+  | 'screen'
+  | 'uiNode'
+  | 'dataType'
+  | 'dataEntity'
+  | 'dataField'
+  | 'businessRule'
+  | 'openQuestion'
+  | 'state'
+  | 'stateTransition'
+  | 'flow'
+  | 'flowStep'
+  | 'errorCase'
+  | 'decisionTable'
+  | 'testViewpoint'
+  | 'testCase'
+  | 'traceLink'
+  | 'changeRecord'
+  | 'evidence';
 
 type TraceLinkType =
-  | "covers"
-  | "derived_from"
-  | "impacts"
-  | "validates"
-  | "depends_on"
-  | "replaces"
-  | "supports";
+  | 'covers'
+  | 'derived_from'
+  | 'impacts'
+  | 'validates'
+  | 'depends_on'
+  | 'replaces'
+  | 'supports';
 
 type TraceLink = EntityBase & {
   fromType: TraceNodeType;
@@ -394,19 +394,19 @@ TraceLinkも `EntityBase` を持つ。Traceabilityでは過去の根拠を残す
 
 ```ts
 type ChangeType =
-  | "added"
-  | "updated"
-  | "deprecated"
-  | "removed"
-  | "selector-changed"
-  | "accessible-name-changed"
-  | "role-changed"
-  | "state-changed"
-  | "description-changed"
-  | "behavior-changed"
-  | "validation-changed"
-  | "display-changed"
-  | "permission-changed";
+  | 'added'
+  | 'updated'
+  | 'deprecated'
+  | 'removed'
+  | 'selector-changed'
+  | 'accessible-name-changed'
+  | 'role-changed'
+  | 'state-changed'
+  | 'description-changed'
+  | 'behavior-changed'
+  | 'validation-changed'
+  | 'display-changed'
+  | 'permission-changed';
 
 type ChangeRecord = EntityBase & {
   targetType: TraceNodeType;
@@ -431,9 +431,9 @@ Chrome拡張やPlaywright等で取得したUI候補をWebアプリ側でレビ�
 詳細は `docs/specs/11-accessibility-tree-capture.md` を正とする。
 
 ```ts
-type UiCaptureMode = "dom" | "accessibility-tree" | "hybrid" | "playwright-aria-snapshot";
+type UiCaptureMode = 'dom' | 'accessibility-tree' | 'hybrid' | 'playwright-aria-snapshot';
 
-type UiCaptureSource = "chrome-extension" | "playwright" | "manual-import";
+type UiCaptureSource = 'chrome-extension' | 'playwright' | 'manual-import';
 
 type DomCaptureData = {
   tagName: string;
@@ -456,17 +456,17 @@ type AccessibilityCaptureData = {
   role?: string;
   name?: string;
   description?: string;
-  valueType?: "string" | "number" | "boolean" | "unknown";
+  valueType?: 'string' | 'number' | 'boolean' | 'unknown';
   ignored?: boolean;
   ignoredReasons?: string[];
   properties?: {
     disabled?: boolean;
     required?: boolean;
     readonly?: boolean;
-    checked?: boolean | "mixed";
+    checked?: boolean | 'mixed';
     selected?: boolean;
     expanded?: boolean;
-    pressed?: boolean | "mixed";
+    pressed?: boolean | 'mixed';
     focused?: boolean;
     focusable?: boolean;
     invalid?: boolean;
@@ -497,11 +497,11 @@ type UiCaptureCandidate = {
     textHint?: string;
     accessibleNameHint?: string;
     descriptionHint?: string;
-    locatorStrategy?: "role" | "label" | "testid" | "text" | "css";
+    locatorStrategy?: 'role' | 'label' | 'testid' | 'text' | 'css';
     locatorHint?: string;
     required?: boolean;
   };
-  status: "candidate" | "accepted" | "rejected";
+  status: 'candidate' | 'accepted' | 'rejected';
 };
 ```
 
@@ -513,7 +513,15 @@ type UiCaptureCandidate = {
 
 ```ts
 type Evidence = EntityBase & {
-  sourceType: "spec" | "figma" | "notion" | "slack" | "meeting" | "implementation" | "manual-observation" | "other";
+  sourceType:
+    | 'spec'
+    | 'figma'
+    | 'notion'
+    | 'slack'
+    | 'meeting'
+    | 'implementation'
+    | 'manual-observation'
+    | 'other';
   title: string;
   url?: string;
   quote?: string;
@@ -531,7 +539,16 @@ P0では `Evidence` Repository は必須にしない。ExportBundleでは `evide
 ### State / StateTransition
 
 ```ts
-type StateScope = "app" | "session" | "screen" | "uiNode" | "form" | "data" | "flow" | "async" | "external";
+type StateScope =
+  | 'app'
+  | 'session'
+  | 'screen'
+  | 'uiNode'
+  | 'form'
+  | 'data'
+  | 'flow'
+  | 'async'
+  | 'external';
 
 type State = EntityBase & {
   featureId?: string;
@@ -549,7 +566,7 @@ type State = EntityBase & {
 
 type StateTransition = EntityBase & {
   featureId: string;
-  targetType: "screen" | "uiNode" | "data" | "flow" | "other";
+  targetType: 'screen' | 'uiNode' | 'data' | 'flow' | 'other';
   targetId?: string;
   fromStateId: string;
   toStateId: string;

@@ -42,7 +42,7 @@ type ExportBundle = {
   schemaVersion: number;
   appVersion: string;
   exportedAt: string;
-  exportType: "project";
+  exportType: 'project';
   project: Project;
   data: {
     features: Feature[];
@@ -188,16 +188,16 @@ P0対象レコードIDを再生成した後、参照IDは新旧ID対応表に基
 
 P0 importerでは、次の参照IDを同一transaction内で再マッピングする。
 
-| 対象 | 置き換える参照 |
-|---|---|
-| Project.id | すべての `projectId` |
-| Feature.id | Screen.featureId, BusinessRule.featureId, OpenQuestion.featureId, TestViewpoint.featureId, TestCase.featureId |
-| Screen.id | UiNode.screenId, BusinessRule.screenId, OpenQuestion.screenId |
-| UiNode.id | UiNode.parentId, BusinessRule.uiNodeId, OpenQuestion.uiNodeId, TestStep.targetUiNodeId |
-| DataEntity.id | DataField.entityId |
-| DataType.id | DataField.dataTypeId |
-| TestViewpoint.id | TestCase.viewpointId |
-| 任意のP0対象ID | TraceLink.fromId, TraceLink.toId, ChangeRecord.targetId |
+| 対象             | 置き換える参照                                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------- |
+| Project.id       | すべての `projectId`                                                                                          |
+| Feature.id       | Screen.featureId, BusinessRule.featureId, OpenQuestion.featureId, TestViewpoint.featureId, TestCase.featureId |
+| Screen.id        | UiNode.screenId, BusinessRule.screenId, OpenQuestion.screenId                                                 |
+| UiNode.id        | UiNode.parentId, BusinessRule.uiNodeId, OpenQuestion.uiNodeId, TestStep.targetUiNodeId                        |
+| DataEntity.id    | DataField.entityId                                                                                            |
+| DataType.id      | DataField.dataTypeId                                                                                          |
+| TestViewpoint.id | TestCase.viewpointId                                                                                          |
+| 任意のP0対象ID   | TraceLink.fromId, TraceLink.toId, ChangeRecord.targetId                                                       |
 
 ID再マッピングは、全P0対象レコードの新旧ID対応表を作成してから適用する。
 
@@ -207,12 +207,12 @@ TraceLink / ChangeRecordの再マッピングは、P0 importerで取り込む対
 
 Reserved modelのID remappingは、該当モデルのRepositoryとImport対応を実装するPhaseで追加する。
 
-| 対象 | 置き換える参照 |
-|---|---|
-| State.id | StateTransition.fromStateId, StateTransition.toStateId |
-| Flow.id | FlowStep.flowId |
-| BusinessRule.id | DecisionTable.businessRuleId |
-| Reserved model | 該当PhaseのImport仕様で個別に定義する |
+| 対象            | 置き換える参照                                         |
+| --------------- | ------------------------------------------------------ |
+| State.id        | StateTransition.fromStateId, StateTransition.toStateId |
+| Flow.id         | FlowStep.flowId                                        |
+| BusinessRule.id | DecisionTable.businessRuleId                           |
+| Reserved model  | 該当PhaseのImport仕様で個別に定義する                  |
 
 ### future: replace-project
 

@@ -37,12 +37,12 @@ confidence: confirmed
 
 ## UiNodes
 
-| name | role | componentType | textHint | selectorHint | required |
-|---|---|---|---|---|---|
-| Email input | textbox | text-input | Email | getByRole('textbox', { name: 'Email' }) | true |
-| Password input | textbox | password-input | Password | getByLabel('Password') | true |
-| Login button | button | button | Login | getByRole('button', { name: 'Login' }) | true |
-| Error message | alert | message | Invalid email or password | getByRole('alert') | false |
+| name           | role    | componentType  | textHint                  | selectorHint                            | required |
+| -------------- | ------- | -------------- | ------------------------- | --------------------------------------- | -------- |
+| Email input    | textbox | text-input     | Email                     | getByRole('textbox', { name: 'Email' }) | true     |
+| Password input | textbox | password-input | Password                  | getByLabel('Password')                  | true     |
+| Login button   | button  | button         | Login                     | getByRole('button', { name: 'Login' })  | true     |
+| Error message  | alert   | message        | Invalid email or password | getByRole('alert')                      | false    |
 
 ## DataTypes
 
@@ -129,13 +129,13 @@ automationReason: Can be checked with stable form inputs and alert message.
 
 Steps:
 
-| order | action | targetUiNode | instruction | expectedResult | testData |
-|---:|---|---|---|---|---|
-| 1 | navigate |  | Open the login page. | Login form is displayed. | /login |
-| 2 | fill | Email input | Enter a registered email address. | Email input contains the value. | user@example.test |
-| 3 | fill | Password input | Enter an invalid password. | Password input accepts the value. | wrong-password |
-| 4 | click | Login button | Click the login button. | Error message is displayed. |  |
-| 5 | assert | Error message | Confirm the error message. | Invalid email or password is visible. |  |
+| order | action   | targetUiNode   | instruction                       | expectedResult                        | testData          |
+| ----: | -------- | -------------- | --------------------------------- | ------------------------------------- | ----------------- |
+|     1 | navigate |                | Open the login page.              | Login form is displayed.              | /login            |
+|     2 | fill     | Email input    | Enter a registered email address. | Email input contains the value.       | user@example.test |
+|     3 | fill     | Password input | Enter an invalid password.        | Password input accepts the value.     | wrong-password    |
+|     4 | click    | Login button   | Click the login button.           | Error message is displayed.           |                   |
+|     5 | assert   | Error message  | Confirm the error message.        | Invalid email or password is visible. |                   |
 
 Trace links:
 

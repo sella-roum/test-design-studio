@@ -50,13 +50,19 @@ type ViewpointCandidate = {
   featureId: string;
   title: string;
   description?: string;
-  technique: "equivalence" | "boundary" | "state-transition" | "decision-table" | "use-case" | "exploratory";
+  technique:
+    | 'equivalence'
+    | 'boundary'
+    | 'state-transition'
+    | 'decision-table'
+    | 'use-case'
+    | 'exploratory';
   sourceType: TraceNodeType;
   sourceId: string;
   suggestedPriority?: Priority;
   suggestedAutomationSuitability?: AutomationSuitability;
   suggestedAutomationReason?: string;
-  status: "candidate" | "accepted" | "rejected" | "ignored";
+  status: 'candidate' | 'accepted' | 'rejected' | 'ignored';
 };
 ```
 

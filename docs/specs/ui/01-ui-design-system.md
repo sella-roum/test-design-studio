@@ -60,14 +60,14 @@ P0では、次を作り込みすぎない。
 
 ## Visual tone
 
-| 項目 | 方針 |
-|---|---|
-| 基調 | 白、薄いグレー、濃紺、青アクセント |
-| 印象 | 信頼感、整理、業務利用、分析的 |
+| 項目 | 方針                                                 |
+| ---- | ---------------------------------------------------- |
+| 基調 | 白、薄いグレー、濃紺、青アクセント                   |
+| 印象 | 信頼感、整理、業務利用、分析的                       |
 | 余白 | ゆとりを持たせるが、業務画面として情報密度は確保する |
-| 角丸 | カード、ボタン、入力欄は控えめな丸み |
-| 影 | 立体感よりも階層表現のために弱く使う |
-| 装飾 | 過度なグラデーションやイラストは使わない |
+| 角丸 | カード、ボタン、入力欄は控えめな丸み                 |
+| 影   | 立体感よりも階層表現のために弱く使う                 |
+| 装飾 | 過度なグラデーションやイラストは使わない             |
 
 ## Color tokens
 
@@ -99,52 +99,52 @@ P0では、次を作り込みすぎない。
 
 ## Layout tokens
 
-| 用途 | 値 |
-|---|---|
-| App outer padding | 24px |
-| Main section gap | 24px |
-| Card padding | 16px |
-| Form row gap | 12px |
-| Table cell padding | 12px 16px |
-| Sidebar width | 240px |
-| Compact sidebar width | 72px |
-| Workspace left panel | 280px - 360px |
+| 用途                  | 値            |
+| --------------------- | ------------- |
+| App outer padding     | 24px          |
+| Main section gap      | 24px          |
+| Card padding          | 16px          |
+| Form row gap          | 12px          |
+| Table cell padding    | 12px 16px     |
+| Sidebar width         | 240px         |
+| Compact sidebar width | 72px          |
+| Workspace left panel  | 280px - 360px |
 | Workspace right panel | 320px - 400px |
 
 ## Radius tokens
 
-| 用途 | 値 |
-|---|---|
-| Button | 8px |
-| Input | 8px |
-| Card | 12px |
-| Dialog | 16px |
-| Badge | 999px |
+| 用途   | 値    |
+| ------ | ----- |
+| Button | 8px   |
+| Input  | 8px   |
+| Card   | 12px  |
+| Dialog | 16px  |
+| Badge  | 999px |
 
 ## Typography
 
-| 用途 | サイズ | 補足 |
-|---|---:|---|
-| Page title | 24px | 画面タイトル |
-| Feature title | 22px | Feature Workspaceの主タイトル |
-| Section title | 18px | カード見出し |
-| Body | 14px | 通常テキスト |
-| Table body | 13px | 一覧・Matrix |
-| Caption | 12px | 補足、メタ情報 |
-| KPI number | 28px | Summary Cardの主要数値 |
+| 用途          | サイズ | 補足                          |
+| ------------- | -----: | ----------------------------- |
+| Page title    |   24px | 画面タイトル                  |
+| Feature title |   22px | Feature Workspaceの主タイトル |
+| Section title |   18px | カード見出し                  |
+| Body          |   14px | 通常テキスト                  |
+| Table body    |   13px | 一覧・Matrix                  |
+| Caption       |   12px | 補足、メタ情報                |
+| KPI number    |   28px | Summary Cardの主要数値        |
 
 ## Badge variants
 
 UIで表示する値はDomain Modelのenumを正とする。UI仕様だけで独自のenumを増やさない。
 
-| 種類 | 用途 |
-|---|---|
-| StatusBadge | active / deprecated / removed |
-| RiskBadge | high / medium / low |
-| ConfidenceBadge | confirmed / assumed / unknown |
-| QuestionStatusBadge | open / answered / deferred / not_applicable |
-| AutomationBadge | high / medium / low / manual-only |
-| LinkTypeBadge | covers / derived_from / impacts / depends_on |
+| 種類                | 用途                                         |
+| ------------------- | -------------------------------------------- |
+| StatusBadge         | active / deprecated / removed                |
+| RiskBadge           | high / medium / low                          |
+| ConfidenceBadge     | confirmed / assumed / unknown                |
+| QuestionStatusBadge | open / answered / deferred / not_applicable  |
+| AutomationBadge     | high / medium / low / manual-only            |
+| LinkTypeBadge       | covers / derived_from / impacts / depends_on |
 
 未判断の自動化適性は `automationSuitability` を未設定として扱い、`unknown` という保存値は使わない。
 
@@ -152,15 +152,15 @@ UIで表示する値はDomain Modelのenumを正とする。UI仕様だけで独
 
 すべての主要画面とデータ表示コンポーネントは、次の状態を持つ。
 
-| 状態 | 表示方針 |
-|---|---|
-| loading | Skeletonを表示する |
-| empty | 次に取るべき主要アクションを1つ明示する |
-| error | 原因の要約とRetry導線を表示する |
-| saving | 保存ボタンをloading状態にする |
-| saved | Toastで保存完了を伝える |
-| validation error | Field単位でエラーを表示する |
-| not found | Project / Feature / Entityが存在しないことを明示する |
+| 状態             | 表示方針                                             |
+| ---------------- | ---------------------------------------------------- |
+| loading          | Skeletonを表示する                                   |
+| empty            | 次に取るべき主要アクションを1つ明示する              |
+| error            | 原因の要約とRetry導線を表示する                      |
+| saving           | 保存ボタンをloading状態にする                        |
+| saved            | Toastで保存完了を伝える                              |
+| validation error | Field単位でエラーを表示する                          |
+| not found        | Project / Feature / Entityが存在しないことを明示する |
 
 ## Empty state principles
 
@@ -186,12 +186,12 @@ UIで表示する値はDomain Modelのenumを正とする。UI仕様だけで独
 
 ## Toast messages
 
-| 種類 | 例 |
-|---|---|
-| success | 保存しました |
-| error | 保存に失敗しました |
+| 種類    | 例                         |
+| ------- | -------------------------- |
+| success | 保存しました               |
+| error   | 保存に失敗しました         |
 | warning | 未入力の必須項目があります |
-| info | JSONをエクスポートしました |
+| info    | JSONをエクスポートしました |
 
 ## Desktop first
 

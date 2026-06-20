@@ -173,17 +173,17 @@ type AccessibilityCaptureData = {
   role?: string;
   name?: string;
   description?: string;
-  valueType?: "string" | "number" | "boolean" | "unknown";
+  valueType?: 'string' | 'number' | 'boolean' | 'unknown';
   ignored?: boolean;
   ignoredReasons?: string[];
   properties?: {
     disabled?: boolean;
     required?: boolean;
     readonly?: boolean;
-    checked?: boolean | "mixed";
+    checked?: boolean | 'mixed';
     selected?: boolean;
     expanded?: boolean;
-    pressed?: boolean | "mixed";
+    pressed?: boolean | 'mixed';
     focused?: boolean;
     focusable?: boolean;
     invalid?: boolean;
@@ -222,9 +222,9 @@ AX由来の `name` / `description` もredaction rulesとtext length limitの対�
 Chrome拡張から取り込んだ候補を表す。
 
 ```ts
-type UiCaptureMode = "dom" | "accessibility-tree" | "hybrid" | "playwright-aria-snapshot";
+type UiCaptureMode = 'dom' | 'accessibility-tree' | 'hybrid' | 'playwright-aria-snapshot';
 
-type UiCaptureSource = "chrome-extension" | "playwright" | "manual-import";
+type UiCaptureSource = 'chrome-extension' | 'playwright' | 'manual-import';
 
 type UiCaptureCandidate = {
   id: string;
@@ -246,11 +246,11 @@ type UiCaptureCandidate = {
     textHint?: string;
     accessibleNameHint?: string;
     descriptionHint?: string;
-    locatorStrategy?: "role" | "label" | "testid" | "text" | "css";
+    locatorStrategy?: 'role' | 'label' | 'testid' | 'text' | 'css';
     locatorHint?: string;
     required?: boolean;
   };
-  status: "candidate" | "accepted" | "rejected";
+  status: 'candidate' | 'accepted' | 'rejected';
 };
 ```
 
@@ -265,7 +265,7 @@ type UiCaptureBundle = {
   schemaVersion: number;
   appVersion: string;
   exportedAt: string;
-  exportType: "ui-capture";
+  exportType: 'ui-capture';
   source: UiCaptureSource;
   candidates: UiCaptureCandidate[];
 };
@@ -300,11 +300,11 @@ Element Pickerは、ユーザーが対象ページ上の要素を1つ選択す�
 
 ```ts
 type ExtensionMessage =
-  | { type: "GET_ACTIVE_TAB" }
-  | { type: "CAPTURE_PAGE" }
-  | { type: "START_ELEMENT_PICKER" }
-  | { type: "STOP_ELEMENT_PICKER" }
-  | { type: "ELEMENT_PICKED"; payload: UiCaptureCandidate };
+  | { type: 'GET_ACTIVE_TAB' }
+  | { type: 'CAPTURE_PAGE' }
+  | { type: 'START_ELEMENT_PICKER' }
+  | { type: 'STOP_ELEMENT_PICKER' }
+  | { type: 'ELEMENT_PICKED'; payload: UiCaptureCandidate };
 ```
 
 message payloadは `shared` に型定義し、Side Panel / Background / Content Script で共有する。

@@ -19,15 +19,15 @@ UI仕様では、SaaS風の見た目を定義するだけではなく、QAエン
 
 ## UI仕様一覧
 
-| 文書 | 内容 |
-|---|---|
-| `01-ui-design-system.md` | UIコンセプト、デザイン原則、色、余白、状態表現 |
-| `02-app-shell-navigation.md` | App Shell、Sidebar、Top Header、共通ナビゲーション |
-| `03-project-dashboard-ui-spec.md` | Project Dashboard / Project Detail / Project List |
-| `04-feature-workspace-ui-spec.md` | Feature Workspaceのレイアウト、ヘッダー、タブ、主要導線 |
-| `05-test-design-editor-ui-spec.md` | TestViewpoint Editor / TestCase Editor / StepTable |
-| `06-export-traceability-ui-spec.md` | Export画面、TraceabilityのPhase 7以降の表示方針 |
-| `07-ui-implementation-order.md` | UI実装順、P0/P1の分割、Taskとの対応 |
+| 文書                                | 内容                                                    |
+| ----------------------------------- | ------------------------------------------------------- |
+| `01-ui-design-system.md`            | UIコンセプト、デザイン原則、色、余白、状態表現          |
+| `02-app-shell-navigation.md`        | App Shell、Sidebar、Top Header、共通ナビゲーション      |
+| `03-project-dashboard-ui-spec.md`   | Project Dashboard / Project Detail / Project List       |
+| `04-feature-workspace-ui-spec.md`   | Feature Workspaceのレイアウト、ヘッダー、タブ、主要導線 |
+| `05-test-design-editor-ui-spec.md`  | TestViewpoint Editor / TestCase Editor / StepTable      |
+| `06-export-traceability-ui-spec.md` | Export画面、TraceabilityのPhase 7以降の表示方針         |
+| `07-ui-implementation-order.md`     | UI実装順、P0/P1の分割、Taskとの対応                     |
 
 ## 実装時の優先順位
 

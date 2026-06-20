@@ -27,19 +27,19 @@ type ChangeRecord = EntityBase & {
 };
 
 type ChangeType =
-  | "added"
-  | "updated"
-  | "deprecated"
-  | "removed"
-  | "selector-changed"
-  | "accessible-name-changed"
-  | "role-changed"
-  | "state-changed"
-  | "description-changed"
-  | "behavior-changed"
-  | "validation-changed"
-  | "display-changed"
-  | "permission-changed";
+  | 'added'
+  | 'updated'
+  | 'deprecated'
+  | 'removed'
+  | 'selector-changed'
+  | 'accessible-name-changed'
+  | 'role-changed'
+  | 'state-changed'
+  | 'description-changed'
+  | 'behavior-changed'
+  | 'validation-changed'
+  | 'display-changed'
+  | 'permission-changed';
 ```
 
 `TraceNodeType` と `Confidence` は `docs/specs/01-domain-model.md` を正とする。

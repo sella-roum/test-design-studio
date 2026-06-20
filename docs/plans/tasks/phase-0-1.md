@@ -1,5 +1,9 @@
 # Phase 0-1 タスク詳細
 
+> Note:
+> 現在のPR運用では、TASK-002〜TASK-010A を Foundation Phase として1PRで扱う。
+> このファイル名に含まれる phase-0-1 / phase-2 は旧分割名であり、現在のPR運用上は Foundation Phase の一部である。
+
 この文書は、Phase 0 と Phase 1 のTask ID単位タスクを定義する。
 
 Phase 0 は実装前の地図作成、Phase 1 はアプリ基盤作成である。この段階では、プロダクト機能を作り込まず、後続のAIエージェント実装が迷わない土台を作る。

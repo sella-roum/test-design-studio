@@ -219,17 +219,17 @@ Non-goals:
 
 ## Mapping to existing tasks
 
-| UI slice | 既存Task | 備考 |
-|---|---|---|
-| UI-001 | TASK-002 / TASK-013 | App基盤はTASK-002、Workspace枠はTASK-013 |
-| UI-002 | TASK-011 / TASK-012 | ProjectとFeature入口 |
-| UI-003 | TASK-013 | Feature Workspace基盤 |
-| UI-004 | TASK-014 | UiNodeツリー手入力UI |
-| UI-005 | TASK-015 / TASK-016 | Data / Rule / OpenQuestion |
-| UI-006 | TASK-016 | TestViewpoint編集 |
-| UI-007 | TASK-016 | TestCase / TestStep編集 |
-| UI-008 | TASK-017 / TASK-018 | Export / Import |
-| UI-009 | Phase 7 | 簡易Traceability表示 |
+| UI slice | 既存Task            | 備考                                     |
+| -------- | ------------------- | ---------------------------------------- |
+| UI-001   | TASK-002 / TASK-013 | App基盤はTASK-002、Workspace枠はTASK-013 |
+| UI-002   | TASK-011 / TASK-012 | ProjectとFeature入口                     |
+| UI-003   | TASK-013            | Feature Workspace基盤                    |
+| UI-004   | TASK-014            | UiNodeツリー手入力UI                     |
+| UI-005   | TASK-015 / TASK-016 | Data / Rule / OpenQuestion               |
+| UI-006   | TASK-016            | TestViewpoint編集                        |
+| UI-007   | TASK-016            | TestCase / TestStep編集                  |
+| UI-008   | TASK-017 / TASK-018 | Export / Import                          |
+| UI-009   | Phase 7             | 簡易Traceability表示                     |
 
 ## P0 completion definition
 
