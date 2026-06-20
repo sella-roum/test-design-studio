@@ -179,7 +179,7 @@ Non-goals:
 対応文書:
 
 - `06-export-traceability-ui-spec.md`
-- `docs/specs/04-import-export-spec.md`
+- `docs/specs/05-import-export-spec.md`
 
 Scope:
 
