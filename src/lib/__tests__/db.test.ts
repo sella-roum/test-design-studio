@@ -32,6 +32,7 @@ describe('AppDatabase', () => {
   });
 
   it('defines all Foundation Phase tables', () => {
+    const db = new AppDatabase(TEST_DB_NAME);
     const requiredTables = [
       'projects',
       'features',
@@ -47,8 +48,9 @@ describe('AppDatabase', () => {
       'traceLinks',
       'changeRecords',
     ];
-    const tableNames = testDb.tables.map((table) => table.name);
+    const tableNames = db.tables.map((table) => table.name);
     expect(tableNames).toEqual(expect.arrayContaining(requiredTables));
+    db.close();
   });
 });
 

@@ -268,6 +268,13 @@ Cascade logical removal is **deferred** from the Foundation Phase.
 Current `markRemoved` methods only update the target entity itself.
 Cascade behavior will be implemented in a later data consistency phase.
 
+## Status lifecycle API policy
+
+Foundation Phaseでは、Repositoryの通常一覧が `deprecated` entity を保持することのみ担保する。
+Entity を `deprecated` へ変更する専用API (`markDeprecated` や汎用 `updateStatus`) は、後続の data lifecycle phase で追加する。
+
+理由：Foundation Phaseでは保存層の取得契約を固めることが目的であり、ライフサイクル操作APIを増やす段階ではないため。
+
 設計方針（未実装）:
 
 - Projectを `removed` にする場合、配下のFeature、Screen、UiNode、DataEntity、DataField、DataType、BusinessRule、OpenQuestion、TestViewpoint、TestCase、TraceLink、ChangeRecordも論理削除対象にする。
