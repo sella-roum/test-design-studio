@@ -96,6 +96,21 @@ describe('dataFieldRepository', () => {
     expect(removed.status).toBe('removed');
   });
 
+  it('includes deprecated in listByEntity', async () => {
+    const field = await repo.create({ projectId, entityId, name: 'old' });
+    await db.dataFields.update(field.id, { status: 'deprecated' });
+    const list = await repo.listByEntity(entityId);
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed data field by id', async () => {
+    const field = await repo.create({ projectId, entityId, name: 'gone' });
+    await repo.markRemoved(field.id);
+    const found = await repo.get(field.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('excludes removed by default in listByEntity', async () => {
     const field = await repo.create({ projectId, entityId, name: 'Hide' });
     await repo.markRemoved(field.id);

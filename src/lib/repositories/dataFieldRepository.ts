@@ -2,6 +2,8 @@ import type { AppDatabase } from '../db';
 import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { DataField } from '../models/dataField';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createDataFieldRepository(db: AppDatabase) {
   function now(): string {
@@ -55,20 +57,14 @@ export function createDataFieldRepository(db: AppDatabase) {
     return db.dataFields.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByEntity(entityId: string, options?: ListOptions): Promise<DataField[]> {
     const items = await db.dataFields.where('entityId').equals(entityId).toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function listByProject(projectId: string, options?: ListOptions): Promise<DataField[]> {
     const items = await db.dataFields.where('projectId').equals(projectId).toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<DataField> {

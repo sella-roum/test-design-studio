@@ -2,6 +2,8 @@ import type { AppDatabase } from '../db';
 import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { DataType, BaseType, DataTypeConstraints } from '../models/dataType';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createDataTypeRepository(db: AppDatabase) {
   function now(): string {
@@ -58,15 +60,9 @@ export function createDataTypeRepository(db: AppDatabase) {
     return db.dataTypes.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<DataType[]> {
-    if (options?.includeRemoved) {
-      return db.dataTypes.where('projectId').equals(projectId).toArray();
-    }
-    return db.dataTypes.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.dataTypes.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<DataType> {

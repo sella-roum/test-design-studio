@@ -30,6 +30,26 @@ describe('AppDatabase', () => {
     expect(db.name).toBe(TEST_DB_NAME);
     db.delete();
   });
+
+  it('defines all Foundation Phase tables', () => {
+    const requiredTables = [
+      'projects',
+      'features',
+      'screens',
+      'uiNodes',
+      'dataEntities',
+      'dataFields',
+      'dataTypes',
+      'businessRules',
+      'testViewpoints',
+      'testCases',
+      'openQuestions',
+      'traceLinks',
+      'changeRecords',
+    ];
+    const tableNames = testDb.tables.map((table) => table.name);
+    expect(tableNames).toEqual(expect.arrayContaining(requiredTables));
+  });
 });
 
 describe('Database constants', () => {

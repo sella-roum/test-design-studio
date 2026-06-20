@@ -3,6 +3,8 @@ import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { Screen, ScreenType } from '../models/screen';
 import type { Confidence } from '../types';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createScreenRepository(db: AppDatabase) {
   function now(): string {
@@ -69,26 +71,14 @@ export function createScreenRepository(db: AppDatabase) {
     return db.screens.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<Screen[]> {
-    if (options?.includeRemoved) {
-      return db.screens.where('projectId').equals(projectId).toArray();
-    }
-    return db.screens
-      .where('projectId')
-      .equals(projectId)
-      .filter((s) => s.status !== 'removed')
-      .toArray();
+    const items = await db.screens.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function listByFeature(featureId: string, options?: ListOptions): Promise<Screen[]> {
-    if (options?.includeRemoved) {
-      return db.screens.where('featureId').equals(featureId).toArray();
-    }
-    return db.screens.where('[featureId+status]').equals([featureId, 'active']).toArray();
+    const items = await db.screens.where('featureId').equals(featureId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<Screen> {

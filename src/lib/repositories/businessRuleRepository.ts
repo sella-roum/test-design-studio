@@ -3,6 +3,8 @@ import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { BusinessRule, BusinessRuleType } from '../models/businessRule';
 import type { Confidence } from '../types';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createBusinessRuleRepository(db: AppDatabase) {
   function now(): string {
@@ -73,27 +75,19 @@ export function createBusinessRuleRepository(db: AppDatabase) {
     return db.businessRules.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<BusinessRule[]> {
-    if (options?.includeRemoved) {
-      return db.businessRules.where('projectId').equals(projectId).toArray();
-    }
-    return db.businessRules.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.businessRules.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function listByFeature(featureId: string, options?: ListOptions): Promise<BusinessRule[]> {
     const items = await db.businessRules.where('featureId').equals(featureId).toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function listByScreen(screenId: string, options?: ListOptions): Promise<BusinessRule[]> {
     const items = await db.businessRules.where('screenId').equals(screenId).toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<BusinessRule> {

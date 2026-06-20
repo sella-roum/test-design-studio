@@ -69,21 +69,18 @@ export class AppDatabase extends Dexie {
     });
     this.version(SCHEMA_VERSION).stores({
       projects: 'id, status, updatedAt',
-      features: 'id, projectId, [projectId+status], updatedAt',
-      screens: 'id, projectId, featureId, [featureId+status], updatedAt',
-      uiNodes: 'id, projectId, screenId, parentId, [screenId+status], sortOrder',
-      dataEntities: 'id, projectId, [projectId+status]',
+      features: 'id, projectId, updatedAt',
+      screens: 'id, projectId, featureId, updatedAt',
+      uiNodes: 'id, projectId, screenId, parentId, sortOrder',
+      dataEntities: 'id, projectId',
       dataFields: 'id, projectId, entityId, dataTypeId',
-      dataTypes: 'id, projectId, [projectId+status]',
-      businessRules: 'id, projectId, featureId, screenId, uiNodeId, [projectId+status]',
-      testViewpoints: 'id, projectId, featureId, [projectId+status], [featureId+status]',
-      testCases: 'id, projectId, featureId, viewpointId, [projectId+status], [featureId+status]',
-      openQuestions:
-        'id, projectId, featureId, screenId, uiNodeId, questionStatus, [projectId+status]',
-      traceLinks:
-        'id, projectId, fromId, toId, [fromType+fromId], [toType+toId], linkType, [projectId+status]',
-      changeRecords:
-        'id, projectId, targetId, [targetType+targetId], changeType, [projectId+status], updatedAt',
+      dataTypes: 'id, projectId',
+      businessRules: 'id, projectId, featureId, screenId, uiNodeId',
+      testViewpoints: 'id, projectId, featureId',
+      testCases: 'id, projectId, featureId, viewpointId',
+      openQuestions: 'id, projectId, featureId, screenId, uiNodeId, questionStatus',
+      traceLinks: 'id, projectId, fromId, toId, [fromType+fromId], [toType+toId], linkType',
+      changeRecords: 'id, projectId, targetId, [targetType+targetId], changeType, updatedAt',
     });
   }
 }

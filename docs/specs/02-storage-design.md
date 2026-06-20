@@ -105,20 +105,18 @@ P0でDexie schemaへ追加するindexは次の通り。
 
 ```ts
 projects: 'id, status, updatedAt';
-features: 'id, projectId, [projectId+status], updatedAt';
-screens: 'id, projectId, featureId, [featureId+status], updatedAt';
-uiNodes: 'id, projectId, screenId, parentId, [screenId+status], sortOrder';
-dataEntities: 'id, projectId, [projectId+status]';
+features: 'id, projectId, updatedAt';
+screens: 'id, projectId, featureId, updatedAt';
+uiNodes: 'id, projectId, screenId, parentId, sortOrder';
+dataEntities: 'id, projectId';
 dataFields: 'id, projectId, entityId, dataTypeId';
-dataTypes: 'id, projectId, [projectId+status]';
-businessRules: 'id, projectId, featureId, screenId, uiNodeId, [projectId+status]';
-openQuestions: 'id, projectId, featureId, screenId, uiNodeId, questionStatus, [projectId+status]';
-testViewpoints: 'id, projectId, featureId, [featureId+status]';
-testCases: 'id, projectId, featureId, viewpointId, [featureId+status]';
-testViewpoints: 'id, projectId, featureId, [projectId+status], [featureId+status]';
-testCases: 'id, projectId, featureId, viewpointId, [projectId+status], [featureId+status]';
-traceLinks: 'id, projectId, fromId, toId, [projectId+status], [fromType+fromId], [toType+toId], linkType, status';
-changeRecords: 'id, projectId, targetId, [projectId+status], [targetType+targetId], changeType, updatedAt';
+dataTypes: 'id, projectId';
+businessRules: 'id, projectId, featureId, screenId, uiNodeId';
+openQuestions: 'id, projectId, featureId, screenId, uiNodeId, questionStatus';
+testViewpoints: 'id, projectId, featureId';
+testCases: 'id, projectId, featureId, viewpointId';
+traceLinks: 'id, projectId, fromId, toId, [fromType+fromId], [toType+toId], linkType';
+changeRecords: 'id, projectId, targetId, [targetType+targetId], changeType, updatedAt';
 ```
 
 ### P1 index policy

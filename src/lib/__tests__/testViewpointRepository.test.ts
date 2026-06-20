@@ -95,6 +95,21 @@ describe('testViewpointRepository', () => {
     expect(list).toHaveLength(1);
   });
 
+  it('includes deprecated in listByFeature', async () => {
+    const vp = await repo.create({ projectId, featureId, title: 'Old' });
+    await db.testViewpoints.update(vp.id, { status: 'deprecated' });
+    const list = await repo.listByFeature(featureId);
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed test viewpoint by id', async () => {
+    const vp = await repo.create({ projectId, featureId, title: 'Gone' });
+    await repo.markRemoved(vp.id);
+    const found = await repo.get(vp.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('excludes removed by default in listByFeature', async () => {
     const vp = await repo.create({ projectId, featureId, title: 'Test' });
     await repo.markRemoved(vp.id);

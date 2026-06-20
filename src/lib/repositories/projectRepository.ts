@@ -3,6 +3,8 @@ import { SCHEMA_VERSION } from '../constants';
 import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { Project } from '../models/project';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createProjectRepository(db: AppDatabase) {
   function now(): string {
@@ -39,16 +41,9 @@ export function createProjectRepository(db: AppDatabase) {
     return db.projects.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function list(options?: ListOptions): Promise<Project[]> {
-    if (options?.includeRemoved) {
-      return db.projects.orderBy('updatedAt').reverse().toArray();
-    }
-    const items = await db.projects.where('status').notEqual('removed').sortBy('updatedAt');
-    return items.reverse();
+    const items = await db.projects.orderBy('updatedAt').reverse().toArray();
+    return filterRemoved(items, options);
   }
 
   async function update(

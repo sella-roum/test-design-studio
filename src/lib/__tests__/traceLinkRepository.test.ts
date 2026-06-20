@@ -150,6 +150,35 @@ describe('traceLinkRepository', () => {
     expect(list).toHaveLength(0);
   });
 
+  it('includes deprecated in listByFrom', async () => {
+    const link = await repo.create({
+      projectId,
+      fromType: 'feature',
+      fromId: 'f1',
+      toType: 'screen',
+      toId: 's1',
+      linkType: 'covers',
+    });
+    await db.traceLinks.update(link.id, { status: 'deprecated' });
+    const list = await repo.listByFrom('feature', 'f1');
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed trace link by id', async () => {
+    const link = await repo.create({
+      projectId,
+      fromType: 'feature',
+      fromId: 'f1',
+      toType: 'screen',
+      toId: 's1',
+      linkType: 'covers',
+    });
+    await repo.markRemoved(link.id);
+    const found = await repo.get(link.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('includes removed when includeRemoved is true in listByFrom', async () => {
     const link = await repo.create({
       projectId,

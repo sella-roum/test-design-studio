@@ -134,6 +134,21 @@ describe('uiNodeRepository', () => {
       expect(nodes).toHaveLength(0);
     });
 
+    it('includes deprecated in default list', async () => {
+      const node = await repo.create({ projectId, screenId, name: 'Old' });
+      await db.uiNodes.update(node.id, { status: 'deprecated' });
+      const list = await repo.listByScreen(screenId);
+      expect(list).toHaveLength(1);
+    });
+
+    it('gets a removed uiNode by id', async () => {
+      const node = await repo.create({ projectId, screenId, name: 'Gone' });
+      await repo.markRemoved(node.id);
+      const found = await repo.get(node.id);
+      expect(found).toBeTruthy();
+      expect(found!.status).toBe('removed');
+    });
+
     it('includes removed when includeRemoved is true in listByScreen', async () => {
       const n = await repo.create({ projectId, screenId, name: 'Remove Me' });
       await repo.markRemoved(n.id);

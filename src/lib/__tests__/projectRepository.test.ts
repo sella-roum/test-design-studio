@@ -114,6 +114,13 @@ describe('projectRepository', () => {
       expect(projects[0].name).toBe('Keep');
     });
 
+    it('includes deprecated in default list', async () => {
+      const project = await repo.create({ name: 'Old Project' });
+      await db.projects.update(project.id, { status: 'deprecated' });
+      const list = await repo.list();
+      expect(list).toHaveLength(1);
+    });
+
     it('includes removed when includeRemoved is true in list', async () => {
       const toRemove = await repo.create({ name: 'Remove Me' });
       await repo.markRemoved(toRemove.id);

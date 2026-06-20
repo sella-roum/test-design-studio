@@ -112,6 +112,21 @@ describe('dataTypeRepository', () => {
     expect(removed.status).toBe('removed');
   });
 
+  it('includes deprecated in default list', async () => {
+    const dt = await repo.create({ projectId, name: 'Old', baseType: 'string' });
+    await db.dataTypes.update(dt.id, { status: 'deprecated' });
+    const list = await repo.listByProject(projectId);
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed data type by id', async () => {
+    const dt = await repo.create({ projectId, name: 'Gone', baseType: 'string' });
+    await repo.markRemoved(dt.id);
+    const found = await repo.get(dt.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('excludes removed from list', async () => {
     const dt = await repo.create({ projectId, name: 'Hide', baseType: 'string' });
     await repo.markRemoved(dt.id);

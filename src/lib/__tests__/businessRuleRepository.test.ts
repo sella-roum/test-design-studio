@@ -138,6 +138,34 @@ describe('businessRuleRepository', () => {
     expect(list).toHaveLength(1);
   });
 
+  it('includes deprecated in listByFeature', async () => {
+    const rule = await repo.create({
+      projectId,
+      featureId: 'f1',
+      name: 'Old Rule',
+      description: 'desc',
+      ruleType: 'validation',
+      confidence: 'confirmed',
+    });
+    await db.businessRules.update(rule.id, { status: 'deprecated' });
+    const list = await repo.listByFeature('f1');
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed business rule by id', async () => {
+    const rule = await repo.create({
+      projectId,
+      name: 'Gone',
+      description: 'desc',
+      ruleType: 'validation',
+      confidence: 'confirmed',
+    });
+    await repo.markRemoved(rule.id);
+    const found = await repo.get(rule.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('excludes removed by default in listByFeature', async () => {
     const rule = await repo.create({
       projectId,

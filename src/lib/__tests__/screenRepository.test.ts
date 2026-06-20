@@ -119,6 +119,21 @@ describe('screenRepository', () => {
       expect(screens).toHaveLength(0);
     });
 
+    it('includes deprecated in listByProject', async () => {
+      const screen = await repo.create({ projectId, featureId: 'f', name: 'Old' });
+      await db.screens.update(screen.id, { status: 'deprecated' });
+      const list = await repo.listByProject(projectId);
+      expect(list).toHaveLength(1);
+    });
+
+    it('gets a removed screen by id', async () => {
+      const screen = await repo.create({ projectId, featureId: 'f', name: 'Gone' });
+      await repo.markRemoved(screen.id);
+      const found = await repo.get(screen.id);
+      expect(found).toBeTruthy();
+      expect(found!.status).toBe('removed');
+    });
+
     it('includes removed when includeRemoved is true in listByProject', async () => {
       const s = await repo.create({ projectId, featureId, name: 'To Remove' });
       await repo.markRemoved(s.id);

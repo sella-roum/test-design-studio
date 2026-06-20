@@ -3,6 +3,8 @@ import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { TestViewpoint, TestTechnique } from '../models/testViewpoint';
 import type { Priority, AutomationSuitability } from '../types';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createTestViewpointRepository(db: AppDatabase) {
   function now(): string {
@@ -90,22 +92,14 @@ export function createTestViewpointRepository(db: AppDatabase) {
     return db.testViewpoints.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<TestViewpoint[]> {
-    if (options?.includeRemoved) {
-      return db.testViewpoints.where('projectId').equals(projectId).toArray();
-    }
-    return db.testViewpoints.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.testViewpoints.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function listByFeature(featureId: string, options?: ListOptions): Promise<TestViewpoint[]> {
-    if (options?.includeRemoved) {
-      return db.testViewpoints.where('featureId').equals(featureId).toArray();
-    }
-    return db.testViewpoints.where('[featureId+status]').equals([featureId, 'active']).toArray();
+    const items = await db.testViewpoints.where('featureId').equals(featureId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<TestViewpoint> {

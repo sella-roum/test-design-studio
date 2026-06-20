@@ -2,6 +2,8 @@ import type { AppDatabase } from '../db';
 import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { DataEntity } from '../models/dataEntity';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createDataEntityRepository(db: AppDatabase) {
   function now(): string {
@@ -42,15 +44,9 @@ export function createDataEntityRepository(db: AppDatabase) {
     return db.dataEntities.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<DataEntity[]> {
-    if (options?.includeRemoved) {
-      return db.dataEntities.where('projectId').equals(projectId).toArray();
-    }
-    return db.dataEntities.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.dataEntities.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<DataEntity> {

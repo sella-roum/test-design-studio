@@ -2,6 +2,8 @@ import type { AppDatabase } from '../db';
 import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { TraceLink, TraceNodeType, TraceLinkType } from '../models/traceLink';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createTraceLinkRepository(db: AppDatabase) {
   function now(): string {
@@ -88,15 +90,9 @@ export function createTraceLinkRepository(db: AppDatabase) {
     return db.traceLinks.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<TraceLink[]> {
-    if (options?.includeRemoved) {
-      return db.traceLinks.where('projectId').equals(projectId).toArray();
-    }
-    return db.traceLinks.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.traceLinks.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function listByFrom(
@@ -108,8 +104,7 @@ export function createTraceLinkRepository(db: AppDatabase) {
       .where('[fromType+fromId]')
       .equals([fromType, fromId])
       .toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function listByTo(
@@ -118,8 +113,7 @@ export function createTraceLinkRepository(db: AppDatabase) {
     options?: ListOptions,
   ): Promise<TraceLink[]> {
     const items = await db.traceLinks.where('[toType+toId]').equals([toType, toId]).toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<TraceLink> {

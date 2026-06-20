@@ -104,6 +104,21 @@ describe('featureRepository', () => {
       expect(features).toHaveLength(0);
     });
 
+    it('includes deprecated in default list', async () => {
+      const feature = await repo.create({ projectId, name: 'Old Feature' });
+      await db.features.update(feature.id, { status: 'deprecated' });
+      const list = await repo.listByProject(projectId);
+      expect(list).toHaveLength(1);
+    });
+
+    it('gets a removed entity by id', async () => {
+      const feature = await repo.create({ projectId, name: 'Gone' });
+      await repo.markRemoved(feature.id);
+      const found = await repo.get(feature.id);
+      expect(found).toBeTruthy();
+      expect(found!.status).toBe('removed');
+    });
+
     it('includes removed when includeRemoved is true in listByProject', async () => {
       const f = await repo.create({ projectId, name: 'Remove Me' });
       await repo.markRemoved(f.id);

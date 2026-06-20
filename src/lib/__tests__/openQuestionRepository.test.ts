@@ -116,6 +116,32 @@ describe('openQuestionRepository', () => {
     expect(list).toHaveLength(1);
   });
 
+  it('includes deprecated in listByFeature', async () => {
+    const oq = await repo.create({
+      projectId,
+      featureId: 'f1',
+      question: 'Old question?',
+      questionStatus: 'open',
+      confidence: 'tentative',
+    });
+    await db.openQuestions.update(oq.id, { status: 'deprecated' });
+    const list = await repo.listByFeature('f1');
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed open question by id', async () => {
+    const oq = await repo.create({
+      projectId,
+      question: 'Gone?',
+      questionStatus: 'open',
+      confidence: 'tentative',
+    });
+    await repo.markRemoved(oq.id);
+    const found = await repo.get(oq.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('excludes removed by default in listByFeature', async () => {
     const oq = await repo.create({
       projectId,

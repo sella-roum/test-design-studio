@@ -4,6 +4,8 @@ import { NotFoundError, ValidationError } from '../errors';
 import type { ChangeRecord, ChangeType } from '../models/changeRecord';
 import type { TraceNodeType } from '../models/traceLink';
 import type { Confidence } from '../types';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createChangeRecordRepository(db: AppDatabase) {
   function now(): string {
@@ -106,15 +108,9 @@ export function createChangeRecordRepository(db: AppDatabase) {
     return db.changeRecords.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<ChangeRecord[]> {
-    if (options?.includeRemoved) {
-      return db.changeRecords.where('projectId').equals(projectId).toArray();
-    }
-    return db.changeRecords.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.changeRecords.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function listByTarget(
@@ -126,8 +122,7 @@ export function createChangeRecordRepository(db: AppDatabase) {
       .where('[targetType+targetId]')
       .equals([targetType, targetId])
       .toArray();
-    if (options?.includeRemoved) return items;
-    return items.filter((item) => item.status !== 'removed');
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<ChangeRecord> {

@@ -2,6 +2,8 @@ import type { AppDatabase } from '../db';
 import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { UiNode, UiNodeTreeNode, LocatorStrategy } from '../models/uiNode';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createUiNodeRepository(db: AppDatabase) {
   function now(): string {
@@ -95,15 +97,10 @@ export function createUiNodeRepository(db: AppDatabase) {
     return db.uiNodes.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByScreen(screenId: string, options?: ListOptions): Promise<UiNode[]> {
-    if (options?.includeRemoved) {
-      return db.uiNodes.where('screenId').equals(screenId).sortBy('sortOrder');
-    }
-    return db.uiNodes.where('[screenId+status]').equals([screenId, 'active']).sortBy('sortOrder');
+    const items = await db.uiNodes.where('screenId').equals(screenId).toArray();
+    const filtered = filterRemoved(items, options);
+    return filtered.sort((a: UiNode, b: UiNode) => a.sortOrder - b.sortOrder);
   }
 
   async function getTree(screenId: string): Promise<UiNodeTreeNode[]> {

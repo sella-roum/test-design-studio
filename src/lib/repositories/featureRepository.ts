@@ -3,6 +3,8 @@ import { generateId } from '../id';
 import { NotFoundError, ValidationError } from '../errors';
 import type { Feature } from '../models/feature';
 import type { Priority, Confidence } from '../types';
+import type { ListOptions } from './listOptions';
+import { filterRemoved } from './listOptions';
 
 export function createFeatureRepository(db: AppDatabase) {
   function now(): string {
@@ -73,15 +75,9 @@ export function createFeatureRepository(db: AppDatabase) {
     return db.features.get(id);
   }
 
-  type ListOptions = {
-    includeRemoved?: boolean;
-  };
-
   async function listByProject(projectId: string, options?: ListOptions): Promise<Feature[]> {
-    if (options?.includeRemoved) {
-      return db.features.where('projectId').equals(projectId).toArray();
-    }
-    return db.features.where('[projectId+status]').equals([projectId, 'active']).toArray();
+    const items = await db.features.where('projectId').equals(projectId).toArray();
+    return filterRemoved(items, options);
   }
 
   async function update(id: string, patch: UpdateInput): Promise<Feature> {

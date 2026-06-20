@@ -79,6 +79,21 @@ describe('dataEntityRepository', () => {
     expect(removed.status).toBe('removed');
   });
 
+  it('includes deprecated in default list', async () => {
+    const entity = await repo.create({ projectId, name: 'Old Entity' });
+    await db.dataEntities.update(entity.id, { status: 'deprecated' });
+    const list = await repo.listByProject(projectId);
+    expect(list).toHaveLength(1);
+  });
+
+  it('gets a removed data entity by id', async () => {
+    const entity = await repo.create({ projectId, name: 'Gone' });
+    await repo.markRemoved(entity.id);
+    const found = await repo.get(entity.id);
+    expect(found).toBeTruthy();
+    expect(found!.status).toBe('removed');
+  });
+
   it('excludes removed from list', async () => {
     const entity = await repo.create({ projectId, name: 'Hide' });
     await repo.markRemoved(entity.id);
