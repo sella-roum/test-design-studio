@@ -111,36 +111,22 @@ Chrome拡張で実画面からUI候補を取り込み、変更履歴と影響追
 - `Scope` に書かれていない機能をついでに実装しません。
 - `Non-goals` に書かれている内容は実装しません。
 - UIだけ、型だけ、保存処理だけで終わる中途半端な変更を避けます。
-- ただし、Phase 1やPhase 2のような基盤構築タスクでは、各タスクのAcceptance criteriaを優先します。
+- ただし、`TASK-002` や `TASK-003` のような基盤構築タスクでは、各タスクのAcceptance criteriaを優先します。
 - DexieのschemaVersionを変更する場合は、migration方針を明記します。
 - DOM解析およびAccessibility Tree解析は入力補助であり、仕様の完全自動生成として扱いません。
 
 ## Task flow
 
-Task IDは `docs/plans/task-breakdown.md` で管理します。
+Task IDは `docs/plans/task-breakdown.md` で管理します。次に着手するTask IDは、必ずタスク一覧と対応する詳細タスク文書を正本として確認してください。
 
-現在の次タスクは `TASK-002: Reactアプリ基盤作成` です。
+現時点では `TASK-002: Reactアプリ基盤作成` から実装を開始する想定です。
 
-`TASK-002` では、次のみを扱います。
+`TASK-002` は、Vite + React + TypeScript の最小アプリ基盤を追加するタスクです。ドメインモデル、IndexedDB保存、Project作成画面、Chrome拡張、Vitest / Testing Library / GitHub Actionsの品質ゲートは含めません。
 
-- `package.json` の作成
-- Vite React TypeScript構成の追加
-- `src/main.tsx` と `src/App.tsx` の追加
-- 基本レイアウトとグローバルCSSの追加
-- `dev`、`build`、`typecheck` scriptの定義
-- 必要な場合の一時的な `test` script placeholder
-- アプリ名、プロダクト概要、空状態を表示する初期画面の作成
+具体的なScope、Non-goals、Acceptance criteriaは次を参照してください。
 
-`TASK-002` では、次は実装しません。
-
-- ドメインモデル
-- IndexedDB保存
-- Project作成画面
-- Chrome拡張
-- 認証
-- クラウド同期
-- 外部API連携
-- Vitest、Testing Library、GitHub Actionsの品質ゲート
+- `docs/plans/tasks/phase-0-1.md`
+- `docs/plans/task-breakdown.md`
 
 ## Local development
 
