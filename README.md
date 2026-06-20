@@ -127,7 +127,8 @@ Task IDは `docs/plans/task-breakdown.md` で管理します。
 - Vite React TypeScript構成の追加
 - `src/main.tsx` と `src/App.tsx` の追加
 - 基本レイアウトとグローバルCSSの追加
-- `dev`、`build`、`typecheck`、`test` scriptの定義
+- `dev`、`build`、`typecheck` scriptの定義
+- 必要な場合の一時的な `test` script placeholder
 - アプリ名、プロダクト概要、空状態を表示する初期画面の作成
 
 `TASK-002` では、次は実装しません。
@@ -139,6 +140,7 @@ Task IDは `docs/plans/task-breakdown.md` で管理します。
 - 認証
 - クラウド同期
 - 外部API連携
+- Vitest、Testing Library、GitHub Actionsの品質ゲート
 
 ## Local development
 
@@ -151,8 +153,9 @@ npm install
 npm run dev
 npm run build
 npm run typecheck
-npm run test
 ```
+
+`npm run test` と `npm run check` は、品質ゲートを追加する `TASK-003` 以降で実体化します。`TASK-002` で `test` scriptを追加する場合は、実テスト基盤を導入しない一時placeholderとして扱います。
 
 ## Non-goals for early phases
 
