@@ -79,16 +79,27 @@ export function createOpenQuestionRepository(db: AppDatabase) {
     return db.openQuestions.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<OpenQuestion[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<OpenQuestion[]> {
+    if (options?.includeRemoved) {
+      return db.openQuestions.where('projectId').equals(projectId).toArray();
+    }
     return db.openQuestions.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 
-  async function listByFeature(featureId: string): Promise<OpenQuestion[]> {
-    return db.openQuestions.where('featureId').equals(featureId).toArray();
+  async function listByFeature(featureId: string, options?: ListOptions): Promise<OpenQuestion[]> {
+    const items = await db.openQuestions.where('featureId').equals(featureId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
-  async function listByScreen(screenId: string): Promise<OpenQuestion[]> {
-    return db.openQuestions.where('screenId').equals(screenId).toArray();
+  async function listByScreen(screenId: string, options?: ListOptions): Promise<OpenQuestion[]> {
+    const items = await db.openQuestions.where('screenId').equals(screenId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
   async function update(id: string, patch: UpdateInput): Promise<OpenQuestion> {

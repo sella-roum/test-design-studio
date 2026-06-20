@@ -95,7 +95,14 @@ export function createUiNodeRepository(db: AppDatabase) {
     return db.uiNodes.get(id);
   }
 
-  async function listByScreen(screenId: string): Promise<UiNode[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByScreen(screenId: string, options?: ListOptions): Promise<UiNode[]> {
+    if (options?.includeRemoved) {
+      return db.uiNodes.where('screenId').equals(screenId).sortBy('sortOrder');
+    }
     return db.uiNodes.where('[screenId+status]').equals([screenId, 'active']).sortBy('sortOrder');
   }
 

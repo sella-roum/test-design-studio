@@ -39,8 +39,16 @@ export function createProjectRepository(db: AppDatabase) {
     return db.projects.get(id);
   }
 
-  async function list(): Promise<Project[]> {
-    return db.projects.where('status').notEqual('removed').reverse().sortBy('updatedAt');
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function list(options?: ListOptions): Promise<Project[]> {
+    if (options?.includeRemoved) {
+      return db.projects.orderBy('updatedAt').reverse().toArray();
+    }
+    const items = await db.projects.where('status').notEqual('removed').sortBy('updatedAt');
+    return items.reverse();
   }
 
   async function update(

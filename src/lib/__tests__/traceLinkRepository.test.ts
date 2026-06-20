@@ -135,6 +135,36 @@ describe('traceLinkRepository', () => {
     expect(list).toHaveLength(2);
   });
 
+  it('excludes removed by default in listByFrom', async () => {
+    const link = await repo.create({
+      projectId,
+      fromType: 'feature',
+      fromId: 'f1',
+      toType: 'screen',
+      toId: 's1',
+      linkType: 'covers',
+    });
+    await repo.markRemoved(link.id);
+
+    const list = await repo.listByFrom('feature', 'f1');
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByFrom', async () => {
+    const link = await repo.create({
+      projectId,
+      fromType: 'feature',
+      fromId: 'f1',
+      toType: 'screen',
+      toId: 's1',
+      linkType: 'covers',
+    });
+    await repo.markRemoved(link.id);
+
+    const list = await repo.listByFrom('feature', 'f1', { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
+
   it('lists by to', async () => {
     await repo.create({
       projectId,
@@ -155,6 +185,36 @@ describe('traceLinkRepository', () => {
 
     const list = await repo.listByTo('screen', 's1');
     expect(list).toHaveLength(2);
+  });
+
+  it('excludes removed by default in listByTo', async () => {
+    const link = await repo.create({
+      projectId,
+      fromType: 'feature',
+      fromId: 'f1',
+      toType: 'screen',
+      toId: 's1',
+      linkType: 'covers',
+    });
+    await repo.markRemoved(link.id);
+
+    const list = await repo.listByTo('screen', 's1');
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByTo', async () => {
+    const link = await repo.create({
+      projectId,
+      fromType: 'feature',
+      fromId: 'f1',
+      toType: 'screen',
+      toId: 's1',
+      linkType: 'covers',
+    });
+    await repo.markRemoved(link.id);
+
+    const list = await repo.listByTo('screen', 's1', { includeRemoved: true });
+    expect(list).toHaveLength(1);
   });
 
   it('updates link type', async () => {

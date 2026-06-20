@@ -134,6 +134,14 @@ describe('uiNodeRepository', () => {
       expect(nodes).toHaveLength(0);
     });
 
+    it('includes removed when includeRemoved is true in listByScreen', async () => {
+      const n = await repo.create({ projectId, screenId, name: 'Remove Me' });
+      await repo.markRemoved(n.id);
+
+      const nodes = await repo.listByScreen(screenId, { includeRemoved: true });
+      expect(nodes).toHaveLength(1);
+    });
+
     it('does not mix screens', async () => {
       await repo.create({ projectId, screenId: 'other', name: 'Other' });
       const nodes = await repo.listByScreen(screenId);

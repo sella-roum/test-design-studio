@@ -88,16 +88,38 @@ export function createTraceLinkRepository(db: AppDatabase) {
     return db.traceLinks.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<TraceLink[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<TraceLink[]> {
+    if (options?.includeRemoved) {
+      return db.traceLinks.where('projectId').equals(projectId).toArray();
+    }
     return db.traceLinks.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 
-  async function listByFrom(fromType: TraceNodeType, fromId: string): Promise<TraceLink[]> {
-    return db.traceLinks.where('[fromType+fromId]').equals([fromType, fromId]).toArray();
+  async function listByFrom(
+    fromType: TraceNodeType,
+    fromId: string,
+    options?: ListOptions,
+  ): Promise<TraceLink[]> {
+    const items = await db.traceLinks
+      .where('[fromType+fromId]')
+      .equals([fromType, fromId])
+      .toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
-  async function listByTo(toType: TraceNodeType, toId: string): Promise<TraceLink[]> {
-    return db.traceLinks.where('[toType+toId]').equals([toType, toId]).toArray();
+  async function listByTo(
+    toType: TraceNodeType,
+    toId: string,
+    options?: ListOptions,
+  ): Promise<TraceLink[]> {
+    const items = await db.traceLinks.where('[toType+toId]').equals([toType, toId]).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
   async function update(id: string, patch: UpdateInput): Promise<TraceLink> {

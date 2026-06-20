@@ -73,7 +73,14 @@ export function createFeatureRepository(db: AppDatabase) {
     return db.features.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<Feature[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<Feature[]> {
+    if (options?.includeRemoved) {
+      return db.features.where('projectId').equals(projectId).toArray();
+    }
     return db.features.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 

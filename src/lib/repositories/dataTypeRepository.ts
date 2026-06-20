@@ -58,7 +58,14 @@ export function createDataTypeRepository(db: AppDatabase) {
     return db.dataTypes.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<DataType[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<DataType[]> {
+    if (options?.includeRemoved) {
+      return db.dataTypes.where('projectId').equals(projectId).toArray();
+    }
     return db.dataTypes.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 

@@ -152,6 +152,36 @@ describe('changeRecordRepository', () => {
     expect(list).toHaveLength(2);
   });
 
+  it('excludes removed by default in listByTarget', async () => {
+    const cr = await repo.create({
+      projectId,
+      targetType: 'feature',
+      targetId: 'f1',
+      changeType: 'added',
+      summary: 'Test',
+      confidence: 'confirmed',
+    });
+    await repo.markRemoved(cr.id);
+
+    const list = await repo.listByTarget('feature', 'f1');
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByTarget', async () => {
+    const cr = await repo.create({
+      projectId,
+      targetType: 'feature',
+      targetId: 'f1',
+      changeType: 'added',
+      summary: 'Test',
+      confidence: 'confirmed',
+    });
+    await repo.markRemoved(cr.id);
+
+    const list = await repo.listByTarget('feature', 'f1', { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
+
   it('updates change record', async () => {
     const cr = await repo.create({
       projectId,

@@ -114,6 +114,15 @@ describe('projectRepository', () => {
       expect(projects[0].name).toBe('Keep');
     });
 
+    it('includes removed when includeRemoved is true in list', async () => {
+      const toRemove = await repo.create({ name: 'Remove Me' });
+      await repo.markRemoved(toRemove.id);
+
+      const projects = await repo.list({ includeRemoved: true });
+      expect(projects).toHaveLength(1);
+      expect(projects[0].name).toBe('Remove Me');
+    });
+
     it('returns projects sorted by updatedAt descending', async () => {
       await repo.create({ name: 'First' });
       await new Promise((r) => setTimeout(r, 10));

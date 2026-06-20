@@ -119,6 +119,22 @@ describe('testCaseRepository', () => {
     expect(list).toHaveLength(1);
   });
 
+  it('excludes removed by default in listByViewpoint', async () => {
+    const tc = await repo.create({ projectId, featureId, viewpointId: 'vp1', title: 'Test' });
+    await repo.markRemoved(tc.id);
+
+    const list = await repo.listByViewpoint('vp1');
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByViewpoint', async () => {
+    const tc = await repo.create({ projectId, featureId, viewpointId: 'vp1', title: 'Test' });
+    await repo.markRemoved(tc.id);
+
+    const list = await repo.listByViewpoint('vp1', { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
+
   it('updates test case', async () => {
     const tc = await repo.create({ projectId, featureId, title: 'Old' });
     const updated = await repo.update(tc.id, { title: 'New', priority: 'low' });

@@ -119,4 +119,12 @@ describe('dataTypeRepository', () => {
     const list = await repo.listByProject(projectId);
     expect(list).toHaveLength(0);
   });
+
+  it('includes removed when includeRemoved is true in listByProject', async () => {
+    const dt = await repo.create({ projectId, name: 'Hide', baseType: 'string' });
+    await repo.markRemoved(dt.id);
+
+    const list = await repo.listByProject(projectId, { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
 });

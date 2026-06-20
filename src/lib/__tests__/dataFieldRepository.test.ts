@@ -95,4 +95,20 @@ describe('dataFieldRepository', () => {
 
     expect(removed.status).toBe('removed');
   });
+
+  it('excludes removed by default in listByEntity', async () => {
+    const field = await repo.create({ projectId, entityId, name: 'Hide' });
+    await repo.markRemoved(field.id);
+
+    const list = await repo.listByEntity(entityId);
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByEntity', async () => {
+    const field = await repo.create({ projectId, entityId, name: 'Show' });
+    await repo.markRemoved(field.id);
+
+    const list = await repo.listByEntity(entityId, { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
 });

@@ -90,11 +90,21 @@ export function createTestViewpointRepository(db: AppDatabase) {
     return db.testViewpoints.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<TestViewpoint[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<TestViewpoint[]> {
+    if (options?.includeRemoved) {
+      return db.testViewpoints.where('projectId').equals(projectId).toArray();
+    }
     return db.testViewpoints.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 
-  async function listByFeature(featureId: string): Promise<TestViewpoint[]> {
+  async function listByFeature(featureId: string, options?: ListOptions): Promise<TestViewpoint[]> {
+    if (options?.includeRemoved) {
+      return db.testViewpoints.where('featureId').equals(featureId).toArray();
+    }
     return db.testViewpoints.where('[featureId+status]').equals([featureId, 'active']).toArray();
   }
 

@@ -104,6 +104,14 @@ describe('featureRepository', () => {
       expect(features).toHaveLength(0);
     });
 
+    it('includes removed when includeRemoved is true in listByProject', async () => {
+      const f = await repo.create({ projectId, name: 'Remove Me' });
+      await repo.markRemoved(f.id);
+
+      const features = await repo.listByProject(projectId, { includeRemoved: true });
+      expect(features).toHaveLength(1);
+    });
+
     it('does not mix projects', async () => {
       await repo.create({ projectId: 'other-project', name: 'Other Feature' });
       const features = await repo.listByProject(projectId);

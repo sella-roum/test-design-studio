@@ -116,6 +116,34 @@ describe('openQuestionRepository', () => {
     expect(list).toHaveLength(1);
   });
 
+  it('excludes removed by default in listByFeature', async () => {
+    const oq = await repo.create({
+      projectId,
+      featureId: 'f1',
+      question: 'Test?',
+      questionStatus: 'open',
+      confidence: 'tentative',
+    });
+    await repo.markRemoved(oq.id);
+
+    const list = await repo.listByFeature('f1');
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByFeature', async () => {
+    const oq = await repo.create({
+      projectId,
+      featureId: 'f1',
+      question: 'Test?',
+      questionStatus: 'open',
+      confidence: 'tentative',
+    });
+    await repo.markRemoved(oq.id);
+
+    const list = await repo.listByFeature('f1', { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
+
   it('updates status and answer', async () => {
     const oq = await repo.create({
       projectId,

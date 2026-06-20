@@ -106,15 +106,28 @@ export function createChangeRecordRepository(db: AppDatabase) {
     return db.changeRecords.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<ChangeRecord[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<ChangeRecord[]> {
+    if (options?.includeRemoved) {
+      return db.changeRecords.where('projectId').equals(projectId).toArray();
+    }
     return db.changeRecords.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 
   async function listByTarget(
     targetType: TraceNodeType,
     targetId: string,
+    options?: ListOptions,
   ): Promise<ChangeRecord[]> {
-    return db.changeRecords.where('[targetType+targetId]').equals([targetType, targetId]).toArray();
+    const items = await db.changeRecords
+      .where('[targetType+targetId]')
+      .equals([targetType, targetId])
+      .toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
   async function update(id: string, patch: UpdateInput): Promise<ChangeRecord> {

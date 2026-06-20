@@ -138,6 +138,36 @@ describe('businessRuleRepository', () => {
     expect(list).toHaveLength(1);
   });
 
+  it('excludes removed by default in listByFeature', async () => {
+    const rule = await repo.create({
+      projectId,
+      featureId: 'f1',
+      name: 'Hide',
+      description: 'desc',
+      ruleType: 'validation',
+      confidence: 'confirmed',
+    });
+    await repo.markRemoved(rule.id);
+
+    const list = await repo.listByFeature('f1');
+    expect(list).toHaveLength(0);
+  });
+
+  it('includes removed when includeRemoved is true in listByFeature', async () => {
+    const rule = await repo.create({
+      projectId,
+      featureId: 'f1',
+      name: 'Show',
+      description: 'desc',
+      ruleType: 'validation',
+      confidence: 'confirmed',
+    });
+    await repo.markRemoved(rule.id);
+
+    const list = await repo.listByFeature('f1', { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
+
   it('marks removed', async () => {
     const rule = await repo.create({
       projectId,

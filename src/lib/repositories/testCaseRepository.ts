@@ -128,16 +128,28 @@ export function createTestCaseRepository(db: AppDatabase) {
     return db.testCases.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<TestCase[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<TestCase[]> {
+    if (options?.includeRemoved) {
+      return db.testCases.where('projectId').equals(projectId).toArray();
+    }
     return db.testCases.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 
-  async function listByFeature(featureId: string): Promise<TestCase[]> {
+  async function listByFeature(featureId: string, options?: ListOptions): Promise<TestCase[]> {
+    if (options?.includeRemoved) {
+      return db.testCases.where('featureId').equals(featureId).toArray();
+    }
     return db.testCases.where('[featureId+status]').equals([featureId, 'active']).toArray();
   }
 
-  async function listByViewpoint(viewpointId: string): Promise<TestCase[]> {
-    return db.testCases.where('viewpointId').equals(viewpointId).toArray();
+  async function listByViewpoint(viewpointId: string, options?: ListOptions): Promise<TestCase[]> {
+    const items = await db.testCases.where('viewpointId').equals(viewpointId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
   async function update(id: string, patch: UpdateInput): Promise<TestCase> {

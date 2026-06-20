@@ -42,7 +42,14 @@ export function createDataEntityRepository(db: AppDatabase) {
     return db.dataEntities.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<DataEntity[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<DataEntity[]> {
+    if (options?.includeRemoved) {
+      return db.dataEntities.where('projectId').equals(projectId).toArray();
+    }
     return db.dataEntities.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 

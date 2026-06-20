@@ -86,4 +86,12 @@ describe('dataEntityRepository', () => {
     const list = await repo.listByProject(projectId);
     expect(list).toHaveLength(0);
   });
+
+  it('includes removed when includeRemoved is true in listByProject', async () => {
+    const entity = await repo.create({ projectId, name: 'Hide' });
+    await repo.markRemoved(entity.id);
+
+    const list = await repo.listByProject(projectId, { includeRemoved: true });
+    expect(list).toHaveLength(1);
+  });
 });

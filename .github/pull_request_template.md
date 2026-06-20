@@ -1,9 +1,10 @@
 # Summary
 
-## Task
+## Phase / Task
 
-- Task ID:
-- Task document:
+- Phase:
+- Task ID(s):
+- Task document(s):
 
 ## Scope implemented
 

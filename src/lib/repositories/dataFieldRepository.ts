@@ -55,12 +55,20 @@ export function createDataFieldRepository(db: AppDatabase) {
     return db.dataFields.get(id);
   }
 
-  async function listByEntity(entityId: string): Promise<DataField[]> {
-    return db.dataFields.where('entityId').equals(entityId).toArray();
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByEntity(entityId: string, options?: ListOptions): Promise<DataField[]> {
+    const items = await db.dataFields.where('entityId').equals(entityId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
-  async function listByProject(projectId: string): Promise<DataField[]> {
-    return db.dataFields.where('projectId').equals(projectId).toArray();
+  async function listByProject(projectId: string, options?: ListOptions): Promise<DataField[]> {
+    const items = await db.dataFields.where('projectId').equals(projectId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
   async function update(id: string, patch: UpdateInput): Promise<DataField> {

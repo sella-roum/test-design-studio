@@ -73,16 +73,27 @@ export function createBusinessRuleRepository(db: AppDatabase) {
     return db.businessRules.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<BusinessRule[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<BusinessRule[]> {
+    if (options?.includeRemoved) {
+      return db.businessRules.where('projectId').equals(projectId).toArray();
+    }
     return db.businessRules.where('[projectId+status]').equals([projectId, 'active']).toArray();
   }
 
-  async function listByFeature(featureId: string): Promise<BusinessRule[]> {
-    return db.businessRules.where('featureId').equals(featureId).toArray();
+  async function listByFeature(featureId: string, options?: ListOptions): Promise<BusinessRule[]> {
+    const items = await db.businessRules.where('featureId').equals(featureId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
-  async function listByScreen(screenId: string): Promise<BusinessRule[]> {
-    return db.businessRules.where('screenId').equals(screenId).toArray();
+  async function listByScreen(screenId: string, options?: ListOptions): Promise<BusinessRule[]> {
+    const items = await db.businessRules.where('screenId').equals(screenId).toArray();
+    if (options?.includeRemoved) return items;
+    return items.filter((item) => item.status !== 'removed');
   }
 
   async function update(id: string, patch: UpdateInput): Promise<BusinessRule> {

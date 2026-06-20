@@ -118,6 +118,14 @@ describe('screenRepository', () => {
       const screens = await repo.listByProject(projectId);
       expect(screens).toHaveLength(0);
     });
+
+    it('includes removed when includeRemoved is true in listByProject', async () => {
+      const s = await repo.create({ projectId, featureId, name: 'To Remove' });
+      await repo.markRemoved(s.id);
+
+      const screens = await repo.listByProject(projectId, { includeRemoved: true });
+      expect(screens).toHaveLength(1);
+    });
   });
 
   describe('listByFeature', () => {
@@ -141,6 +149,14 @@ describe('screenRepository', () => {
 
       const screens = await repo.listByFeature(featureId);
       expect(screens).toHaveLength(0);
+    });
+
+    it('includes removed when includeRemoved is true in listByFeature', async () => {
+      const s = await repo.create({ projectId, featureId, name: 'Removable' });
+      await repo.markRemoved(s.id);
+
+      const screens = await repo.listByFeature(featureId, { includeRemoved: true });
+      expect(screens).toHaveLength(1);
     });
   });
 

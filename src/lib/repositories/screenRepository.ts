@@ -69,7 +69,14 @@ export function createScreenRepository(db: AppDatabase) {
     return db.screens.get(id);
   }
 
-  async function listByProject(projectId: string): Promise<Screen[]> {
+  type ListOptions = {
+    includeRemoved?: boolean;
+  };
+
+  async function listByProject(projectId: string, options?: ListOptions): Promise<Screen[]> {
+    if (options?.includeRemoved) {
+      return db.screens.where('projectId').equals(projectId).toArray();
+    }
     return db.screens
       .where('projectId')
       .equals(projectId)
@@ -77,7 +84,10 @@ export function createScreenRepository(db: AppDatabase) {
       .toArray();
   }
 
-  async function listByFeature(featureId: string): Promise<Screen[]> {
+  async function listByFeature(featureId: string, options?: ListOptions): Promise<Screen[]> {
+    if (options?.includeRemoved) {
+      return db.screens.where('featureId').equals(featureId).toArray();
+    }
     return db.screens.where('[featureId+status]').equals([featureId, 'active']).toArray();
   }
 
