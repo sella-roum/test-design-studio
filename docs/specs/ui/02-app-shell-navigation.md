@@ -36,19 +36,19 @@ Sidebarは、グローバルナビゲーションとして機能する。
 
 ### Menu items
 
-| メニュー | Route | P0 | 備考 |
-|---|---|---:|---|
-| ダッシュボード | `/` | 必須 | Project横断の簡易入口 |
-| プロジェクト | `/projects` | 必須 | Project一覧・作成 |
-| 機能 | `/projects/:projectId` | 必須 | Project内Feature一覧 |
-| 画面 / UI | Feature Workspace tab | 任意 | P0では直接routeを持たなくてよい |
-| データ / ルール | Feature Workspace tab | 任意 | P0では直接routeを持たなくてよい |
-| 未確認事項 | Feature Workspace tab | 任意 | P0では直接routeを持たなくてよい |
-| テスト観点 | Feature Workspace tab | 必須 | Feature Workspace内で編集 |
-| テストケース | Feature Workspace tab | 必須 | Feature Workspace内で編集 |
-| トレーサビリティ | `/projects/:projectId/features/:featureId?tab=traceability` | 非対象 | Phase 7で簡易表示。P0では準備中表示 |
-| エクスポート | `/projects/:projectId/export` | Phase 4 | Phase 3では導線または準備中 |
-| 設定 | `/settings` | 非対象 | P0では実装しない |
+| メニュー         | Route                                                       |      P0 | 備考                                |
+| ---------------- | ----------------------------------------------------------- | ------: | ----------------------------------- |
+| ダッシュボード   | `/`                                                         |    必須 | Project横断の簡易入口               |
+| プロジェクト     | `/projects`                                                 |    必須 | Project一覧・作成                   |
+| 機能             | `/projects/:projectId`                                      |    必須 | Project内Feature一覧                |
+| 画面 / UI        | Feature Workspace tab                                       |    任意 | P0では直接routeを持たなくてよい     |
+| データ / ルール  | Feature Workspace tab                                       |    任意 | P0では直接routeを持たなくてよい     |
+| 未確認事項       | Feature Workspace tab                                       |    任意 | P0では直接routeを持たなくてよい     |
+| テスト観点       | Feature Workspace tab                                       |    必須 | Feature Workspace内で編集           |
+| テストケース     | Feature Workspace tab                                       |    必須 | Feature Workspace内で編集           |
+| トレーサビリティ | `/projects/:projectId/features/:featureId?tab=traceability` |  非対象 | Phase 7で簡易表示。P0では準備中表示 |
+| エクスポート     | `/projects/:projectId/export`                               | Phase 4 | Phase 3では導線または準備中         |
+| 設定             | `/settings`                                                 |  非対象 | P0では実装しない                    |
 
 ### Active state
 
@@ -72,13 +72,13 @@ P0では検索や通知を作り込みすぎない。
 
 ### Elements
 
-| 要素 | P0 | 内容 |
-|---|---:|---|
-| Product name | 必須 | `Test Design Studio` |
-| Global search | 任意 | P0ではdisabledまたはplaceholderでよい |
-| Notification icon | 非対象 | P0では表示しないかplaceholder |
-| User avatar | 非対象 | 認証がないため固定表示または非表示 |
-| Current project switcher | 任意 | Project選択後の補助導線 |
+| 要素                     |     P0 | 内容                                  |
+| ------------------------ | -----: | ------------------------------------- |
+| Product name             |   必須 | `Test Design Studio`                  |
+| Global search            |   任意 | P0ではdisabledまたはplaceholderでよい |
+| Notification icon        | 非対象 | P0では表示しないかplaceholder         |
+| User avatar              | 非対象 | 認証がないため固定表示または非表示    |
+| Current project switcher |   任意 | Project選択後の補助導線               |
 
 ## Breadcrumb
 
@@ -118,11 +118,11 @@ Login / Authentication    [active]
 
 P0はDesktop firstとし、Main Contentは次を想定する。
 
-| 用途 | 推奨 |
-|---|---|
-| 最大幅固定画面 | Project一覧、Export |
-| 横幅いっぱい | Feature Workspace、Traceability Matrix |
-| 最小幅 | 1280px |
+| 用途           | 推奨                                   |
+| -------------- | -------------------------------------- |
+| 最大幅固定画面 | Project一覧、Export                    |
+| 横幅いっぱい   | Feature Workspace、Traceability Matrix |
+| 最小幅         | 1280px                                 |
 
 ## Routing policy
 

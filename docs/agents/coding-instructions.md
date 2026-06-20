@@ -112,22 +112,28 @@
 
 ```md
 ## Summary
+
 - 何を実装したか
 
 ## Task
+
 - Task ID:
 - Task document:
 
 ## Scope
+
 - 今回の対象範囲
 
 ## Non-goals
+
 - 今回あえて実装していないもの
 
 ## Testing
+
 - 実行したチェック
 
 ## Notes
+
 - 設計判断や次PRへの申し送り
 ```
 
