@@ -75,7 +75,7 @@ P0では右ペインを簡略化してよい。
 | priority | 任意 | 優先度 |
 | automationSuitability | 任意 | 自動化適性 |
 | automationReason | 任意 | 自動化適性の理由 |
-| sourceElements | 任意 | UiNode / DataType / BusinessRule / OpenQuestionなど |
+| sourceElements | 任意 | 保存フィールドではなく、`derived_from` TraceLinkを作成するためのUI入力 |
 | status | 必須 | active / deprecated / removed |
 
 P0の保存対象はDomain Modelの `TestViewpoint` を正とする。`riskLevel` や `tags` が必要になった場合は、UI仕様だけで先行せず、Domain Model更新タスクを先に作る。
