@@ -13,7 +13,7 @@ UI仕様では、SaaS風の見た目を定義するだけではなく、QAエン
 - Feature Workspaceを中心作業画面にする。
 - Dashboardは状況把握と入口に留め、作り込みすぎない。
 - TestViewpointとTestCaseは分けて扱い、相互リンクできるようにする。
-- TraceabilityはP0では簡易表示に留め、P1以降でMatrix UIを強化する。
+- Traceability専用UIはP0では作り込まず、Phase 7で簡易表示、Phase 7+でMatrix UIを追加する。
 - Chrome拡張CaptureとAI支援はP0に含めない。
 - Desktop firstで設計し、mobile対応は後続タスクに分離する。
 
@@ -26,7 +26,7 @@ UI仕様では、SaaS風の見た目を定義するだけではなく、QAエン
 | `03-project-dashboard-ui-spec.md` | Project Dashboard / Project Detail / Project List |
 | `04-feature-workspace-ui-spec.md` | Feature Workspaceのレイアウト、ヘッダー、タブ、主要導線 |
 | `05-test-design-editor-ui-spec.md` | TestViewpoint Editor / TestCase Editor / StepTable |
-| `06-export-traceability-ui-spec.md` | Export画面、Traceability簡易表示、Matrix UI方針 |
+| `06-export-traceability-ui-spec.md` | Export画面、TraceabilityのPhase 7以降の表示方針 |
 | `07-ui-implementation-order.md` | UI実装順、P0/P1の分割、Taskとの対応 |
 
 ## 実装時の優先順位
