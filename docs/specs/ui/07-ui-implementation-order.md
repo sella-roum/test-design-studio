@@ -217,24 +217,6 @@ Non-goals:
 - 任意TraceLink編集
 - 影響候補表示
 
-### UI-010: Traceability Matrix
-
-対応Phase:
-
-- Phase 7
-
-Scope:
-
-- BusinessRule x TestViewpoint x TestCaseのMatrix
-- coverage状態表示
-- uncovered警告
-- filter
-
-Non-goals:
-
-- AIによる影響推定
-- Playwright実行結果との統合
-
 ## Mapping to existing tasks
 
 | UI slice | 既存Task | 備考 |
@@ -248,7 +230,6 @@ Non-goals:
 | UI-007 | TASK-016 | TestCase / TestStep編集 |
 | UI-008 | TASK-017 / TASK-018 | Export / Import |
 | UI-009 | Phase 7 | 簡易Traceability表示 |
-| UI-010 | Phase 7 | Matrix UI |
 
 ## P0 completion definition
 
