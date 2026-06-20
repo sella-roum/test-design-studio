@@ -101,8 +101,11 @@ P0では物理削除を提供しない。
 |---|---:|---|
 | name | 必須 | Project名 |
 | description | 任意 | 説明 |
-| targetUrl | 任意 | 対象アプリURL |
+| targetAppName | 任意 | 対象アプリ名 |
+| targetAppUrl | 任意 | 対象アプリURL |
 | status | 任意 | 初期値active |
+
+Project作成・編集フォームの保存フィールド名はDomain Modelの `Project` を正とする。`targetUrl` のようなUI独自の保存フィールドは使わない。
 
 ### Behavior
 
