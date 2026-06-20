@@ -8,7 +8,9 @@ function App() {
       </header>
       <main className="app-main">
         <div className="welcome">
-          <h2 className="welcome-heading">ローカルファーストなテスト設計ワークスペース</h2>
+          <h2 className="welcome-heading">
+            ローカルファーストなテスト設計ワークスペース
+          </h2>
           <p className="welcome-description">
             仕様把握、UI構造、データ条件、業務ルール、テスト観点、テストケース、
             変更履歴、トレーサビリティを構造化して扱います。
