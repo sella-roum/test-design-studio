@@ -21,8 +21,11 @@
 
 - [ ] Relevant docs reviewed
 - [ ] Scope and Non-goals checked
-- [ ] Typecheck passes, or not applicable because this PR is docs-only
-- [ ] Tests pass, or not applicable because this PR is docs-only
+- [ ] `npm run lint` passes, or not applicable because this PR is docs-only
+- [ ] `npm run format:check` passes, or not applicable because this PR is docs-only
+- [ ] `npm run typecheck` passes, or not applicable because this PR is docs-only
+- [ ] `npm run test` passes, or not applicable because this PR is docs-only
+- [ ] `npm run check` passes, or not applicable because this PR is docs-only
 - [ ] Manual behavior checked, if UI or extension behavior changed
 
 ## Notes for reviewers
