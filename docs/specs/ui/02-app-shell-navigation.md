@@ -46,7 +46,7 @@ Sidebarは、グローバルナビゲーションとして機能する。
 | 未確認事項 | Feature Workspace tab | 任意 | P0では直接routeを持たなくてよい |
 | テスト観点 | Feature Workspace tab | 必須 | Feature Workspace内で編集 |
 | テストケース | Feature Workspace tab | 必須 | Feature Workspace内で編集 |
-| トレーサビリティ | `/projects/:projectId/features/:featureId?tab=traceability` | P1 | P0は簡易表示 |
+| トレーサビリティ | `/projects/:projectId/features/:featureId?tab=traceability` | 非対象 | Phase 7で簡易表示。P0では準備中表示 |
 | エクスポート | `/projects/:projectId/export` | Phase 4 | Phase 3では導線または準備中 |
 | 設定 | `/settings` | 非対象 | P0では実装しない |
 
