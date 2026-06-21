@@ -184,4 +184,70 @@ describe('testCaseRepository', () => {
 
     expect(removed.status).toBe('removed');
   });
+
+  it('preserves existing step id on update', async () => {
+    const tc = await repo.create({
+      projectId,
+      featureId,
+      title: 'Steps with IDs',
+      steps: [
+        { id: 'step-1', action: 'navigate', instruction: 'Visit page' },
+        { id: 'step-2', action: 'click', instruction: 'Click button' },
+      ],
+    });
+
+    expect(tc.steps[0].id).toBe('step-1');
+    expect(tc.steps[1].id).toBe('step-2');
+
+    const updated = await repo.update(tc.id, {
+      steps: [
+        { id: 'step-1', action: 'navigate', instruction: 'Visit updated page' },
+        { id: 'step-3', action: 'assert', instruction: 'Check result' },
+      ],
+    });
+
+    expect(updated.steps).toHaveLength(2);
+    expect(updated.steps[0].id).toBe('step-1');
+    expect(updated.steps[0].instruction).toBe('Visit updated page');
+    expect(updated.steps[1].id).toBe('step-3');
+    expect(updated.steps[1].action).toBe('assert');
+  });
+
+  it('generates new id for steps without id', async () => {
+    const tc = await repo.create({
+      projectId,
+      featureId,
+      title: 'No IDs',
+      steps: [{ action: 'navigate', instruction: 'Step 1' }],
+    });
+
+    expect(tc.steps[0].id).toBeTruthy();
+    expect(tc.steps[0].id).not.toBe('step-1');
+  });
+
+  it('reorders steps and keeps ids', async () => {
+    const tc = await repo.create({
+      projectId,
+      featureId,
+      title: 'Reorder steps',
+      steps: [
+        { id: 'first', action: 'navigate', instruction: 'First' },
+        { id: 'second', action: 'click', instruction: 'Second' },
+        { id: 'third', action: 'assert', instruction: 'Third' },
+      ],
+    });
+
+    const updated = await repo.update(tc.id, {
+      steps: [
+        { id: 'third', action: 'assert', instruction: 'Third' },
+        { id: 'first', action: 'navigate', instruction: 'First' },
+      ],
+    });
+
+    expect(updated.steps).toHaveLength(2);
+    expect(updated.steps[0].id).toBe('third');
+    expect(updated.steps[0].order).toBe(1);
+    expect(updated.steps[1].id).toBe('first');
+    expect(updated.steps[1].order).toBe(2);
+  });
 });

@@ -7,6 +7,7 @@ import type { Priority, AutomationSuitability } from '../lib/types';
 const repo = createTestCaseRepository(db);
 
 export type StepInput = {
+  id?: string;
   action: TestStepAction;
   instruction: string;
   targetUiNodeId?: string;
@@ -16,17 +17,19 @@ export type StepInput = {
 
 type StepRowWithId = StepInput & { id: string };
 
-function stripStepId(step: StepRowWithId): StepInput {
+function normalizeStep(step: StepRowWithId, index: number) {
   return {
+    id: step.id,
+    order: index + 1,
     action: step.action,
     instruction: step.instruction,
-    targetUiNodeId: step.targetUiNodeId,
-    expectedResult: step.expectedResult,
-    testData: step.testData,
+    targetUiNodeId: step.targetUiNodeId || undefined,
+    expectedResult: step.expectedResult?.trim() || undefined,
+    testData: step.testData?.trim() || undefined,
   };
 }
 
-export function useTestCases(projectId: string, featureId: string) {
+export function useTestCases(projectId: string, featureId?: string) {
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [loading, setLoading] = useState(true);
   const loadSeqRef = useRef(0);
@@ -34,7 +37,9 @@ export function useTestCases(projectId: string, featureId: string) {
   const load = useCallback(async () => {
     const seq = ++loadSeqRef.current;
     try {
-      const items = await repo.listByFeature(featureId);
+      const items = featureId
+        ? await repo.listByFeature(featureId)
+        : await repo.listByProject(projectId);
       if (seq !== loadSeqRef.current) return;
       setTestCases(items);
     } catch {
@@ -42,7 +47,7 @@ export function useTestCases(projectId: string, featureId: string) {
     } finally {
       if (seq === loadSeqRef.current) setLoading(false);
     }
-  }, [featureId]);
+  }, [projectId, featureId]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -64,8 +69,8 @@ export function useTestCases(projectId: string, featureId: string) {
       const tc = await repo.create({
         ...rest,
         projectId,
-        featureId,
-        steps: steps?.map(stripStepId),
+        featureId: featureId ?? '',
+        steps: steps?.map((s, i) => normalizeStep(s, i)),
       });
       await load();
       return tc;
@@ -89,7 +94,7 @@ export function useTestCases(projectId: string, featureId: string) {
       const { steps, ...rest } = patch;
       const tc = await repo.update(id, {
         ...rest,
-        steps: steps?.map(stripStepId),
+        steps: steps?.map((s, i) => normalizeStep(s, i)),
       });
       await load();
       return tc;

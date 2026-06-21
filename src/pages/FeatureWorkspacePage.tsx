@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { db } from '../lib/db';
 import { createFeatureRepository } from '../lib/repositories/featureRepository';
@@ -15,7 +15,9 @@ import { UiNodeTree } from '../components/uiNode/UiNodeTree';
 import { UiNodeCreateDialog } from '../components/uiNode/UiNodeCreateDialog';
 import { UiNodeEditDialog } from '../components/uiNode/UiNodeEditDialog';
 import { DataTypeCreateDialog } from '../components/dataType/DataTypeCreateDialog';
+import { DataTypeEditDialog } from '../components/dataType/DataTypeEditDialog';
 import { BusinessRuleCreateDialog } from '../components/businessRule/BusinessRuleCreateDialog';
+import { BusinessRuleEditDialog } from '../components/businessRule/BusinessRuleEditDialog';
 import { ConfirmDialog } from '../components/common/ConfirmDialog';
 import { OpenQuestionCreateDialog } from '../components/openQuestion/OpenQuestionCreateDialog';
 import { OpenQuestionEditDialog } from '../components/openQuestion/OpenQuestionEditDialog';
@@ -34,6 +36,8 @@ import type { UiNode, UiNodeTreeNode } from '../lib/models/uiNode';
 import type { OpenQuestion } from '../lib/models/openQuestion';
 import type { TestViewpoint } from '../lib/models/testViewpoint';
 import type { TestCase } from '../lib/models/testCase';
+import type { DataType } from '../lib/models/dataType';
+import type { BusinessRule } from '../lib/models/businessRule';
 
 const featureRepo = createFeatureRepository(db);
 
@@ -89,16 +93,22 @@ export function FeatureWorkspacePage() {
   const {
     dataTypes,
     create: createDataType,
+    update: updateDataType,
     markRemoved: removeDataType,
   } = useDataTypes(projectId ?? '');
   const {
     businessRules,
     create: createBusinessRule,
+    update: updateBusinessRule,
     markRemoved: removeBusinessRule,
   } = useBusinessRules(projectId ?? '', featureId ?? '');
 
   const [showCreateDataType, setShowCreateDataType] = useState(false);
+  const [editingDataType, setEditingDataType] = useState<DataType | null>(null);
+  const [removingDataType, setRemovingDataType] = useState<DataType | null>(null);
   const [showCreateBusinessRule, setShowCreateBusinessRule] = useState(false);
+  const [editingBusinessRule, setEditingBusinessRule] = useState<BusinessRule | null>(null);
+  const [removingBusinessRule, setRemovingBusinessRule] = useState<BusinessRule | null>(null);
 
   const {
     openQuestions,
@@ -108,7 +118,6 @@ export function FeatureWorkspacePage() {
   } = useOpenQuestions(projectId ?? '', featureId);
   const {
     viewpoints,
-    testCaseCounts,
     create: createViewpoint,
     update: updateViewpoint,
     markRemoved: removeViewpoint,
@@ -130,6 +139,16 @@ export function FeatureWorkspacePage() {
   const [editingTestCase, setEditingTestCase] = useState<TestCase | null>(null);
   const [removingTestCase, setRemovingTestCase] = useState<TestCase | null>(null);
 
+  const testCaseCountsByViewpoint = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const tc of testCases) {
+      if (tc.viewpointId) {
+        counts[tc.viewpointId] = (counts[tc.viewpointId] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [testCases]);
+
   useEffect(() => {
     if (!featureId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -145,7 +164,7 @@ export function FeatureWorkspacePage() {
       .get(featureId)
       .then((f) => {
         if (cancelled) return;
-        if (!f || f.status === 'removed') {
+        if (!f || f.status === 'removed' || f.projectId !== projectId) {
           setNotFound(true);
         } else {
           setFeature(f);
@@ -160,7 +179,7 @@ export function FeatureWorkspacePage() {
     return () => {
       cancelled = true;
     };
-  }, [featureId]);
+  }, [featureId, projectId]);
 
   const handleUpdate = async (id: string, patch: Parameters<typeof featureRepo.update>[1]) => {
     const updated = await featureRepo.update(id, patch);
@@ -192,8 +211,9 @@ export function FeatureWorkspacePage() {
     if (!removingUiNode) return;
     try {
       await removeUiNode(removingUiNode.id);
-    } catch {
-      // ignore
+      toast.toast('success', 'UI要素を削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : 'UI要素の削除に失敗しました');
     } finally {
       setRemovingUiNode(null);
     }
@@ -221,8 +241,9 @@ export function FeatureWorkspacePage() {
     if (!removingOpenQuestion) return;
     try {
       await removeOpenQuestion(removingOpenQuestion.id);
-    } catch {
-      // ignore
+      toast.toast('success', '未確定事項を削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : '未確定事項の削除に失敗しました');
     } finally {
       setRemovingOpenQuestion(null);
     }
@@ -252,8 +273,9 @@ export function FeatureWorkspacePage() {
     if (!removingViewpoint) return;
     try {
       await removeViewpoint(removingViewpoint.id);
-    } catch {
-      // ignore
+      toast.toast('success', 'テスト観点を削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : 'テスト観点の削除に失敗しました');
     } finally {
       setRemovingViewpoint(null);
     }
@@ -288,10 +310,53 @@ export function FeatureWorkspacePage() {
     if (!removingTestCase) return;
     try {
       await removeTestCase(removingTestCase.id);
-    } catch {
-      // ignore
+      toast.toast('success', 'テストケースを削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : 'テストケースの削除に失敗しました');
     } finally {
       setRemovingTestCase(null);
+    }
+  };
+
+  const handleEditDataType = useCallback(
+    async (id: string, patch: Parameters<typeof updateDataType>[1]) => {
+      const result = await updateDataType(id, patch);
+      setEditingDataType(null);
+      return result;
+    },
+    [updateDataType, setEditingDataType],
+  );
+
+  const handleRemoveDataType = async () => {
+    if (!removingDataType) return;
+    try {
+      await removeDataType(removingDataType.id);
+      toast.toast('success', 'データ型を削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : 'データ型の削除に失敗しました');
+    } finally {
+      setRemovingDataType(null);
+    }
+  };
+
+  const handleEditBusinessRule = useCallback(
+    async (id: string, patch: Parameters<typeof updateBusinessRule>[1]) => {
+      const result = await updateBusinessRule(id, patch);
+      setEditingBusinessRule(null);
+      return result;
+    },
+    [updateBusinessRule, setEditingBusinessRule],
+  );
+
+  const handleRemoveBusinessRule = async () => {
+    if (!removingBusinessRule) return;
+    try {
+      await removeBusinessRule(removingBusinessRule.id);
+      toast.toast('success', '業務ルールを削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : '業務ルールの削除に失敗しました');
+    } finally {
+      setRemovingBusinessRule(null);
     }
   };
 
@@ -746,8 +811,14 @@ export function FeatureWorkspacePage() {
                         <td className="actions">
                           <button
                             className="btn btn-ghost btn-sm"
+                            onClick={() => setEditingDataType(dt)}
+                          >
+                            編集
+                          </button>
+                          <button
+                            className="btn btn-ghost btn-sm"
                             style={{ color: 'var(--color-danger)' }}
-                            onClick={() => removeDataType(dt.id)}
+                            onClick={() => setRemovingDataType(dt)}
                           >
                             削除
                           </button>
@@ -818,8 +889,14 @@ export function FeatureWorkspacePage() {
                         <td className="actions">
                           <button
                             className="btn btn-ghost btn-sm"
+                            onClick={() => setEditingBusinessRule(br)}
+                          >
+                            編集
+                          </button>
+                          <button
+                            className="btn btn-ghost btn-sm"
                             style={{ color: 'var(--color-danger)' }}
-                            onClick={() => removeBusinessRule(br.id)}
+                            onClick={() => setRemovingBusinessRule(br)}
                           >
                             削除
                           </button>
@@ -907,7 +984,7 @@ export function FeatureWorkspacePage() {
           ) : (
             <TestViewpointTable
               viewpoints={viewpoints}
-              testCaseCounts={testCaseCounts}
+              testCaseCounts={testCaseCountsByViewpoint}
               onEdit={setEditingViewpoint}
               onRemove={setRemovingViewpoint}
             />
@@ -1024,16 +1101,64 @@ export function FeatureWorkspacePage() {
       {showCreateDataType && (
         <DataTypeCreateDialog
           onCreate={createDataType}
-          onCreated={() => setShowCreateDataType(false)}
+          onCreated={() => {
+            setShowCreateDataType(false);
+            toast.toast('success', 'データ型を作成しました');
+          }}
           onCancel={() => setShowCreateDataType(false)}
+        />
+      )}
+
+      {editingDataType && (
+        <DataTypeEditDialog
+          dataType={editingDataType}
+          onUpdate={handleEditDataType}
+          onUpdated={() => {
+            toast.toast('success', 'データ型を更新しました');
+          }}
+          onCancel={() => setEditingDataType(null)}
+        />
+      )}
+
+      {removingDataType && (
+        <ConfirmDialog
+          title="データ型を削除"
+          message={`「${removingDataType.name}」を削除します。この操作は取り消せません。`}
+          confirmLabel="削除する"
+          onConfirm={handleRemoveDataType}
+          onCancel={() => setRemovingDataType(null)}
         />
       )}
 
       {showCreateBusinessRule && (
         <BusinessRuleCreateDialog
           onCreate={(input) => createBusinessRule({ ...input, featureId })}
-          onCreated={() => setShowCreateBusinessRule(false)}
+          onCreated={() => {
+            setShowCreateBusinessRule(false);
+            toast.toast('success', '業務ルールを作成しました');
+          }}
           onCancel={() => setShowCreateBusinessRule(false)}
+        />
+      )}
+
+      {editingBusinessRule && (
+        <BusinessRuleEditDialog
+          businessRule={editingBusinessRule}
+          onUpdate={handleEditBusinessRule}
+          onUpdated={() => {
+            toast.toast('success', '業務ルールを更新しました');
+          }}
+          onCancel={() => setEditingBusinessRule(null)}
+        />
+      )}
+
+      {removingBusinessRule && (
+        <ConfirmDialog
+          title="業務ルールを削除"
+          message={`「${removingBusinessRule.name}」を削除します。この操作は取り消せません。`}
+          confirmLabel="削除する"
+          onConfirm={handleRemoveBusinessRule}
+          onCancel={() => setRemovingBusinessRule(null)}
         />
       )}
 

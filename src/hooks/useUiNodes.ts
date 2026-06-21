@@ -12,13 +12,13 @@ export function useUiNodes(screenId: string | undefined) {
   const loadSeqRef = useRef(0);
 
   const load = useCallback(async () => {
+    const seq = ++loadSeqRef.current;
     if (!screenId) {
       setNodes([]);
       setTree([]);
       setLoading(false);
       return;
     }
-    const seq = ++loadSeqRef.current;
     setLoading(true);
     try {
       const items = await repo.listByScreen(screenId);

@@ -31,6 +31,7 @@ export function createTestCaseRepository(db: AppDatabase) {
   ];
 
   type StepInput = {
+    id?: string;
     action: TestStepAction;
     instruction: string;
     targetUiNodeId?: string;
@@ -78,7 +79,7 @@ export function createTestCaseRepository(db: AppDatabase) {
         throw new ValidationError('Step instruction is required');
       }
       return {
-        id: generateId(),
+        id: s.id ?? generateId(),
         order: i + 1,
         action: s.action,
         instruction: s.instruction.trim(),

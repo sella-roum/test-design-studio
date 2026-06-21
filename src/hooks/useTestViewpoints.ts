@@ -11,7 +11,7 @@ const viewpointRepo = createTestViewpointRepository(db);
 const testCaseRepo = createTestCaseRepository(db);
 const traceLinkRepo = createTraceLinkRepository(db);
 
-export function useTestViewpoints(projectId: string, featureId: string) {
+export function useTestViewpoints(projectId: string, featureId?: string) {
   const [viewpoints, setViewpoints] = useState<TestViewpoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [testCaseCounts, setTestCaseCounts] = useState<Record<string, number>>({});
@@ -20,7 +20,9 @@ export function useTestViewpoints(projectId: string, featureId: string) {
   const load = useCallback(async () => {
     const seq = ++loadSeqRef.current;
     try {
-      const items = await viewpointRepo.listByFeature(featureId);
+      const items = featureId
+        ? await viewpointRepo.listByFeature(featureId)
+        : await viewpointRepo.listByProject(projectId);
       if (seq !== loadSeqRef.current) return;
       setViewpoints(items);
       const counts: Record<string, number> = {};
@@ -35,7 +37,7 @@ export function useTestViewpoints(projectId: string, featureId: string) {
     } finally {
       if (seq === loadSeqRef.current) setLoading(false);
     }
-  }, [featureId]);
+  }, [projectId, featureId]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -53,21 +55,24 @@ export function useTestViewpoints(projectId: string, featureId: string) {
       automationReason?: string;
       sourceElementIds?: { type: string; id: string }[];
     }) => {
-      const vp = await viewpointRepo.create({ projectId, featureId, ...input });
-      if (input.sourceElementIds && input.sourceElementIds.length > 0) {
-        for (const se of input.sourceElementIds) {
-          await traceLinkRepo.create({
-            projectId,
-            fromType: se.type as TraceNodeType,
-            fromId: se.id,
-            toType: 'testViewpoint',
-            toId: vp.id,
-            linkType: 'derived_from',
-          });
+      let vp: TestViewpoint;
+      await db.transaction('rw', db.testViewpoints, db.traceLinks, async () => {
+        vp = await viewpointRepo.create({ projectId, featureId: featureId ?? '', ...input });
+        if (input.sourceElementIds && input.sourceElementIds.length > 0) {
+          for (const se of input.sourceElementIds) {
+            await traceLinkRepo.create({
+              projectId,
+              fromType: se.type as TraceNodeType,
+              fromId: se.id,
+              toType: 'testViewpoint',
+              toId: vp.id,
+              linkType: 'derived_from',
+            });
+          }
         }
-      }
+      });
       await load();
-      return vp;
+      return vp!;
     },
     [projectId, featureId, load],
   );

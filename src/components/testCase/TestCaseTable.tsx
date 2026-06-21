@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type { TestCase } from '../../lib/models/testCase';
 
 const PRIORITY_LABELS: Record<string, string> = {
@@ -34,14 +35,13 @@ function formatDate(iso: string): string {
   }
 }
 
-const viewpointMap = new Map<string, string>();
-
 export function TestCaseTable({ testCases, viewpoints, onEdit, onRemove }: TestCaseTableProps) {
-  if (testCases.length === 0) return null;
+  const viewpointMap = useMemo(
+    () => new Map(viewpoints.map((vp) => [vp.id, vp.title])),
+    [viewpoints],
+  );
 
-  for (const vp of viewpoints) {
-    viewpointMap.set(vp.id, vp.title);
-  }
+  if (testCases.length === 0) return null;
 
   return (
     <div className="card" style={{ padding: 0, overflow: 'hidden' }}>

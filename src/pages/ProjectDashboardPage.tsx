@@ -4,6 +4,9 @@ import { db } from '../lib/db';
 import { createProjectRepository } from '../lib/repositories/projectRepository';
 import { useFeatures } from '../hooks/useFeatures';
 import { useScreens } from '../hooks/useScreens';
+import { useOpenQuestions } from '../hooks/useOpenQuestions';
+import { useTestViewpoints } from '../hooks/useTestViewpoints';
+import { useTestCases } from '../hooks/useTestCases';
 import { useToast } from '../components/common/ToastContext';
 import { EmptyState } from '../components/common/EmptyState';
 import { Badge } from '../components/common/Badge';
@@ -43,6 +46,9 @@ export function ProjectDashboardPage() {
     update: updateScreen,
     markRemoved: removeScreen,
   } = useScreens(projectId ?? '');
+  const { openQuestions, loading: oqLoading } = useOpenQuestions(projectId ?? '');
+  const { viewpoints, loading: vpLoading } = useTestViewpoints(projectId ?? '');
+  const { testCases, loading: tcLoading } = useTestCases(projectId ?? '');
 
   const [showCreateFeature, setShowCreateFeature] = useState(false);
   const [editingFeature, setEditingFeature] = useState<Feature | null>(null);
@@ -132,7 +138,8 @@ export function ProjectDashboardPage() {
     }
   };
 
-  const isLoading = projectLoading || featuresLoading || screensLoading;
+  const isLoading =
+    projectLoading || featuresLoading || screensLoading || oqLoading || vpLoading || tcLoading;
 
   if (isLoading) {
     return (
@@ -223,11 +230,15 @@ export function ProjectDashboardPage() {
           <p className="kpi-label">画面</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">0</p>
-          <p className="kpi-label">テスト観点 / テストケース</p>
+          <p className="kpi-number">{viewpoints.length}</p>
+          <p className="kpi-label">テスト観点</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">0</p>
+          <p className="kpi-number">{testCases.length}</p>
+          <p className="kpi-label">テストケース</p>
+        </div>
+        <div className="card kpi-card">
+          <p className="kpi-number">{openQuestions.length}</p>
           <p className="kpi-label">未確認事項</p>
         </div>
       </div>
@@ -320,7 +331,6 @@ export function ProjectDashboardPage() {
           onCreate={handleCreateScreen}
           onCreated={() => {
             setShowCreateScreen(false);
-            toast.toast('success', '画面を作成しました');
           }}
           onCancel={() => setShowCreateScreen(false)}
         />
