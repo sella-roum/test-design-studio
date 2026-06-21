@@ -36,8 +36,8 @@
   --radius-dialog: 16px;
   --radius-badge: 999px;
 
-  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, Consolas, monospace;
+  --font-sans: system-ui, 'Segoe UI', 'Roboto', sans-serif;
+  --font-mono: ui-monospace, 'Consolas', monospace;
 
   --fs-page-title: 24px;
   --fs-feature-title: 22px;

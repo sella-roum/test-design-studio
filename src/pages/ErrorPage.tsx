@@ -1,5 +1,14 @@
 import { useRouteError, isRouteErrorResponse, Link } from 'react-router-dom';
 
+function normalizeMessage(data: unknown): string | null {
+  if (typeof data === 'string') return data;
+  if (data && typeof data === 'object' && 'message' in data) {
+    const msg = (data as { message: unknown }).message;
+    if (typeof msg === 'string') return msg;
+  }
+  return null;
+}
+
 export function ErrorPage() {
   const error = useRouteError();
 
@@ -12,10 +21,9 @@ export function ErrorPage() {
       message = 'お探しのページは存在しないか、移動しました。';
     } else {
       title = `${error.status} - ${error.statusText}`;
-      message = error.data?.message ?? message;
+      const normalized = normalizeMessage(error.data);
+      if (normalized) message = normalized;
     }
-  } else if (error instanceof Error) {
-    message = error.message;
   }
 
   return (

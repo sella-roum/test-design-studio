@@ -25,6 +25,13 @@ function formatDate(iso: string): string {
 export function ProjectTable({ projects, onSelect, onEdit, onRemove }: ProjectTableProps) {
   if (projects.length === 0) return null;
 
+  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onSelect(id);
+    }
+  };
+
   return (
     <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
       <table className="table">
@@ -39,7 +46,15 @@ export function ProjectTable({ projects, onSelect, onEdit, onRemove }: ProjectTa
         </thead>
         <tbody>
           {projects.map((p) => (
-            <tr key={p.id} style={{ cursor: 'pointer' }} onClick={() => onSelect(p.id)}>
+            <tr
+              key={p.id}
+              tabIndex={0}
+              role="button"
+              aria-label={`${p.name} を開く`}
+              style={{ cursor: 'pointer' }}
+              onClick={() => onSelect(p.id)}
+              onKeyDown={(e) => handleKeyDown(e, p.id)}
+            >
               <td style={{ fontWeight: 600 }}>{p.name}</td>
               <td
                 style={{

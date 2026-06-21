@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { db } from '../lib/db';
 import { createProjectRepository } from '../lib/repositories/projectRepository';
 import type { Project } from '../lib/models/project';
@@ -9,19 +9,25 @@ export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const loadSeqRef = useRef(0);
 
   const load = useCallback(async (options?: { reload?: boolean }) => {
+    const seq = ++loadSeqRef.current;
     if (options?.reload) {
       setLoading(true);
     }
     try {
       const items = await repo.list();
+      if (seq !== loadSeqRef.current) return;
       setProjects(items);
       setError(null);
     } catch (e) {
+      if (seq !== loadSeqRef.current) return;
       setError(e instanceof Error ? e.message : 'Failed to load projects');
     } finally {
-      setLoading(false);
+      if (seq === loadSeqRef.current) {
+        setLoading(false);
+      }
     }
   }, []);
 

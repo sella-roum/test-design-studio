@@ -44,9 +44,14 @@ export function ProjectListPage() {
 
   const handleRemove = async () => {
     if (!removingProject) return;
-    await markRemoved(removingProject.id);
-    setRemovingProject(null);
-    toast.toast('success', 'プロジェクトを削除しました');
+    try {
+      await markRemoved(removingProject.id);
+      toast.toast('success', 'プロジェクトを削除しました');
+    } catch (e) {
+      toast.toast('error', e instanceof Error ? e.message : '削除に失敗しました');
+    } finally {
+      setRemovingProject(null);
+    }
   };
 
   if (loading) {

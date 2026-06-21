@@ -20,7 +20,6 @@ describe('App', () => {
     expect(brandElements[0]).toBeInTheDocument();
 
     expect(screen.getByText('ダッシュボード')).toBeInTheDocument();
-
     expect(screen.getByText('プロジェクト')).toBeInTheDocument();
   });
 });

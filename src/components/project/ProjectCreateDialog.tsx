@@ -37,7 +37,6 @@ export function ProjectCreateDialog({ onCreated, onCancel, onCreate }: ProjectCr
       onCreated(project.id);
     } catch (e) {
       setError(e instanceof Error ? e.message : '作成に失敗しました');
-    } finally {
       setSaving(false);
     }
   };

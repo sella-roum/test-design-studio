@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react';
+
 type ConfirmDialogProps = {
   title: string;
   message: string;
@@ -8,6 +10,8 @@ type ConfirmDialogProps = {
   danger?: boolean;
 };
 
+const titleId = 'confirm-dialog-title';
+
 export function ConfirmDialog({
   title,
   message,
@@ -17,11 +21,33 @@ export function ConfirmDialog({
   onCancel,
   danger = true,
 }: ConfirmDialogProps) {
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    },
+    [onCancel],
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
   return (
     <div className="dialog-overlay" onClick={onCancel}>
-      <div className="dialog confirm-dialog" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="dialog confirm-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="dialog-header">
-          <h3 className="dialog-title">{title}</h3>
+          <h3 className="dialog-title" id={titleId}>
+            {title}
+          </h3>
         </div>
         <div className="dialog-body">
           <p className="confirm-message">{message}</p>

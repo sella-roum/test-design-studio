@@ -47,7 +47,6 @@ export function ProjectEditDialog({
       onUpdated();
     } catch (e) {
       setError(e instanceof Error ? e.message : '更新に失敗しました');
-    } finally {
       setSaving(false);
     }
   };
