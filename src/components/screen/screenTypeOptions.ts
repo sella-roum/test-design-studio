@@ -14,3 +14,7 @@ export const SCREEN_TYPE_OPTIONS: { value: ScreenType; label: string }[] = [
   { value: 'admin', label: '管理' },
   { value: 'other', label: 'その他' },
 ];
+
+export const SCREEN_TYPE_LABELS: Record<ScreenType, string> = Object.fromEntries(
+  SCREEN_TYPE_OPTIONS.map((option) => [option.value, option.label]),
+) as Record<ScreenType, string>;

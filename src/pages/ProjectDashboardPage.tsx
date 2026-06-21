@@ -222,23 +222,33 @@ export function ProjectDashboardPage() {
 
       <div className="kpi-cards">
         <div className="card kpi-card">
-          <p className="kpi-number">{features.length}</p>
+          <p className="kpi-number" data-testid="kpi-features-count">
+            {features.length}
+          </p>
           <p className="kpi-label">機能</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">{screens.length}</p>
+          <p className="kpi-number" data-testid="kpi-screens-count">
+            {screens.length}
+          </p>
           <p className="kpi-label">画面</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">{viewpoints.length}</p>
+          <p className="kpi-number" data-testid="kpi-viewpoints-count">
+            {viewpoints.length}
+          </p>
           <p className="kpi-label">テスト観点</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">{testCases.length}</p>
+          <p className="kpi-number" data-testid="kpi-test-cases-count">
+            {testCases.length}
+          </p>
           <p className="kpi-label">テストケース</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">{openQuestions.length}</p>
+          <p className="kpi-number" data-testid="kpi-open-questions-count">
+            {openQuestions.length}
+          </p>
           <p className="kpi-label">未確認事項</p>
         </div>
       </div>

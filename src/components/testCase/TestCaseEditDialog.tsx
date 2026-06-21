@@ -47,9 +47,9 @@ export function TestCaseEditDialog({
   const [title, setTitle] = useState(testCase.title);
   const [viewpointId, setViewpointId] = useState(testCase.viewpointId ?? '');
   const [preconditions, setPreconditions] = useState(testCase.preconditions ?? '');
-  const [steps, setSteps] = useState<StepRow[]>(
-    testCase.steps.map((s) => ({
-      id: s.id,
+  const [steps, setSteps] = useState<StepRow[]>(() =>
+    testCase.steps.map((s, i) => ({
+      id: s.id ?? `step_existing_${testCase.id}_${i}`,
       action: s.action,
       instruction: s.instruction,
       targetUiNodeId: s.targetUiNodeId,

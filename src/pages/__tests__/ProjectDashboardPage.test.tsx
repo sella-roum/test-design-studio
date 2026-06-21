@@ -152,13 +152,14 @@ describe('ProjectDashboardPage', () => {
       expect(screen.getByText('KPI Project')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('機能')).toBeInTheDocument();
-    expect(screen.getByText('テスト観点')).toBeInTheDocument();
-    expect(screen.getByText('テストケース')).toBeInTheDocument();
-    expect(screen.getByText('未確認事項')).toBeInTheDocument();
+    expect(screen.getByTestId('kpi-features-count')).toHaveTextContent('1');
+    expect(screen.getByTestId('kpi-screens-count')).toHaveTextContent('1');
+    expect(screen.getByTestId('kpi-viewpoints-count')).toHaveTextContent('1');
+    expect(screen.getByTestId('kpi-test-cases-count')).toHaveTextContent('1');
+    expect(screen.getByTestId('kpi-open-questions-count')).toHaveTextContent('1');
   });
 
-  it('creates a feature via dialog', async () => {
+  it('creates a feature via dialog and navigates to workspace', async () => {
     const projectRepo = createProjectRepository(db);
     const project = await projectRepo.create({ name: 'Feature Create Test' });
 
@@ -180,7 +181,7 @@ describe('ProjectDashboardPage', () => {
     await userEvent.click(screen.getByRole('button', { name: '作成' }));
 
     await waitFor(() => {
-      expect(screen.getByText('New Feature')).toBeInTheDocument();
+      expect(screen.getByText('Feature Workspace Page')).toBeInTheDocument();
     });
   });
 

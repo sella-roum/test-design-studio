@@ -1,24 +1,10 @@
 import type { Screen } from '../../lib/models/screen';
 import { Badge } from '../common/Badge';
+import { SCREEN_TYPE_LABELS } from './screenTypeOptions';
 
 type ScreenDetailPanelProps = {
   screen: Screen;
   onAddUiNode: () => void;
-};
-
-const SCREEN_TYPE_LABELS: Record<string, string> = {
-  list: '一覧',
-  detail: '詳細',
-  create: '作成',
-  edit: '編集',
-  confirm: '確認',
-  complete: '完了',
-  error: 'エラー',
-  settings: '設定',
-  login: 'ログイン',
-  dashboard: 'ダッシュボード',
-  admin: '管理',
-  other: 'その他',
 };
 
 export function ScreenDetailPanel({ screen, onAddUiNode }: ScreenDetailPanelProps) {

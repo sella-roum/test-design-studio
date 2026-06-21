@@ -65,11 +65,14 @@ export function useTestCases(projectId: string, featureId?: string) {
       automationSuitability?: AutomationSuitability;
       automationReason?: string;
     }) => {
+      if (!featureId || featureId.trim().length === 0) {
+        throw new Error('featureId is required to create a test case');
+      }
       const { steps, ...rest } = input;
       const tc = await repo.create({
         ...rest,
         projectId,
-        featureId: featureId ?? '',
+        featureId,
         steps: steps?.map((s, i) => normalizeStep(s, i)),
       });
       await load();

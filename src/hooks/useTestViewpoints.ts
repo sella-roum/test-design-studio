@@ -55,9 +55,12 @@ export function useTestViewpoints(projectId: string, featureId?: string) {
       automationReason?: string;
       sourceElementIds?: { type: string; id: string }[];
     }) => {
+      if (!featureId || featureId.trim().length === 0) {
+        throw new Error('featureId is required to create a test viewpoint');
+      }
       let vp: TestViewpoint;
       await db.transaction('rw', db.testViewpoints, db.traceLinks, async () => {
-        vp = await viewpointRepo.create({ projectId, featureId: featureId ?? '', ...input });
+        vp = await viewpointRepo.create({ projectId, featureId, ...input });
         if (input.sourceElementIds && input.sourceElementIds.length > 0) {
           for (const se of input.sourceElementIds) {
             await traceLinkRepo.create({

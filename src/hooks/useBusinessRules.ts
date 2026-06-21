@@ -40,15 +40,17 @@ export function useBusinessRules(projectId: string, featureId?: string) {
       confidence?: Confidence;
       featureId?: string;
     }) => {
+      const { featureId: inputFeatureId, ...rest } = input;
       const br = await repo.create({
         projectId,
-        ...input,
-        confidence: input.confidence ?? 'unknown',
+        featureId: inputFeatureId ?? featureId,
+        ...rest,
+        confidence: rest.confidence ?? 'unknown',
       });
       await load();
       return br;
     },
-    [projectId, load],
+    [projectId, featureId, load],
   );
 
   const update = useCallback(
