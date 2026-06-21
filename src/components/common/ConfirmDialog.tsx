@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useId } from 'react';
 
 type ConfirmDialogProps = {
   title: string;
@@ -10,8 +10,6 @@ type ConfirmDialogProps = {
   danger?: boolean;
 };
 
-const titleId = 'confirm-dialog-title';
-
 export function ConfirmDialog({
   title,
   message,
@@ -21,6 +19,8 @@ export function ConfirmDialog({
   onCancel,
   danger = true,
 }: ConfirmDialogProps) {
+  const titleId = useId();
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

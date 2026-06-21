@@ -14,8 +14,12 @@ export function ProjectDashboardPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true);
+    setProject(null);
+    setNotFound(false);
+
     if (!projectId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setNotFound(true);
       setLoading(false);
       return;

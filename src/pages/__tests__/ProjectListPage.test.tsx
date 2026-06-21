@@ -1,8 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ToastProvider } from '../../components/common/Toast';
 import { ProjectListPage } from '../ProjectListPage';
+import { ProjectDashboardPage } from '../ProjectDashboardPage';
 import { db } from '../../lib/db';
 import { createProjectRepository } from '../../lib/repositories/projectRepository';
 
@@ -10,6 +11,19 @@ function renderWithProviders(ui: React.ReactElement) {
   return render(
     <ToastProvider>
       <MemoryRouter initialEntries={['/projects']}>{ui}</MemoryRouter>
+    </ToastProvider>,
+  );
+}
+
+function renderWithRoutes() {
+  return render(
+    <ToastProvider>
+      <MemoryRouter initialEntries={['/projects']}>
+        <Routes>
+          <Route path="/projects" element={<ProjectListPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDashboardPage />} />
+        </Routes>
+      </MemoryRouter>
     </ToastProvider>,
   );
 }
@@ -27,7 +41,8 @@ describe('ProjectListPage', () => {
   });
 
   it('creates a project and navigates to dashboard', async () => {
-    renderWithProviders(<ProjectListPage />);
+    renderWithRoutes();
+
     await waitFor(() => {
       expect(screen.getByText('まだプロジェクトがありません')).toBeInTheDocument();
     });
@@ -41,6 +56,14 @@ describe('ProjectListPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('プロジェクトを作成しました')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('New Test Project')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('プロジェクト一覧')).toBeInTheDocument();
     });
   });
 
@@ -66,6 +89,69 @@ describe('ProjectListPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Existing Project')).toBeInTheDocument();
     });
+  });
+
+  it('navigates to dashboard on row click', async () => {
+    const repo = createProjectRepository(db);
+    await repo.create({ name: 'Click Project' });
+
+    renderWithRoutes();
+
+    await waitFor(() => {
+      expect(screen.getByText('Click Project')).toBeInTheDocument();
+    });
+
+    const rows = screen.getAllByRole('button', { name: /Click Project/ });
+    await userEvent.click(rows[0]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Click Project')).toBeInTheDocument();
+    });
+
+    const links = screen.getAllByText('プロジェクト一覧');
+    expect(links.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('navigates to dashboard on Enter key', async () => {
+    const repo = createProjectRepository(db);
+    await repo.create({ name: 'Enter Project' });
+
+    renderWithRoutes();
+
+    await waitFor(() => {
+      expect(screen.getByText('Enter Project')).toBeInTheDocument();
+    });
+
+    const rows = screen.getAllByRole('button', { name: /Enter Project/ });
+    await userEvent.type(rows[0], '{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByText('Enter Project')).toBeInTheDocument();
+    });
+
+    const links = screen.getAllByText('プロジェクト一覧');
+    expect(links.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('navigates to dashboard on Space key', async () => {
+    const repo = createProjectRepository(db);
+    await repo.create({ name: 'Space Project' });
+
+    renderWithRoutes();
+
+    await waitFor(() => {
+      expect(screen.getByText('Space Project')).toBeInTheDocument();
+    });
+
+    const rows = screen.getAllByRole('button', { name: /Space Project/ });
+    await userEvent.type(rows[0], '{Space}');
+
+    await waitFor(() => {
+      expect(screen.getByText('Space Project')).toBeInTheDocument();
+    });
+
+    const links = screen.getAllByText('プロジェクト一覧');
+    expect(links.length).toBeGreaterThanOrEqual(1);
   });
 
   it('edits a project', async () => {

@@ -19,8 +19,13 @@ function renderWithRouter(projectId: string) {
 }
 
 describe('ProjectDashboardPage', () => {
+  let existingProjectId: string;
+
   beforeEach(async () => {
     await db.projects.clear();
+    const repo = createProjectRepository(db);
+    const project = await repo.create({ name: 'Existing Dashboard' });
+    existingProjectId = project.id;
   });
 
   it('shows loading state initially', () => {
@@ -64,6 +69,31 @@ describe('ProjectDashboardPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('プロジェクトが見つかりません')).toBeInTheDocument();
+    });
+  });
+
+  it('recovers from not-found state when navigating to existing project', async () => {
+    const repo = createProjectRepository(db);
+    const project = await repo.create({ name: 'Recovery Test' });
+
+    renderWithRouter(project.id);
+
+    await waitFor(() => {
+      expect(screen.getByText('Recovery Test')).toBeInTheDocument();
+    });
+  });
+
+  it('shows not found for missing-id then displays existing project on same page', async () => {
+    renderWithRouter('missing-id');
+
+    await waitFor(() => {
+      expect(screen.getByText('プロジェクトが見つかりません')).toBeInTheDocument();
+    });
+
+    renderWithRouter(existingProjectId);
+
+    await waitFor(() => {
+      expect(screen.getByText('Existing Dashboard')).toBeInTheDocument();
     });
   });
 

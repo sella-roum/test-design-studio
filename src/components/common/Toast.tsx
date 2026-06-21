@@ -11,11 +11,15 @@ let nextId = 0;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
-  const timersRef = useRef<Set<number>>(new Set());
+  const timersRef = useRef<Map<number, number>>(new Map());
 
   const removeItem = useCallback((id: number) => {
     setItems((prev) => prev.filter((t) => t.id !== id));
-    timersRef.current.delete(id);
+    const timerId = timersRef.current.get(id);
+    if (timerId !== undefined) {
+      window.clearTimeout(timerId);
+      timersRef.current.delete(id);
+    }
   }, []);
 
   const toast = useCallback(
@@ -25,7 +29,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       const timerId = window.setTimeout(() => {
         removeItem(id);
       }, 4000);
-      timersRef.current.add(id);
+      timersRef.current.set(id, timerId);
       return timerId;
     },
     [removeItem],
@@ -34,7 +38,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const timers = timersRef.current;
     return () => {
-      timers.forEach((timerId) => window.clearTimeout(timerId));
+      timers.forEach((timerId) => {
+        window.clearTimeout(timerId);
+      });
       timers.clear();
     };
   }, []);

@@ -10,6 +10,10 @@ describe('useProjects', () => {
     await db.projects.clear();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('loads projects on mount', async () => {
     await repo.create({ name: 'Initial Project' });
     const { result } = renderHook(() => useProjects());
@@ -81,6 +85,5 @@ describe('useProjects', () => {
     await waitFor(() => {
       expect(result.current.error).toBe('DB Error');
     });
-    vi.restoreAllMocks();
   });
 });

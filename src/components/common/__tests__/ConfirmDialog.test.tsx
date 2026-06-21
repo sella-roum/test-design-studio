@@ -24,7 +24,10 @@ describe('ConfirmDialog', () => {
     render(<ConfirmDialog {...defaultProps} />);
     const dialog = screen.getByRole('dialog');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
-    expect(dialog).toHaveAttribute('aria-labelledby', 'confirm-dialog-title');
+    const labelledby = dialog.getAttribute('aria-labelledby');
+    expect(labelledby).toBeTruthy();
+    const title = screen.getByText('確認');
+    expect(title.id).toBe(labelledby);
   });
 
   it('calls onCancel when Escape is pressed', () => {
