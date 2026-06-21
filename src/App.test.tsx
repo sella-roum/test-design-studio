@@ -1,21 +1,25 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import { MemoryRouter } from 'react-router-dom';
+import { AppShell } from './components/layout/AppShell';
+import { ToastProvider } from './components/common/Toast';
+
+function renderWithProviders(ui: React.ReactElement) {
+  return render(
+    <ToastProvider>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </ToastProvider>,
+  );
+}
 
 describe('App', () => {
-  it('renders the initial product shell and empty state', () => {
-    render(<App />);
+  it('renders the app shell with sidebar', () => {
+    renderWithProviders(<AppShell />);
 
-    expect(
-      screen.getByRole('heading', { level: 1, name: 'Test Design Studio' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: 'ローカルファーストなテスト設計ワークスペース',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('プロジェクトを作成して、テスト設計を始めましょう。'),
-    ).toBeInTheDocument();
+    const brandElements = screen.getAllByText('Test Design Studio');
+    expect(brandElements).toHaveLength(2);
+    expect(brandElements[0]).toBeInTheDocument();
+
+    expect(screen.getByText('ダッシュボード')).toBeInTheDocument();
+    expect(screen.getByText('プロジェクト')).toBeInTheDocument();
   });
 });
