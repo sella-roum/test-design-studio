@@ -1,35 +1,43 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { ToastProvider } from '../../components/common/Toast';
 import { ProjectDashboardPage } from '../ProjectDashboardPage';
 import { db } from '../../lib/db';
 import { createProjectRepository } from '../../lib/repositories/projectRepository';
 
-function renderWithRouter(projectId: string) {
-  return render(
+function renderWithMemoryRouter(initialPath: string) {
+  const router = createMemoryRouter(
+    [
+      {
+        path: '/projects/:projectId',
+        element: <ProjectDashboardPage />,
+      },
+      {
+        path: '/projects',
+        element: <div>Project List Page</div>,
+      },
+    ],
+    {
+      initialEntries: [initialPath],
+    },
+  );
+
+  render(
     <ToastProvider>
-      <MemoryRouter initialEntries={[`/projects/${projectId}`]}>
-        <Routes>
-          <Route path="/projects/:projectId" element={<ProjectDashboardPage />} />
-          <Route path="/projects" element={<div>Project List Page</div>} />
-        </Routes>
-      </MemoryRouter>
+      <RouterProvider router={router} />
     </ToastProvider>,
   );
+
+  return router;
 }
 
 describe('ProjectDashboardPage', () => {
-  let existingProjectId: string;
-
   beforeEach(async () => {
     await db.projects.clear();
-    const repo = createProjectRepository(db);
-    const project = await repo.create({ name: 'Existing Dashboard' });
-    existingProjectId = project.id;
   });
 
   it('shows loading state initially', () => {
-    renderWithRouter('some-id');
+    renderWithMemoryRouter('/projects/some-id');
     expect(screen.getByText('プロジェクトダッシュボード')).toBeInTheDocument();
   });
 
@@ -42,7 +50,7 @@ describe('ProjectDashboardPage', () => {
       targetAppUrl: 'https://test.example.com',
     });
 
-    renderWithRouter(project.id);
+    renderWithMemoryRouter(`/projects/${project.id}`);
 
     await waitFor(() => {
       expect(screen.getByText('Test Dashboard')).toBeInTheDocument();
@@ -50,10 +58,11 @@ describe('ProjectDashboardPage', () => {
     expect(screen.getByText('A test project')).toBeInTheDocument();
     expect(screen.getByText('TestApp')).toBeInTheDocument();
     expect(screen.getByText('https://test.example.com')).toBeInTheDocument();
+    expect(screen.queryByText('プロジェクトが見つかりません')).not.toBeInTheDocument();
   });
 
   it('shows project not found for non-existent project', async () => {
-    renderWithRouter('non-existent-id');
+    renderWithMemoryRouter('/projects/non-existent-id');
 
     await waitFor(() => {
       expect(screen.getByText('プロジェクトが見つかりません')).toBeInTheDocument();
@@ -65,43 +74,38 @@ describe('ProjectDashboardPage', () => {
     const project = await repo.create({ name: 'Gone' });
     await repo.markRemoved(project.id);
 
-    renderWithRouter(project.id);
+    renderWithMemoryRouter(`/projects/${project.id}`);
 
     await waitFor(() => {
       expect(screen.getByText('プロジェクトが見つかりません')).toBeInTheDocument();
     });
   });
 
-  it('recovers from not-found state when navigating to existing project', async () => {
+  it('recovers from not-found state when navigating to existing project on the same router', async () => {
     const repo = createProjectRepository(db);
-    const project = await repo.create({ name: 'Recovery Test' });
+    const project = await repo.create({ name: 'Recovered Project' });
 
-    renderWithRouter(project.id);
-
-    await waitFor(() => {
-      expect(screen.getByText('Recovery Test')).toBeInTheDocument();
-    });
-  });
-
-  it('shows not found for missing-id then displays existing project on same page', async () => {
-    renderWithRouter('missing-id');
+    const router = renderWithMemoryRouter('/projects/missing-id');
 
     await waitFor(() => {
       expect(screen.getByText('プロジェクトが見つかりません')).toBeInTheDocument();
     });
 
-    renderWithRouter(existingProjectId);
+    await act(async () => {
+      await router.navigate(`/projects/${project.id}`);
+    });
 
     await waitFor(() => {
-      expect(screen.getByText('Existing Dashboard')).toBeInTheDocument();
+      expect(screen.getByText('Recovered Project')).toBeInTheDocument();
     });
+    expect(screen.queryByText('プロジェクトが見つかりません')).not.toBeInTheDocument();
   });
 
   it('has a link back to project list', async () => {
     const repo = createProjectRepository(db);
     const project = await repo.create({ name: 'With Back Link' });
 
-    renderWithRouter(project.id);
+    renderWithMemoryRouter(`/projects/${project.id}`);
 
     await waitFor(() => {
       expect(screen.getByText('With Back Link')).toBeInTheDocument();
