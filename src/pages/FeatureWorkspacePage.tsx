@@ -90,6 +90,9 @@ export function FeatureWorkspacePage() {
   const [editingUiNode, setEditingUiNode] = useState<UiNode | null>(null);
   const [removingUiNode, setRemovingUiNode] = useState<UiNode | null>(null);
 
+  const allUiNodes = useMemo(() => uiNodeTree.flatMap((n) => flattenTree(n)), [uiNodeTree]);
+  const uiNodeCount = useMemo(() => allUiNodes.length, [allUiNodes]);
+
   const {
     dataTypes,
     create: createDataType,
@@ -439,9 +442,7 @@ export function FeatureWorkspacePage() {
           <p className="kpi-label">画面</p>
         </div>
         <div className="card kpi-card">
-          <p className="kpi-number">
-            {uiNodeTree.reduce((sum, n) => sum + 1 + n.children.flatMap(flattenTree).length, 0)}
-          </p>
+          <p className="kpi-number">{uiNodeCount}</p>
           <p className="kpi-label">UI要素</p>
         </div>
         <div className="card kpi-card">
@@ -661,13 +662,11 @@ export function FeatureWorkspacePage() {
                       onSelect={setSelectedUiNodeId}
                       onAddChild={(parentId) => setCreatingUiNode({ parentId })}
                       onEdit={(id) => {
-                        const allNodes = uiNodeTree.flatMap((n) => flattenTree(n));
-                        const found = allNodes.find((n) => n.id === id);
+                        const found = allUiNodes.find((n) => n.id === id);
                         if (found) setEditingUiNode(found);
                       }}
                       onRemove={(id) => {
-                        const allNodes = uiNodeTree.flatMap((n) => flattenTree(n));
-                        const found = allNodes.find((n) => n.id === id);
+                        const found = allUiNodes.find((n) => n.id === id);
                         if (found) setRemovingUiNode(found);
                       }}
                     />
@@ -694,8 +693,7 @@ export function FeatureWorkspacePage() {
             )}
             {selectedUiNodeId &&
               (() => {
-                const allNodes = uiNodeTree.flatMap((n) => flattenTree(n));
-                const selectedNode = allNodes.find((n) => n.id === selectedUiNodeId);
+                const selectedNode = allUiNodes.find((n) => n.id === selectedUiNodeId);
                 if (!selectedNode) return null;
                 return (
                   <div className="card">
@@ -1061,10 +1059,7 @@ export function FeatureWorkspacePage() {
         <UiNodeCreateDialog
           parentNode={
             creatingUiNode.parentId
-              ? (() => {
-                  const allNodes = uiNodeTree.flatMap((n) => flattenTree(n));
-                  return allNodes.find((n) => n.id === creatingUiNode.parentId) ?? null;
-                })()
+              ? (allUiNodes.find((n) => n.id === creatingUiNode.parentId) ?? null)
               : null
           }
           projectId={projectId ?? ''}

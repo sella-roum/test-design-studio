@@ -225,6 +225,68 @@ describe('testCaseRepository', () => {
     expect(tc.steps[0].id).not.toBe('step-1');
   });
 
+  it('generates new id for empty string step id', async () => {
+    const tc = await repo.create({
+      projectId,
+      featureId,
+      title: 'Empty step id',
+      steps: [
+        { id: '', action: 'click', instruction: 'Click submit', expectedResult: 'Submitted' },
+      ],
+    });
+
+    expect(tc.steps[0].id).toBeTruthy();
+    expect(tc.steps[0].id.trim().length).toBeGreaterThan(0);
+    expect(tc.steps[0].order).toBe(1);
+  });
+
+  it('generates new id for whitespace-only step id', async () => {
+    const tc = await repo.create({
+      projectId,
+      featureId,
+      title: 'Whitespace step id',
+      steps: [
+        { id: '   ', action: 'click', instruction: 'Click submit', expectedResult: 'Submitted' },
+      ],
+    });
+
+    expect(tc.steps[0].id).toBeTruthy();
+    expect(tc.steps[0].id.trim().length).toBeGreaterThan(0);
+  });
+
+  it('generates unique ids for multiple steps without id', async () => {
+    const tc = await repo.create({
+      projectId,
+      featureId,
+      title: 'Multiple auto ids',
+      steps: [
+        { action: 'fill', instruction: 'Fill name', expectedResult: 'Name is entered' },
+        { action: 'click', instruction: 'Click submit', expectedResult: 'Submitted' },
+      ],
+    });
+
+    expect(tc.steps).toHaveLength(2);
+    expect(tc.steps[0].id).toBeTruthy();
+    expect(tc.steps[1].id).toBeTruthy();
+    expect(tc.steps[0].id).not.toBe(tc.steps[1].id);
+    expect(tc.steps[0].order).toBe(1);
+    expect(tc.steps[1].order).toBe(2);
+  });
+
+  it('throws ValidationError for duplicate step ids', async () => {
+    await expect(
+      repo.create({
+        projectId,
+        featureId,
+        title: 'Duplicate step ids',
+        steps: [
+          { id: 'dup', action: 'fill', instruction: 'Fill name', expectedResult: 'Entered' },
+          { id: 'dup', action: 'click', instruction: 'Click submit', expectedResult: 'Submitted' },
+        ],
+      }),
+    ).rejects.toThrow(ValidationError);
+  });
+
   it('reorders steps and keeps ids', async () => {
     const tc = await repo.create({
       projectId,
