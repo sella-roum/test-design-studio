@@ -31,6 +31,7 @@ export function createTestCaseRepository(db: AppDatabase) {
   ];
 
   type StepInput = {
+    id?: string;
     action: TestStepAction;
     instruction: string;
     targetUiNodeId?: string;
@@ -70,6 +71,7 @@ export function createTestCaseRepository(db: AppDatabase) {
 
   function buildSteps(inputs?: StepInput[]): TestStep[] {
     if (!inputs || inputs.length === 0) return [];
+    const seenIds = new Set<string>();
     return inputs.map((s, i) => {
       if (!VALID_STEP_ACTIONS.includes(s.action)) {
         throw new ValidationError(`Invalid step action: ${s.action}`);
@@ -77,8 +79,13 @@ export function createTestCaseRepository(db: AppDatabase) {
       if (!s.instruction || s.instruction.trim().length === 0) {
         throw new ValidationError('Step instruction is required');
       }
+      const normalizedId = s.id?.trim() || generateId();
+      if (seenIds.has(normalizedId)) {
+        throw new ValidationError(`Duplicate step id: ${normalizedId}`);
+      }
+      seenIds.add(normalizedId);
       return {
-        id: generateId(),
+        id: normalizedId,
         order: i + 1,
         action: s.action,
         instruction: s.instruction.trim(),
