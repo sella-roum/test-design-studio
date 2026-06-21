@@ -56,7 +56,7 @@ describe('ProjectDashboardPage', () => {
       expect(screen.getByText('Test Dashboard')).toBeInTheDocument();
     });
     expect(screen.getByText('A test project')).toBeInTheDocument();
-    expect(screen.getByText('TestApp')).toBeInTheDocument();
+    expect(screen.getByText(/対象アプリ:\s*TestApp/)).toBeInTheDocument();
     expect(screen.getByText('https://test.example.com')).toBeInTheDocument();
     expect(screen.queryByText('プロジェクトが見つかりません')).not.toBeInTheDocument();
   });
